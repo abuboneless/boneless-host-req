@@ -10,14 +10,12 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
             color: white;
             overflow-x: hidden;
         }
-
         .background {
             position: fixed;
             top: 0;
@@ -27,7 +25,6 @@
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
             z-index: -2;
         }
-
         .pattern {
             position: fixed;
             top: 0;
@@ -40,51 +37,39 @@
             z-index: -1;
             animation: patternMove 20s linear infinite;
         }
-
         @keyframes patternMove {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(70px, 70px);
-            }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
         header {
             text-align: center;
             padding: 60px 20px 40px;
         }
-
         h1 {
             font-size: 3.5em;
             margin-bottom: 20px;
             text-shadow: 0 0 20px rgba(0, 255, 100, 0.5);
         }
-
         h1 .highlight {
             color: #00d4ff;
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
         }
-
         .subtitle {
             font-size: 1.2em;
             color: #aaa;
             margin-bottom: 50px;
         }
-
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             margin-bottom: 50px;
         }
-
         .feature-card {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(0, 255, 100, 0.2);
@@ -95,7 +80,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .feature-card::before {
             content: '';
             position: absolute;
@@ -107,46 +91,31 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
         .feature-card:hover::before {
             opacity: 1;
         }
-
         .feature-card:hover {
             transform: translateY(-10px);
             border-color: rgba(0, 255, 100, 0.5);
             box-shadow: 0 10px 40px rgba(0, 255, 100, 0.3);
         }
-
         .feature-icon {
             font-size: 3em;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 10px currentColor);
         }
-
-        .feature-card:nth-child(1) .feature-icon {
-            color: #00ff64;
-        }
-
-        .feature-card:nth-child(2) .feature-icon {
-            color: #00d4ff;
-        }
-
-        .feature-card:nth-child(3) .feature-icon {
-            color: #ff6b35;
-        }
-
+        .feature-card:nth-child(1) .feature-icon { color: #00ff64; }
+        .feature-card:nth-child(2) .feature-icon { color: #00d4ff; }
+        .feature-card:nth-child(3) .feature-icon { color: #ff6b35; }
         .feature-title {
             font-size: 1.5em;
             margin-bottom: 15px;
             font-weight: bold;
         }
-
         .feature-desc {
             color: #bbb;
             line-height: 1.6;
         }
-
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -163,42 +132,20 @@
             text-decoration: none;
             box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
         }
-
         .cta-button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(0, 102, 255, 0.6);
         }
-
         .discord-icon {
             width: 24px;
             height: 24px;
         }
-
         .google-btn {
             background: linear-gradient(135deg, #db4437 0%, #c23321 100%);
             box-shadow: 0 5px 20px rgba(219, 68, 55, 0.4);
         }
-
         .google-btn:hover {
             box-shadow: 0 8px 30px rgba(219, 68, 55, 0.6);
-        }
-
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 60px;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -218,13 +165,11 @@
                 <h3 class="feature-title">حماية متقدمة</h3>
                 <p class="feature-desc">أمان عالي المستوى لسيرفرك مع حماية ضد جميع الهجمات</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
                 <h3 class="feature-title">استجابة فورية</h3>
                 <p class="feature-desc">معالجة سريعة لجميع الطلبات مع أداء ممتاز</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <h3 class="feature-title">استضافة قوية</h3>
@@ -250,13 +195,9 @@
                 تسجيل الدخول عبر Google
             </a>
         </div>
-
-        <div class="footer">
-        </div>
     </div>
 
     <script>
-        // تأثير تحريك الخلفية عند تحريك الماوس
         document.addEventListener('mousemove', (e) => {
             const pattern = document.querySelector('.pattern');
             const x = e.clientX / window.innerWidth;
@@ -264,7 +205,6 @@
             pattern.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
         });
 
-        // تأثير الكروت عند التمرير
         const cards = document.querySelectorAll('.feature-card');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -273,9 +213,7 @@
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, {
-            threshold: 0.1
-        });
+        }, { threshold: 0.1 });
 
         cards.forEach(card => {
             card.style.opacity = '0';
@@ -286,22 +224,17 @@
     </script>
 
     <script type="module">
-        import {
-            initializeApp
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import {
-            getAuth,
-            signInWithPopup,
-            GoogleAuthProvider,
-            OAuthProvider,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
             authDomain: "boneless-hosts-req.firebaseapp.com",
             projectId: "boneless-hosts-req",
-            appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd"
+            storageBucket: "boneless-hosts-req.firebasestorage.app",
+            messagingSenderId: "264386337640",
+            appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+            measurementId: "G-WZX8LHCD9L"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -309,22 +242,22 @@
 
         window.googleLogin = () => {
             const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider);
+            signInWithPopup(auth, provider).catch(e => alert(e.message));
         };
 
         window.discordLogin = () => {
             const provider = new OAuthProvider("discord");
-            signInWithPopup(auth, provider);
+            signInWithPopup(auth, provider).catch(e => alert(e.message));
         };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById("login-buttons").style.display = "none";
                 alert("تم تسجيل الدخول بنجاح ✅");
-                // لاحقًا يمكن تحويل المستخدم لصفحة أخرى
+                // لاحقاً يمكنك تحويل المستخدم لصفحة أخرى:
                 // window.location.href = "dashboard.html";
             }
         });
     </script>
 </body>
-    </html>
+</html>
