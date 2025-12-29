@@ -1,24 +1,60 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>اختيار الباقة - Boneless Hosts Requests</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>اختيار الباقة</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- هنا تنسخ محتوى صفحة اختيار الباقة بدون قسم <style> أو <script> -->
+<header class="top-bar">
+    <div class="logo">Boneless</div>
+    <div id="userBox"></div>
+</header>
 
-    <!-- بداية المحتوى (نسخة من الكود الموجود عندك داخل <body> فقط) -->
-    <div class="background"></div>
-    <div class="pattern"></div>
+<div class="container">
 
-    <div class="container">
-        <!-- ... باقي محتوى اختيار الباقة ... -->
+    <h1>اختيار الباقة</h1>
+
+    <div class="packages-grid">
+
+        <div class="package-card">
+            <h2>Basic</h2>
+            <p>$8</p>
+            <button class="select-button"
+                onclick="selectPackage('Basic',8,this)">
+                اختيار
+            </button>
+        </div>
+
+        <div class="package-card">
+            <h2>Premium</h2>
+            <p>$13.49</p>
+            <button class="select-button"
+                onclick="selectPackage('Premium',13.49,this)">
+                اختيار
+            </button>
+        </div>
+
+        <div class="package-card">
+            <h2>Master</h2>
+            <p>$17.99</p>
+            <button class="select-button"
+                onclick="selectPackage('Master',17.99,this)">
+                اختيار
+            </button>
+        </div>
+
     </div>
-    <!-- نهاية المحتوى -->
 
-    <script src="script.js"></script>
+    <div id="summaryBox" class="summary-box">
+        <p>الباقة: <span id="summaryPackage">-</span></p>
+        <p>السعر: <span id="summaryPrice">-</span></p>
+        <button id="orderButton" onclick="submitOrder()">طلب الآن</button>
+    </div>
+
+</div>
+
+<script src="script.js" defer></script>
 </body>
 </html>
