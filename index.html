@@ -1,423 +1,592 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>اختيار الباقة - Boneless Hosts Requests</title>
-    <style>
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>اختيار الباقة - Boneless Hosts Requests</title>
+
+<style>
+  /* إعادة تعيين بعض القواعد */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000000;
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* خلفيات */
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    z-index: -2;
+  }
+
+  .pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
+      repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px);
+    z-index: -1;
+    animation: patternMove 20s linear infinite;
+  }
+
+  @keyframes patternMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(70px, 70px); }
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(0,212,255,0.3);
+  }
+
+  .subtitle {
+    font-size: 1.2em;
+    color: #888;
+  }
+
+  /* باقات */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .package-card {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 40px 30px;
+    position: relative;
+    transition: all 0.4s ease;
+    overflow: hidden;
+  }
+
+  .package-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .package-card:hover::before {
+    opacity: 1;
+  }
+
+  .package-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(0,212,255,0.5);
+    box-shadow: 0 20px 60px rgba(0,212,255,0.2);
+  }
+
+  .package-card.selected {
+    border-color: #00d4ff;
+    box-shadow: 0 20px 60px rgba(0,212,255,0.4);
+    background: rgba(0,212,255,0.08);
+  }
+
+  .package-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .package-card.selected .package-badge {
+    opacity: 1;
+  }
+
+  .package-name {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #00d4ff;
+    text-shadow: 0 0 15px rgba(0,212,255,0.4);
+  }
+
+  .package-price {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .package-price span {
+    font-size: 0.5em;
+    color: #888;
+  }
+
+  .package-period {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+  }
+
+  .specs-list {
+    list-style: none;
+    margin-bottom: 30px;
+  }
+
+  .specs-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+  }
+
+  .specs-list li:last-child {
+    border-bottom: none;
+  }
+
+  .checkmark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0,212,255,0.2);
+    border: 2px solid #00d4ff;
+    position: relative;
+  }
+
+  .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #00d4ff;
+    font-size: 0.9em;
+  }
+
+  .select-button {
+    width: 100%;
+    padding: 15px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .select-button:hover {
+    background: rgba(0,212,255,0.2);
+    border-color: #00d4ff;
+    transform: scale(1.02);
+  }
+
+  .select-button.selected {
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border-color: #00d4ff;
+    box-shadow: 0 5px 20px rgba(0,212,255,0.4);
+  }
+
+  .options-container {
+    max-width: 800px;
+    margin: 50px auto;
+    display: none;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease;
+  }
+
+  .options-container.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .option-section {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #00d4ff;
+  }
+
+  .option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .option-item {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .option-item:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(0,212,255,0.5);
+    transform: scale(1.05);
+  }
+
+  .option-item.selected {
+    background: rgba(0,212,255,0.1);
+    border-color: #00d4ff;
+    box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+  }
+
+  .option-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+  }
+
+  .option-name {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: white;
+  }
+
+  .order-button {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .order-button.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .order-button.active:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,212,255,0.6);
+  }
+
+  .summary-box {
+    background: rgba(0,212,255,0.05);
+    border: 2px solid rgba(0,212,255,0.3);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  .summary-box.visible {
+    display: block;
+  }
+
+  .summary-title {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #00d4ff;
+    text-align: center;
+  }
+
+  .summary-details {
+    display: grid;
+    gap: 10px;
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+  }
+
+  .summary-label {
+    color: #888;
+  }
+
+  .summary-value {
+    color: white;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2em;
+    }
+
+    .packages-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .option-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* منطقة حساب المستخدم أعلى اليمين */
+  .account-area {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 212, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    color: white;
+    font-weight: bold;
+    cursor: default;
+    user-select: none;
+    z-index: 10000;
+  }
+
+  .account-area img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00d4ff;
+    cursor: pointer;
+  }
+
+  .account-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+  }
+
+  .account-info input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #00d4ff;
+    color: white;
+    font-size: 1em;
+    outline: none;
+    text-align: right;
+    cursor: text;
+  }
+
+  .account-info input:focus {
+    background: rgba(0, 212, 255, 0.2);
+    border-bottom-color: #0099cc;
+  }
+
+  .btn-logout {
+    background: #00d4ff;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+
+  .btn-logout:hover {
+    background: #0099cc;
+  }
+
+  /* زر تسجيل دخول جوجل */
+  .login-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #00d4ff;
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: background 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background: #0099cc;
+  }
+
+</style>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+  // مفاتيح مشروع Firebase - غيّرها حسب مشروعك
+  const firebaseConfig = {
+    apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
+    authDomain: "boneless-hosts-req.firebaseapp.com",
+    projectId: "boneless-hosts-req",
+    storageBucket: "boneless-hosts-req.firebasestorage.app",
+    messagingSenderId: "264386337640",
+    appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+    measurementId: "G-WZX8LHCD9L"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // عناصر DOM الخاصة بالحساب وتسجيل الدخول
+  let loginBtn, accountArea, userPhoto, userNameInput, logoutBtn;
+
+  window.onload = () => {
+    createUI();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        showUser(user);
+      } else {
+        showLogin();
+      }
+    });
+  };
+
+  function createUI() {
+    // زر تسجيل الدخول
+    loginBtn = document.createElement("button");
+    loginBtn.textContent = "تسجيل دخول جوجل";
+    loginBtn.className = "login-btn";
+    loginBtn.onclick = () => {
+      signInWithPopup(auth, provider).catch((error) => {
+        alert("خطأ أثناء تسجيل الدخول: " + error.message);
+      });
+    };
+    document.body.appendChild(loginBtn);
+
+    // منطقة حساب المستخدم
+    accountArea = document.createElement("div");
+    accountArea.className = "account-area";
+    accountArea.style.display = "none";
+
+    // صورة المستخدم
+    userPhoto = document.createElement("img");
+    userPhoto.alt = "صورة المستخدم";
+    userPhoto.title = "صورة الحساب";
+
+    // اسم المستخدم قابل للتعديل
+    userNameInput = document.createElement("input");
+    userNameInput.type = "text";
+    userNameInput.title = "تعديل اسم المستخدم";
+    userNameInput.spellcheck = false;
+
+    // تحديث الاسم عند التعديل (debounce)
+    let timeoutId;
+    userNameInput.oninput = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const newName = userNameInput.value.trim();
+        if (newName.length > 0) {
+          updateProfile(auth.currentUser, { displayName: newName }).catch(err => {
+            alert("خطأ في تحديث الاسم: " + err.message);
+          });
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            color: white;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-            padding-top: 70px;
-        }
-        .background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
-            z-index: -2;
-        }
-        .pattern {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px);
-            z-index: -1;
-            animation: patternMove 20s linear infinite;
-        }
-        @keyframes patternMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(70px, 70px); }
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 20px rgba(0,212,255,0.3);
-        }
-        .subtitle {
-            font-size: 1.2em;
-            color: #888;
-        }
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-        .package-card {
-            background: rgba(255,255,255,0.03);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px 30px;
-            position: relative;
-            transition: all 0.4s ease;
-            overflow: hidden;
-        }
-        .package-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .package-card:hover::before {
-            opacity: 1;
-        }
-        .package-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0,212,255,0.5);
-            box-shadow: 0 20px 60px rgba(0,212,255,0.2);
-        }
-        .package-card.selected {
-            border-color: #00d4ff;
-            box-shadow: 0 20px 60px rgba(0,212,255,0.4);
-            background: rgba(0,212,255,0.08);
-        }
-        .package-badge {
-            position: absolute;
-            top: 20px; left: 20px;
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.85em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .package-card.selected .package-badge {
-            opacity: 1;
-        }
-        .package-name {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #00d4ff;
-            text-shadow: 0 0 15px rgba(0,212,255,0.4);
-        }
-        .package-price {
-            font-size: 3em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: white;
-        }
-        .package-price span {
-            font-size: 0.5em;
-            color: #888;
-        }
-        .package-period {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-        }
-        .specs-list {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-        .specs-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ccc;
-        }
-        .specs-list li:last-child {
-            border-bottom: none;
-        }
-        .checkmark {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(0,212,255,0.2);
-            border: 2px solid #00d4ff;
-            position: relative;
-        }
-        .checkmark::after {
-            content: '✓';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: #00d4ff;
-            font-size: 0.9em;
-        }
-        .select-button {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .select-button:hover {
-            background: rgba(0,212,255,0.2);
-            border-color: #00d4ff;
-            transform: scale(1.02);
-        }
-        .select-button.selected {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            border-color: #00d4ff;
-            box-shadow: 0 5px 20px rgba(0,212,255,0.4);
-        }
-        .options-container {
-            max-width: 800px;
-            margin: 50px auto;
-            display: none;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s ease;
-        }
-        .options-container.visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .option-section {
-            background: rgba(255,255,255,0.03);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-        }
-        .section-title {
-            font-size: 1.8em;
-            margin-bottom: 25px;
-            text-align: center;
-            color: #00d4ff;
-        }
-        .option-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .option-item {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .option-item:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(0,212,255,0.5);
-            transform: scale(1.05);
-        }
-        .option-item.selected {
-            background: rgba(0,212,255,0.1);
-            border-color: #00d4ff;
-            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
-        }
-        .option-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-        .option-name {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: white;
-        }
-        .order-button {
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-size: 1.3em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .order-button.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .order-button.active:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,212,255,0.6);
-        }
-        .summary-box {
-            background: rgba(0,212,255,0.05);
-            border: 2px solid rgba(0,212,255,0.3);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .summary-box.visible {
-            display: block;
-        }
-        .summary-title {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: #00d4ff;
-            text-align: center;
-        }
-        .summary-details {
-            display: grid;
-            gap: 10px;
-        }
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-        }
-        .summary-label {
-            color: #888;
-        }
-        .summary-value {
-            color: white;
-            font-weight: bold;
-        }
-        /* تسجيل دخول جوجل في أعلى يمين الصفحة */
-        .user-info {
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #00d4ff;
-            border-radius: 25px;
-            padding: 5px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            z-index: 9999;
-            font-weight: bold;
-            user-select: none;
-        }
-        .user-photo {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #00d4ff;
-            cursor: pointer;
-        }
-        .user-name {
-            cursor: pointer;
-        }
-        .edit-username {
-            background: transparent;
-            border: none;
-            color: #00d4ff;
-            cursor: pointer;
-            font-size: 0.9em;
-            padding: 0;
-            margin-left: 5px;
-        }
-        .login-button {
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            background: #4285f4;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 18px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(66,133,244,0.4);
-            transition: background 0.3s ease;
-        }
-        .login-button:hover {
-            background: #3367d6;
-        }
-        .google-icon {
-            width: 20px;
-            height: 20px;
-        }
-    </style>
+      }, 1000);
+    };
+
+    // زر تسجيل الخروج
+    logoutBtn = document.createElement("button");
+    logoutBtn.textContent = "تسجيل خروج";
+    logoutBtn.className = "btn-logout";
+    logoutBtn.onclick = () => {
+      signOut(auth);
+    };
+
+    // تجميع عناصر الحساب
+    accountArea.appendChild(userPhoto);
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "account-info";
+    infoDiv.appendChild(userNameInput);
+    accountArea.appendChild(infoDiv);
+    accountArea.appendChild(logoutBtn);
+
+    document.body.appendChild(accountArea);
+  }
+
+  function showUser(user) {
+    loginBtn.style.display = "none";
+    accountArea.style.display = "flex";
+
+    userPhoto.src = user.photoURL || "https://via.placeholder.com/40?text=User";
+    userNameInput.value = user.displayName || "مستخدم";
+  }
+
+  function showLogin() {
+    loginBtn.style.display = "block";
+    accountArea.style.display = "none";
+  }
+</script>
+
 </head>
 <body>
-    <div class="background"></div>
-    <div class="pattern"></div>
+  <div class="background"></div>
+  <div class="pattern"></div>
 
-    <!-- زر تسجيل الدخول يظهر إذا لم يتم تسجيل الدخول -->
-    <button id="loginBtn" class="login-button" style="display:none;">
-        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" fill="white">
-            <path d="M533.5 278.4c0-17.4-1.6-34-4.7-50.1H272v95.1h146.9c-6.3 34-25.4 62.8-54.3 82.1v68h87.7c51.2-47.2 80.9-116.5 80.9-195.1z"/>
-            <path d="M272 544.3c73.7 0 135.7-24.4 180.9-66.3l-87.7-68c-24.5 16.5-56 26.2-93.2 26.2-71.6 0-132.3-48.3-154.1-113.2H25.7v70.7c45 88.6 137.1 150.6 246.3 150.6z"/>
-            <path d="M117.9 322.9c-10.7-31.9-10.7-66.3 0-98.2V154h-92C8.2 198.4 0 243.7 0 290c0 46.3 8.2 91.6 25.9 136.3l92-70.4z"/>
-            <path d="M272 107.7c39.4 0 75 13.6 102.9 40.4l77.3-77.3C403.9 24.7 344.4 0 272 0 162.8 0 70.7 62 25.7 150.6l92 70.7c21.8-64.9 82.5-113.6 154.1-113.6z"/>
-        </svg>
-        تسجيل الدخول عبر جوجل
-    </button>
+  <div class="container">
+    <header>
+      <h1>اختيار الباقة</h1>
+      <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
+    </header>
 
-    <!-- معلومات المستخدم تظهر إذا تم تسجيل الدخول -->
-    <div id="userInfo" class="user-info" style="display:none;">
-        <img src="" alt="User Photo" class="user-photo" id="userPhoto" />
-        <div>
-            <span id="userName" class="user-name"></span>
-            <button id="editNameBtn" class="edit-username" title="تعديل الاسم">✎</button>
-        </div>
-        <button id="logoutBtn" class="edit-username" title="تسجيل الخروج" style="margin-left: 10px;">خروج</button>
-    </div>
-
-    <div class="container">
-        <header>
-            <h1>اختيار الباقة</h1>
-            <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
-        </header>
-
-        <div class="packages-grid">
-            <!-- Basic Package -->
-            <div class="package-card" data-package="basic" data-price="8">
-                <div class="package-badge">محدد</div>
-                <h2 class="package-name">Basic</h2>
-                <div class="package-price">$8<span>/شهرياً</span></div>
-                <p class="package-period">باقة مثالية للمبتدئين</p>
-                
-                <ul class="specs-list">
-                    <li><span class="checkmark"></span><span><strong>325% CPU</strong> (3.25 vCores)</span></li>
-                    <li><span class="checkmark"></span><span><strong>6GB</strong> Ram</span></li>
-                    <li><span class="checkmark"></span><span><strong>24GB</strong> NVMe Storage</span></li>
-                    <li><span class="checkmark"></span><span><strong>2Gbit/s</strong> Network</span></li>
-                    <li><span class="checkmark"></span><span><strong>DDoS Protection</strong></span></li>
-                </ul>
-
-                <button class="select-button" onclick="selectPackage('basic', 8, this)">اختيار هذه الباقة</button>
-            </div>
-
-            <!-- Premium Package -->
-            <div class="package-card" data-package="premium" data-price="13.49">
-                <div class="package-badge">محدد</div>
-                <h2 class="package-name">Premium</h2>
-                <div class="package-price">$13.49<span>/شهرياً</span></div>
-                <p class="package-period">باقة احترافية متقدمة</p>
-                
-                <ul class="specs-list">
-                    <li><span class="checkmark"></
+    <div class="packages-grid">
+      <!-- Basic Package -->
+      <div class="package-card" data-package="basic" data-price="8">
+        <div class="package-badge">محدد</div>
