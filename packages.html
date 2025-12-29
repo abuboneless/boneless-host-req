@@ -5,26 +5,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>اختيار الباقة - Boneless Hosts Requests</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <!-- هنا تحط المحتوى الكامل لاختيار الباقة مع الخيارات -->
-
-  <div class="container">
-    <header>
-      <h1>اختيار الباقة</h1>
-      <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
-    </header>
-
-    <!-- باقي المحتوى مثل الباقات والخيارات -->
-  </div>
-
-  <button id="logoutBtn" class="btn-logout">تسجيل خروج</button>
-
+  <style>
+    /* اضف هنا جميع التنسيقات CSS الخاصة بالصفحة */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000000;
+      color: white;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #00d4ff;
+    }
+    .package {
+      border: 2px solid #00d4ff;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      text-align: center;
+    }
+    button.logout-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #00d4ff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button.logout-btn:hover {
+      background: #0099cc;
+    }
+  </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
@@ -39,24 +62,43 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const logoutBtn = document.getElementById("logoutBtn");
+    window.onload = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          // لو المستخدم غير مسجل دخول، يرجع للصفحة الأولى
+          window.location.href = "index.html";
+        } else {
+          // ممكن تعرض اسم المستخدم أو أي شيء آخر
+          document.getElementById("username").textContent = user.displayName || "مستخدم";
+        }
+      });
+    };
 
-    // التحقق من حالة الدخول
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        // إذا لم يكن مسجل دخول، اذهب للصفحة الرئيسية
-        window.location.href = "index.html";
-      } else {
-        // يمكن إضافة إظهار بيانات المستخدم أو تهيئة الصفحة
-        console.log("مستخدم مسجل دخول:", user.displayName);
-      }
-    });
-
-    logoutBtn.onclick = () => {
+    function logout() {
       signOut(auth).then(() => {
         window.location.href = "index.html";
       });
-    };
+    }
   </script>
+</head>
+<body>
+  <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+  <h1>مرحباً، <span id="username"></span></h1>
+
+  <div class="package">
+    <h2>باقة Basic</h2>
+    <p>سعر: 8$ شهرياً</p>
+    <ul>
+      <li>325% CPU (3.25 vCores)</li>
+      <li>6GB Ram</li>
+      <li>24GB NVMe Storage</li>
+      <li>2Gbit/s Network</li>
+      <li>DDoS Protection</li>
+    </ul>
+    <button>اختيار هذه الباقة</button>
+  </div>
+
+  <!-- يمكنك إضافة باقي الباقات هنا بنفس النمط -->
+
 </body>
 </html>
