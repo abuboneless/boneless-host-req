@@ -212,8 +212,8 @@
     onAuthStateChanged(auth, (user) => {
         if(user) {
             document.getElementById('googleSignIn').style.display = 'none';
-            // ممكن توجّه المستخدم لصفحة ثانية لو حبيت
-            // window.location.href = 'dashboard.html';
+            // التوجيه لصفحة الباقات بعد تسجيل الدخول
+            window.location.href = 'packages.html';
         } else {
             document.getElementById('googleSignIn').style.display = 'inline-flex';
         }
@@ -223,11 +223,11 @@
         signInWithPopup(auth, provider)
             .then(result => {
                 document.getElementById('googleSignIn').style.display = 'none';
-                // بعد تسجيل الدخول يمكن توجه لصفحة ثانية
-                // window.location.href = 'dashboard.html';
+                window.location.href = 'packages.html'; // توجه المستخدم بعد تسجيل الدخول
             })
             .catch(error => {
                 console.error("خطأ في تسجيل الدخول:", error);
+                alert("حدث خطأ أثناء تسجيل الدخول: " + error.message);
             });
     });
 
