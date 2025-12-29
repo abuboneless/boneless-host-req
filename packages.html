@@ -1,60 +1,62 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>اختيار الباقة</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اختيار الباقة - Boneless Hosts Requests</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="top-bar">
-    <div class="logo">Boneless</div>
-    <div id="userBox"></div>
-</header>
+  <!-- هنا تحط المحتوى الكامل لاختيار الباقة مع الخيارات -->
 
-<div class="container">
+  <div class="container">
+    <header>
+      <h1>اختيار الباقة</h1>
+      <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
+    </header>
 
-    <h1>اختيار الباقة</h1>
+    <!-- باقي المحتوى مثل الباقات والخيارات -->
+  </div>
 
-    <div class="packages-grid">
+  <button id="logoutBtn" class="btn-logout">تسجيل خروج</button>
 
-        <div class="package-card">
-            <h2>Basic</h2>
-            <p>$8</p>
-            <button class="select-button"
-                onclick="selectPackage('Basic',8,this)">
-                اختيار
-            </button>
-        </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-        <div class="package-card">
-            <h2>Premium</h2>
-            <p>$13.49</p>
-            <button class="select-button"
-                onclick="selectPackage('Premium',13.49,this)">
-                اختيار
-            </button>
-        </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
+      authDomain: "boneless-hosts-req.firebaseapp.com",
+      projectId: "boneless-hosts-req",
+      storageBucket: "boneless-hosts-req.firebasestorage.app",
+      messagingSenderId: "264386337640",
+      appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+      measurementId: "G-WZX8LHCD9L"
+    };
 
-        <div class="package-card">
-            <h2>Master</h2>
-            <p>$17.99</p>
-            <button class="select-button"
-                onclick="selectPackage('Master',17.99,this)">
-                اختيار
-            </button>
-        </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    </div>
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    <div id="summaryBox" class="summary-box">
-        <p>الباقة: <span id="summaryPackage">-</span></p>
-        <p>السعر: <span id="summaryPrice">-</span></p>
-        <button id="orderButton" onclick="submitOrder()">طلب الآن</button>
-    </div>
+    // التحقق من حالة الدخول
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // إذا لم يكن مسجل دخول، اذهب للصفحة الرئيسية
+        window.location.href = "index.html";
+      } else {
+        // يمكن إضافة إظهار بيانات المستخدم أو تهيئة الصفحة
+        console.log("مستخدم مسجل دخول:", user.displayName);
+      }
+    });
 
-</div>
-
-<script src="script.js" defer></script>
+    logoutBtn.onclick = () => {
+      signOut(auth).then(() => {
+        window.location.href = "index.html";
+      });
+    };
+  </script>
 </body>
 </html>
