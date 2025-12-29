@@ -3,34 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>اختيار الباقة - Boneless Hosts Requests</title>
-
+  <title>تسجيل الدخول - Boneless Hosts Requests</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- منطقة حساب المستخدم -->
-  <div id="accountArea" class="account-area" style="display:none;">
-    <img id="userPhoto" alt="صورة المستخدم" title="صورة الحساب" />
-    <div class="account-info">
-      <input id="userNameInput" type="text" title="تعديل اسم المستخدم" spellcheck="false" />
-    </div>
-    <button id="logoutBtn" class="btn-logout">تسجيل خروج</button>
-  </div>
-
   <button id="loginBtn" class="login-btn">تسجيل دخول جوجل</button>
 
-  <!-- محتوى الصفحة -->
-  <div class="container">
-    <header>
-      <h1>اختيار الباقة</h1>
-      <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
-    </header>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-    <!-- هنا تضيف باقي محتوى الصفحة (الباقات، الخيارات، الخ) -->
-    <p>محتوى الصفحة...</p>
-  </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
+      authDomain: "boneless-hosts-req.firebaseapp.com",
+      projectId: "boneless-hosts-req",
+      storageBucket: "boneless-hosts-req.firebasestorage.app",
+      messagingSenderId: "264386337640",
+      appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+      measurementId: "G-WZX8LHCD9L"
+    };
 
-  <script type="module" src="script.js"></script>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.onclick = () => {
+      signInWithPopup(auth, provider).catch(error => {
+        alert("خطأ أثناء تسجيل الدخول: " + error.message);
+      });
+    };
+
+    // التحقق من حالة الدخول
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // إذا المستخدم مسجل دخول، وجهه إلى الصفحة الثانية
+        window.location.href = "packages.html";
+      }
+      // إذا لم يكن مسجل، يبقى في نفس الصفحة مع زر تسجيل الدخول
+    });
+  </script>
+
 </body>
 </html>
