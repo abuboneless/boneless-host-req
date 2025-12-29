@@ -1,69 +1,261 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تسجيل الدخول - Boneless Hosts Requests</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #000;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    button {
-      background: #00d4ff;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border-radius: 12px;
-      cursor: pointer;
-      color: white;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #0099cc;
-    }
-  </style>
-  <script type="module">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: white;
+            overflow-x: hidden;
+        }
+        .background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            z-index: -2;
+        }
+        .pattern {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px);
+            z-index: -1;
+            animation: patternMove 20s linear infinite;
+        }
+        @keyframes patternMove {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(70px,70px); }
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0,255,100,0.5);
+        }
+        h1 .highlight {
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0,212,255,0.6);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: #aaa;
+            margin-bottom: 50px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(0,255,100,0.2);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0,255,100,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0,255,100,0.5);
+            box-shadow: 0 10px 40px rgba(0,255,100,0.3);
+        }
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        .feature-card:nth-child(1) .feature-icon { color: #00ff64; }
+        .feature-card:nth-child(2) .feature-icon { color: #00d4ff; }
+        .feature-card:nth-child(3) .feature-icon { color: #ff6b35; }
+        .feature-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .feature-desc {
+            color: #bbb;
+            line-height: 1.6;
+        }
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0066ff 0%, #0044cc 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0,102,255,0.4);
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0,102,255,0.6);
+        }
+        .google-icon {
+            width: 24px;
+            height: 24px;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 60px;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="pattern"></div>
+    <div class="container">
+        <header>
+            <h1>Boneless <span class="highlight">Hosts</span> <span style="color: #888;">Requests</span></h1>
+            <p class="subtitle">نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً</p>
+        </header>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3 class="feature-title">حماية متقدمة</h3>
+                <p class="feature-desc">أمان عالي المستوى لسيرفرك مع حماية ضد جميع الهجمات</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">استجابة فورية</h3>
+                <p class="feature-desc">معالجة سريعة لجميع الطلبات مع أداء ممتاز</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">استضافة قوية</h3>
+                <p class="feature-desc">سيرفرات عالية الأداء لجميع أنواع الألعاب</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 50px;">
+            <a href="#" id="googleSignIn" class="cta-button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="google-icon" viewBox="0 0 533.5 544.3" fill="none">
+                    <path fill="#4285f4" d="M533.5 278.4c0-17.4-1.5-34.1-4.3-50.3H272v95.1h147.1c-6.3 34-25.3 62.9-54 82.3v68h87.3c51.1-47.1 80.1-116.4 80.1-195.1z"/>
+                    <path fill="#34a853" d="M272 544.3c73.8 0 135.8-24.4 181.1-66.3l-87.3-68c-24.3 16.4-55.5 26-93.7 26-71.9 0-132.8-48.6-154.7-113.9h-89.6v71.6c45.2 89.5 137.7 150 244.3 150z"/>
+                    <path fill="#fbbc04" d="M117.3 323.7c-10.4-31.2-10.4-64.5 0-95.7v-71.6H27.7c-38.6 75.7-38.6 166.2 0 241.9l89.6-74.6z"/>
+                    <path fill="#ea4335" d="M272 107.7c39.9 0 75.7 13.7 104 40.7l78-78C404 24.5 343 0 272 0 165.4 0 73 60.5 27.7 150.1l89.6 74.6c21.9-65.3 82.8-113 154.7-113z"/>
+                </svg>
+                تسجيل الدخول عبر Google
+            </a>
+        </div>
+        <div class="footer"></div>
+    </div>
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
-      authDomain: "boneless-hosts-req.firebaseapp.com",
-      projectId: "boneless-hosts-req",
-      storageBucket: "boneless-hosts-req.firebasestorage.app",
-      messagingSenderId: "264386337640",
-      appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
-      measurementId: "G-WZX8LHCD9L"
+        apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
+        authDomain: "boneless-hosts-req.firebaseapp.com",
+        projectId: "boneless-hosts-req",
+        storageBucket: "boneless-hosts-req.firebasestorage.app",
+        messagingSenderId: "264386337640",
+        appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+        measurementId: "G-WZX8LHCD9L"
     };
 
     const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    window.onload = () => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // إذا المستخدم مسجل دخول، نوجهه مباشرة للصفحة الثانية
-          window.location.href = "packages.html";
+    onAuthStateChanged(auth, (user) => {
+        if(user) {
+            document.getElementById('googleSignIn').style.display = 'none';
+            // ممكن توجّه المستخدم لصفحة ثانية لو حبيت
+            // window.location.href = 'dashboard.html';
+        } else {
+            document.getElementById('googleSignIn').style.display = 'inline-flex';
         }
-      });
-    };
+    });
 
-    function login() {
-      signInWithPopup(auth, provider).catch((error) => {
-        alert("خطأ أثناء تسجيل الدخول: " + error.message);
-      });
-    }
-  </script>
-</head>
-<body>
-  <button onclick="login()">تسجيل دخول جوجل</button>
+    document.getElementById('googleSignIn').addEventListener('click', () => {
+        signInWithPopup(auth, provider)
+            .then(result => {
+                document.getElementById('googleSignIn').style.display = 'none';
+                // بعد تسجيل الدخول يمكن توجه لصفحة ثانية
+                // window.location.href = 'dashboard.html';
+            })
+            .catch(error => {
+                console.error("خطأ في تسجيل الدخول:", error);
+            });
+    });
+
+    // تأثير تحريك الخلفية عند تحريك الماوس
+    document.addEventListener('mousemove', (e) => {
+        const pattern = document.querySelector('.pattern');
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        pattern.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+    });
+
+    // تأثير الكروت عند التمرير
+    const cards = document.querySelectorAll('.feature-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+</script>
 </body>
 </html>
