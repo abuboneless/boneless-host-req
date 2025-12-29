@@ -1,1 +1,16 @@
+/* كل الأكواد اللي كانت داخل <style> في صفحة اختيار الباقة */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000000;
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ...باقي كود الـ CSS كامل... */
