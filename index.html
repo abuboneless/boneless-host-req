@@ -4,12 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تسجيل الدخول - Boneless Hosts Requests</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <button id="loginBtn" class="login-btn">تسجيل دخول جوجل</button>
-
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    button {
+      background: #00d4ff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0099cc;
+    }
+  </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
@@ -28,23 +47,23 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    const loginBtn = document.getElementById("loginBtn");
-
-    loginBtn.onclick = () => {
-      signInWithPopup(auth, provider).catch(error => {
-        alert("خطأ أثناء تسجيل الدخول: " + error.message);
+    window.onload = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // إذا المستخدم مسجل دخول، نوجهه مباشرة للصفحة الثانية
+          window.location.href = "packages.html";
+        }
       });
     };
 
-    // التحقق من حالة الدخول
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // إذا المستخدم مسجل دخول، وجهه إلى الصفحة الثانية
-        window.location.href = "packages.html";
-      }
-      // إذا لم يكن مسجل، يبقى في نفس الصفحة مع زر تسجيل الدخول
-    });
+    function login() {
+      signInWithPopup(auth, provider).catch((error) => {
+        alert("خطأ أثناء تسجيل الدخول: " + error.message);
+      });
+    }
   </script>
-
+</head>
+<body>
+  <button onclick="login()">تسجيل دخول جوجل</button>
 </body>
 </html>
