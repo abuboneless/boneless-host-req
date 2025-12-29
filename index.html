@@ -3,259 +3,421 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
+    <title>اختيار الباقة - Boneless Hosts Requests</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
             color: white;
             overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            padding-top: 70px;
         }
         .background {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
             z-index: -2;
         }
         .pattern {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px);
             z-index: -1;
             animation: patternMove 20s linear infinite;
         }
         @keyframes patternMove {
-            0% { transform: translate(0,0); }
-            100% { transform: translate(70px,70px); }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
         header {
             text-align: center;
-            padding: 60px 20px 40px;
+            margin-bottom: 60px;
         }
         h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(0,255,100,0.5);
-        }
-        h1 .highlight {
-            color: #00d4ff;
-            text-shadow: 0 0 20px rgba(0,212,255,0.6);
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0,212,255,0.3);
         }
         .subtitle {
             font-size: 1.2em;
-            color: #aaa;
-            margin-bottom: 50px;
+            color: #888;
         }
-        .features {
+        .packages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
             margin-bottom: 50px;
         }
-        .feature-card {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(0,255,100,0.2);
-            border-radius: 15px;
+        .package-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
             padding: 40px 30px;
-            text-align: center;
-            transition: all 0.3s ease;
             position: relative;
+            transition: all 0.4s ease;
             overflow: hidden;
         }
-        .feature-card::before {
+        .package-card::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,255,100,0.1) 0%, transparent 70%);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .package-card:hover::before {
+            opacity: 1;
+        }
+        .package-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0,212,255,0.5);
+            box-shadow: 0 20px 60px rgba(0,212,255,0.2);
+        }
+        .package-card.selected {
+            border-color: #00d4ff;
+            box-shadow: 0 20px 60px rgba(0,212,255,0.4);
+            background: rgba(0,212,255,0.08);
+        }
+        .package-badge {
+            position: absolute;
+            top: 20px; left: 20px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .feature-card:hover::before {
+        .package-card.selected .package-badge {
             opacity: 1;
         }
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0,255,100,0.5);
-            box-shadow: 0 10px 40px rgba(0,255,100,0.3);
-        }
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-        .feature-card:nth-child(1) .feature-icon { color: #00ff64; }
-        .feature-card:nth-child(2) .feature-icon { color: #00d4ff; }
-        .feature-card:nth-child(3) .feature-icon { color: #ff6b35; }
-        .feature-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
+        .package-name {
+            font-size: 2em;
             font-weight: bold;
+            margin-bottom: 15px;
+            color: #00d4ff;
+            text-shadow: 0 0 15px rgba(0,212,255,0.4);
         }
-        .feature-desc {
-            color: #bbb;
-            line-height: 1.6;
+        .package-price {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
         }
-        .cta-button {
-            display: inline-flex;
+        .package-price span {
+            font-size: 0.5em;
+            color: #888;
+        }
+        .package-period {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+        .specs-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        .specs-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #0066ff 0%, #0044cc 100%);
+            color: #ccc;
+        }
+        .specs-list li:last-child {
+            border-bottom: none;
+        }
+        .checkmark {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0,212,255,0.2);
+            border: 2px solid #00d4ff;
+            position: relative;
+        }
+        .checkmark::after {
+            content: '✓';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00d4ff;
+            font-size: 0.9em;
+        }
+        .select-button {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
             color: white;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 50px;
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
-            box-shadow: 0 5px 20px rgba(0,102,255,0.4);
         }
-        .cta-button:hover {
+        .select-button:hover {
+            background: rgba(0,212,255,0.2);
+            border-color: #00d4ff;
+            transform: scale(1.02);
+        }
+        .select-button.selected {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-color: #00d4ff;
+            box-shadow: 0 5px 20px rgba(0,212,255,0.4);
+        }
+        .options-container {
+            max-width: 800px;
+            margin: 50px auto;
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        .options-container.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .option-section {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #00d4ff;
+        }
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .option-item {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .option-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0,212,255,0.5);
             transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(0,102,255,0.6);
+        }
+        .option-item.selected {
+            background: rgba(0,212,255,0.1);
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+        .option-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .option-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+        }
+        .order-button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .order-button.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .order-button.active:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,212,255,0.6);
+        }
+        .summary-box {
+            background: rgba(0,212,255,0.05);
+            border: 2px solid rgba(0,212,255,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .summary-box.visible {
+            display: block;
+        }
+        .summary-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #00d4ff;
+            text-align: center;
+        }
+        .summary-details {
+            display: grid;
+            gap: 10px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+        .summary-label {
+            color: #888;
+        }
+        .summary-value {
+            color: white;
+            font-weight: bold;
+        }
+        /* تسجيل دخول جوجل في أعلى يمين الصفحة */
+        .user-info {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #00d4ff;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            z-index: 9999;
+            font-weight: bold;
+            user-select: none;
+        }
+        .user-photo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00d4ff;
+            cursor: pointer;
+        }
+        .user-name {
+            cursor: pointer;
+        }
+        .edit-username {
+            background: transparent;
+            border: none;
+            color: #00d4ff;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 0;
+            margin-left: 5px;
+        }
+        .login-button {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 18px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(66,133,244,0.4);
+            transition: background 0.3s ease;
+        }
+        .login-button:hover {
+            background: #3367d6;
         }
         .google-icon {
-            width: 24px;
-            height: 24px;
-        }
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 60px;
-        }
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-            .features {
-                grid-template-columns: 1fr;
-            }
+            width: 20px;
+            height: 20px;
         }
     </style>
 </head>
 <body>
     <div class="background"></div>
     <div class="pattern"></div>
+
+    <!-- زر تسجيل الدخول يظهر إذا لم يتم تسجيل الدخول -->
+    <button id="loginBtn" class="login-button" style="display:none;">
+        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" fill="white">
+            <path d="M533.5 278.4c0-17.4-1.6-34-4.7-50.1H272v95.1h146.9c-6.3 34-25.4 62.8-54.3 82.1v68h87.7c51.2-47.2 80.9-116.5 80.9-195.1z"/>
+            <path d="M272 544.3c73.7 0 135.7-24.4 180.9-66.3l-87.7-68c-24.5 16.5-56 26.2-93.2 26.2-71.6 0-132.3-48.3-154.1-113.2H25.7v70.7c45 88.6 137.1 150.6 246.3 150.6z"/>
+            <path d="M117.9 322.9c-10.7-31.9-10.7-66.3 0-98.2V154h-92C8.2 198.4 0 243.7 0 290c0 46.3 8.2 91.6 25.9 136.3l92-70.4z"/>
+            <path d="M272 107.7c39.4 0 75 13.6 102.9 40.4l77.3-77.3C403.9 24.7 344.4 0 272 0 162.8 0 70.7 62 25.7 150.6l92 70.7c21.8-64.9 82.5-113.6 154.1-113.6z"/>
+        </svg>
+        تسجيل الدخول عبر جوجل
+    </button>
+
+    <!-- معلومات المستخدم تظهر إذا تم تسجيل الدخول -->
+    <div id="userInfo" class="user-info" style="display:none;">
+        <img src="" alt="User Photo" class="user-photo" id="userPhoto" />
+        <div>
+            <span id="userName" class="user-name"></span>
+            <button id="editNameBtn" class="edit-username" title="تعديل الاسم">✎</button>
+        </div>
+        <button id="logoutBtn" class="edit-username" title="تسجيل الخروج" style="margin-left: 10px;">خروج</button>
+    </div>
+
     <div class="container">
         <header>
-            <h1>Boneless <span class="highlight">Hosts</span> <span style="color: #888;">Requests</span></h1>
-            <p class="subtitle">نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً</p>
+            <h1>اختيار الباقة</h1>
+            <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
         </header>
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3 class="feature-title">حماية متقدمة</h3>
-                <p class="feature-desc">أمان عالي المستوى لسيرفرك مع حماية ضد جميع الهجمات</p>
+
+        <div class="packages-grid">
+            <!-- Basic Package -->
+            <div class="package-card" data-package="basic" data-price="8">
+                <div class="package-badge">محدد</div>
+                <h2 class="package-name">Basic</h2>
+                <div class="package-price">$8<span>/شهرياً</span></div>
+                <p class="package-period">باقة مثالية للمبتدئين</p>
+                
+                <ul class="specs-list">
+                    <li><span class="checkmark"></span><span><strong>325% CPU</strong> (3.25 vCores)</span></li>
+                    <li><span class="checkmark"></span><span><strong>6GB</strong> Ram</span></li>
+                    <li><span class="checkmark"></span><span><strong>24GB</strong> NVMe Storage</span></li>
+                    <li><span class="checkmark"></span><span><strong>2Gbit/s</strong> Network</span></li>
+                    <li><span class="checkmark"></span><span><strong>DDoS Protection</strong></span></li>
+                </ul>
+
+                <button class="select-button" onclick="selectPackage('basic', 8, this)">اختيار هذه الباقة</button>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">استجابة فورية</h3>
-                <p class="feature-desc">معالجة سريعة لجميع الطلبات مع أداء ممتاز</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">استضافة قوية</h3>
-                <p class="feature-desc">سيرفرات عالية الأداء لجميع أنواع الألعاب</p>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 50px;">
-            <a href="#" id="googleSignIn" class="cta-button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="google-icon" viewBox="0 0 533.5 544.3" fill="none">
-                    <path fill="#4285f4" d="M533.5 278.4c0-17.4-1.5-34.1-4.3-50.3H272v95.1h147.1c-6.3 34-25.3 62.9-54 82.3v68h87.3c51.1-47.1 80.1-116.4 80.1-195.1z"/>
-                    <path fill="#34a853" d="M272 544.3c73.8 0 135.8-24.4 181.1-66.3l-87.3-68c-24.3 16.4-55.5 26-93.7 26-71.9 0-132.8-48.6-154.7-113.9h-89.6v71.6c45.2 89.5 137.7 150 244.3 150z"/>
-                    <path fill="#fbbc04" d="M117.3 323.7c-10.4-31.2-10.4-64.5 0-95.7v-71.6H27.7c-38.6 75.7-38.6 166.2 0 241.9l89.6-74.6z"/>
-                    <path fill="#ea4335" d="M272 107.7c39.9 0 75.7 13.7 104 40.7l78-78C404 24.5 343 0 272 0 165.4 0 73 60.5 27.7 150.1l89.6 74.6c21.9-65.3 82.8-113 154.7-113z"/>
-                </svg>
-                تسجيل الدخول عبر Google
-            </a>
-        </div>
-        <div class="footer"></div>
-    </div>
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
-        authDomain: "boneless-hosts-req.firebaseapp.com",
-        projectId: "boneless-hosts-req",
-        storageBucket: "boneless-hosts-req.firebasestorage.app",
-        messagingSenderId: "264386337640",
-        appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
-        measurementId: "G-WZX8LHCD9L"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    onAuthStateChanged(auth, (user) => {
-        if(user) {
-            document.getElementById('googleSignIn').style.display = 'none';
-            // ممكن توجّه المستخدم لصفحة ثانية لو حبيت
-            // window.location.href = 'dashboard.html';
-        } else {
-            document.getElementById('googleSignIn').style.display = 'inline-flex';
-        }
-    });
-
-    document.getElementById('googleSignIn').addEventListener('click', () => {
-        signInWithPopup(auth, provider)
-            .then(result => {
-                document.getElementById('googleSignIn').style.display = 'none';
-                // بعد تسجيل الدخول يمكن توجه لصفحة ثانية
-                // window.location.href = 'dashboard.html';
-            })
-            .catch(error => {
-                console.error("خطأ في تسجيل الدخول:", error);
-            });
-    });
-
-    // تأثير تحريك الخلفية عند تحريك الماوس
-    document.addEventListener('mousemove', (e) => {
-        const pattern = document.querySelector('.pattern');
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
-        pattern.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
-    });
-
-    // تأثير الكروت عند التمرير
-    const cards = document.querySelectorAll('.feature-card');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting){
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
-
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease';
-        observer.observe(card);
-    });
-</script>
-</body>
-</html>
+            <!-- Premium Package -->
+            <div class="package-card" data-package="premium" data-price="13.49">
+                <div class="package-badge">محدد</div>
+                <h2 class="package-name">Premium</h2>
+                <div class="package-price">$13.49<span>/شهرياً</span></div>
+                <p class="package-period">باقة احترافية متقدمة</p>
+                
+                <ul class="specs-list">
+                    <li><span class="checkmark"></
