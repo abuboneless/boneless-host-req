@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>Boneless Hosts</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اختيار الباقة - Boneless Hosts Requests</title>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="top-bar">
-    <div class="logo">Boneless</div>
+  <!-- منطقة حساب المستخدم -->
+  <div id="accountArea" class="account-area" style="display:none;">
+    <img id="userPhoto" alt="صورة المستخدم" title="صورة الحساب" />
+    <div class="account-info">
+      <input id="userNameInput" type="text" title="تعديل اسم المستخدم" spellcheck="false" />
+    </div>
+    <button id="logoutBtn" class="btn-logout">تسجيل خروج</button>
+  </div>
 
-    <!-- زر تسجيل الدخول -->
-    <button id="loginBtn">تسجيل الدخول</button>
-</header>
+  <button id="loginBtn" class="login-btn">تسجيل دخول جوجل</button>
 
-<main class="center">
-    <h1>مرحبا بك</h1>
-    <p>ابدأ بطلب سيرفرك الآن</p>
+  <!-- محتوى الصفحة -->
+  <div class="container">
+    <header>
+      <h1>اختيار الباقة</h1>
+      <p class="subtitle">اختر الباقة المناسبة لاحتياجاتك</p>
+    </header>
 
-    <a href="packages.html" class="main-btn">اختيار الباقة</a>
-</main>
+    <!-- هنا تضيف باقي محتوى الصفحة (الباقات، الخيارات، الخ) -->
+    <p>محتوى الصفحة...</p>
+  </div>
 
-<script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
