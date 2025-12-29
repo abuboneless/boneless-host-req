@@ -490,6 +490,7 @@
 
   window.onload = () => {
     createUI();
+    setupPackageSelection();
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -573,6 +574,115 @@
     loginBtn.style.display = "block";
     accountArea.style.display = "none";
   }
+
+  function setupPackageSelection() {
+    const packageCards = document.querySelectorAll('.package-card');
+    const selectButtons = document.querySelectorAll('.select-button');
+    const optionsContainer = document.querySelector('.options-container');
+    const orderButton = document.querySelector('.order-button');
+
+    packageCards.forEach(card => {
+      const button = card.querySelector('.select-button');
+      
+      button.addEventListener('click', function() {
+        // إلغاء تحديد جميع الباقات
+        packageCards.forEach(c => c.classList.remove('selected'));
+        selectButtons.forEach(b => {
+          b.classList.remove('selected');
+          b.textContent = 'اختيار الباقة';
+        });
+
+        // تحديد الباقة الحالية
+        card.classList.add('selected');
+        this.classList.add('selected');
+        this.textContent = '✓ محددة';
+
+        // إظهار خيارات إضافية
+        setTimeout(() => {
+          optionsContainer.classList.add('visible');
+          window.scrollTo({
+            top: optionsContainer.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }, 300);
+      });
+    });
+
+    // اختيار نظام التشغيل
+    document.querySelectorAll('.option-item[data-type="os"]').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.option-item[data-type="os"]').forEach(i => 
+          i.classList.remove('selected')
+        );
+        this.classList.add('selected');
+        checkSelections();
+      });
+    });
+
+    // اختيار لوحة التحكم
+    document.querySelectorAll('.option-item[data-type="panel"]').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.option-item[data-type="panel"]').forEach(i => 
+          i.classList.remove('selected')
+        );
+        this.classList.add('selected');
+        checkSelections();
+      });
+    });
+
+    function checkSelections() {
+      const selectedOS = document.querySelector('.option-item[data-type="os"].selected');
+      const selectedPanel = document.querySelector('.option-item[data-type="panel"].selected');
+      const selectedPackage = document.querySelector('.package-card.selected');
+      const summaryBox = document.querySelector('.summary-box');
+
+      if (selectedOS && selectedPanel && selectedPackage) {
+        orderButton.classList.add('active');
+        
+        // تحديث الملخص
+        const packageName = selectedPackage.querySelector('.package-name').textContent;
+        const packagePrice = selectedPackage.getAttribute('data-price');
+        
+        document.getElementById('summary-package').textContent = packageName;
+        document.getElementById('summary-os').textContent = selectedOS.querySelector('.option-name').textContent;
+        document.getElementById('summary-panel').textContent = selectedPanel.querySelector('.option-name').textContent;
+        document.getElementById('summary-total').textContent = `$${packagePrice}`;
+        
+        summaryBox.classList.add('visible');
+      }
+    }
+
+    // زر الطلب
+    orderButton.addEventListener('click', function() {
+      if (!this.classList.contains('active')) return;
+      
+      const user = auth.currentUser;
+      if (!user) {
+        alert('يرجى تسجيل الدخول أولاً');
+        return;
+      }
+
+      const selectedPackage = document.querySelector('.package-card.selected');
+      const selectedOS = document.querySelector('.option-item[data-type="os"].selected');
+      const selectedPanel = document.querySelector('.option-item[data-type="panel"].selected');
+
+      const orderData = {
+        userId: user.uid,
+        userName: user.displayName,
+        userEmail: user.email,
+        package: selectedPackage.querySelector('.package-name').textContent,
+        price: selectedPackage.getAttribute('data-price'),
+        os: selectedOS.querySelector('.option-name').textContent,
+        panel: selectedPanel.querySelector('.option-name').textContent,
+        timestamp: new Date().toISOString()
+      };
+
+      alert(`تم تأكيد طلبك!\n\nالباقة: ${orderData.package}\nالسعر: $${orderData.price}\nنظام التشغيل: ${orderData.os}\nلوحة التحكم: ${orderData.panel}\n\nسيتم التواصل معك عبر البريد الإلكتروني.`);
+      
+      // هنا يمكنك إضافة كود لإرسال البيانات إلى قاعدة البيانات
+      console.log('Order Data:', orderData);
+    });
+  }
 </script>
 
 </head>
@@ -590,3 +700,67 @@
       <!-- Basic Package -->
       <div class="package-card" data-package="basic" data-price="8">
         <div class="package-badge">محدد</div>
+        <h3 class="package-name">بيسك</h3>
+        <div class="package-price">$8<span>/شهر</span></div>
+        <p class="package-period">فاتورة شهرية</p>
+        <ul class="specs-list">
+          <li><span class="checkmark"></span> 1GB RAM</li>
+          <li><span class="checkmark"></span> 20GB SSD</li>
+          <li><span class="checkmark"></span> 1 CPU Core</li>
+          <li><span class="checkmark"></span> 1TB Bandwidth</li>
+          <li><span class="checkmark"></span> 1 IPv4 Address</li>
+        </ul>
+        <button class="select-button">اختيار الباقة</button>
+      </div>
+
+      <!-- Standard Package -->
+      <div class="package-card" data-package="standard" data-price="15">
+        <div class="package-badge">محدد</div>
+        <h3 class="package-name">ستاندارد</h3>
+        <div class="package-price">$15<span>/شهر</span></div>
+        <p class="package-period">فاتورة شهرية</p>
+        <ul class="specs-list">
+          <li><span class="checkmark"></span> 2GB RAM</li>
+          <li><span class="checkmark"></span> 40GB SSD</li>
+          <li><span class="checkmark"></span> 2 CPU Cores</li>
+          <li><span class="checkmark"></span> 2TB Bandwidth</li>
+          <li><span class="checkmark"></span> 1 IPv4 Address</li>
+        </ul>
+        <button class="select-button">اختيار الباقة</button>
+      </div>
+
+      <!-- Premium Package -->
+      <div class="package-card" data-package="premium" data-price="25">
+        <div class="package-badge">محدد</div>
+        <h3 class="package-name">بريميوم</h3>
+        <div class="package-price">$25<span>/شهر</span></div>
+        <p class="package-period">فاتورة شهرية</p>
+        <ul class="specs-list">
+          <li><span class="checkmark"></span> 4GB RAM</li>
+          <li><span class="checkmark"></span> 80GB SSD</li>
+          <li><span class="checkmark"></span> 4 CPU Cores</li>
+          <li><span class="checkmark"></span> 4TB Bandwidth</li>
+          <li><span class="checkmark"></span> 1 IPv4 Address</li>
+        </ul>
+        <button class="select-button">اختيار الباقة</button>
+      </div>
+    </div>
+
+    <!-- خيارات إضافية -->
+    <div class="options-container">
+      <div class="summary-box">
+        <h3 class="summary-title">ملخص طلبك</h3>
+        <div class="summary-details">
+          <div class="summary-item">
+            <span class="summary-label">الباقة المختارة:</span>
+            <span class="summary-value" id="summary-package">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">نظام التشغيل:</span>
+            <span class="summary-value" id="summary-os">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">لوحة التحكم:</span>
+            <span class="summary-value" id="summary-panel">-</span>
+          </div>
+         
