@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
     <style>
+        /* التنسيقات كما هي */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
             color: white;
             overflow-x: hidden;
         }
+
         .background {
             position: fixed;
             top: 0;
@@ -25,6 +28,7 @@
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
             z-index: -2;
         }
+
         .pattern {
             position: fixed;
             top: 0;
@@ -37,39 +41,52 @@
             z-index: -1;
             animation: patternMove 20s linear infinite;
         }
+
         @keyframes patternMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(70px, 70px); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(70px, 70px);
+            }
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         header {
             text-align: center;
             padding: 60px 20px 40px;
         }
+
         h1 {
             font-size: 3.5em;
             margin-bottom: 20px;
             text-shadow: 0 0 20px rgba(0, 255, 100, 0.5);
         }
+
         h1 .highlight {
             color: #00d4ff;
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
         }
+
         .subtitle {
             font-size: 1.2em;
             color: #aaa;
             margin-bottom: 50px;
         }
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             margin-bottom: 50px;
         }
+
         .feature-card {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(0, 255, 100, 0.2);
@@ -80,6 +97,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .feature-card::before {
             content: '';
             position: absolute;
@@ -91,31 +109,46 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         .feature-card:hover::before {
             opacity: 1;
         }
+
         .feature-card:hover {
             transform: translateY(-10px);
             border-color: rgba(0, 255, 100, 0.5);
             box-shadow: 0 10px 40px rgba(0, 255, 100, 0.3);
         }
+
         .feature-icon {
             font-size: 3em;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 10px currentColor);
         }
-        .feature-card:nth-child(1) .feature-icon { color: #00ff64; }
-        .feature-card:nth-child(2) .feature-icon { color: #00d4ff; }
-        .feature-card:nth-child(3) .feature-icon { color: #ff6b35; }
+
+        .feature-card:nth-child(1) .feature-icon {
+            color: #00ff64;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            color: #00d4ff;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            color: #ff6b35;
+        }
+
         .feature-title {
             font-size: 1.5em;
             margin-bottom: 15px;
             font-weight: bold;
         }
+
         .feature-desc {
             color: #bbb;
             line-height: 1.6;
         }
+
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -132,20 +165,28 @@
             text-decoration: none;
             box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
         }
+
         .cta-button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(0, 102, 255, 0.6);
         }
-        .discord-icon {
-            width: 24px;
-            height: 24px;
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
         }
-        .google-btn {
-            background: linear-gradient(135deg, #db4437 0%, #c23321 100%);
-            box-shadow: 0 5px 20px rgba(219, 68, 55, 0.4);
-        }
-        .google-btn:hover {
-            box-shadow: 0 8px 30px rgba(219, 68, 55, 0.6);
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -165,11 +206,13 @@
                 <h3 class="feature-title">حماية متقدمة</h3>
                 <p class="feature-desc">أمان عالي المستوى لسيرفرك مع حماية ضد جميع الهجمات</p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
                 <h3 class="feature-title">استجابة فورية</h3>
                 <p class="feature-desc">معالجة سريعة لجميع الطلبات مع أداء ممتاز</p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <h3 class="feature-title">استضافة قوية</h3>
@@ -177,27 +220,51 @@
             </div>
         </div>
 
-        <div id="login-buttons" style="text-align: center; margin-top: 50px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <a href="#" class="cta-button" onclick="discordLogin()">
-                <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-                تسجيل الدخول عبر Discord
-            </a>
-
-            <a href="#" class="cta-button google-btn" onclick="googleLogin()">
-                <svg class="discord-icon" viewBox="0 0 488 512" fill="currentColor">
-                    <path d="M488 261.8c0-17.8-1.5-35-4.3-51.8H249v98h135.6c-5.8 31.4-23.4 58-50 75.8v62h80.8c47.3-43.6 74.6-107.8 74.6-184z"/>
-                    <path d="M249 512c67 0 123.2-22.2 164.3-60.4l-80.8-62c-22.4 15-51 23.8-83.5 23.8-64.2 0-118.5-43.4-137.9-101.6h-84v63.8C68.6 463.8 152.4 512 249 512z"/>
-                    <path d="M111.1 311.8c-4.9-14.6-7.7-30.2-7.7-46s2.7-31.4 7.7-46V156h-84C10 188.6 0 226.2 0 265.8s10 77.2 27.1 109.8l84-63.8z"/>
-                    <path d="M249 98.6c36.4 0 69.2 12.6 95 37.4l71.2-71.2C372.2 24.2 316 0 249 0 152.4 0 68.6 48.2 27.1 119.8l84 63.8C130.5 142 184.8 98.6 249 98.6z"/>
-                </svg>
+        <div style="text-align: center; margin-top: 50px;">
+            <button id="googleSignIn" class="cta-button">
                 تسجيل الدخول عبر Google
-            </a>
+            </button>
+        </div>
+
+        <div class="footer">
+            <!-- الفوتر فارغ بدون أي نص -->
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
+            authDomain: "boneless-hosts-req.firebaseapp.com",
+            projectId: "boneless-hosts-req",
+            storageBucket: "boneless-hosts-req.firebasestorage.app",
+            messagingSenderId: "264386337640",
+            appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
+            measurementId: "G-WZX8LHCD9L"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        document.getElementById('googleSignIn').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // بعد تسجيل الدخول نختفي الزرّ
+                    document.getElementById('googleSignIn').style.display = 'none';
+                    // توجيه لصفحة ثانية ممكن تضيفها هنا
+                    // window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    console.error("خطأ في تسجيل الدخول:", error);
+                });
+        });
+
+        // تأثير تحريك الخلفية عند تحريك الماوس
         document.addEventListener('mousemove', (e) => {
             const pattern = document.querySelector('.pattern');
             const x = e.clientX / window.innerWidth;
@@ -205,6 +272,7 @@
             pattern.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
         });
 
+        // تأثير الكروت عند التمرير
         const cards = document.querySelectorAll('.feature-card');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -220,43 +288,6 @@
             card.style.transform = 'translateY(30px)';
             card.style.transition = 'all 0.6s ease';
             observer.observe(card);
-        });
-    </script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
-            authDomain: "boneless-hosts-req.firebaseapp.com",
-            projectId: "boneless-hosts-req",
-            storageBucket: "boneless-hosts-req.firebasestorage.app",
-            messagingSenderId: "264386337640",
-            appId: "1:264386337640:web:cca8e74c59e31d2ccad4dd",
-            measurementId: "G-WZX8LHCD9L"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        window.googleLogin = () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).catch(e => alert(e.message));
-        };
-
-        window.discordLogin = () => {
-            const provider = new OAuthProvider("discord");
-            signInWithPopup(auth, provider).catch(e => alert(e.message));
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById("login-buttons").style.display = "none";
-                alert("تم تسجيل الدخول بنجاح ✅");
-                // لاحقاً يمكنك تحويل المستخدم لصفحة أخرى:
-                // window.location.href = "dashboard.html";
-            }
         });
     </script>
 </body>
