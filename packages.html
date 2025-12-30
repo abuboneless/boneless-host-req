@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Page2</title>
+  <title>Packages | Boneless Hosts</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -21,14 +22,67 @@
     <div class="container mx-auto px-4 flex justify-between items-center">
 
       <!-- LOGO -->
-      <div class="flex items-center gap-3">
-        <img src="assets/logo.png" class="h-10 w-10 rounded-full">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="assets/logo.png" class="h-10 w-10 rounded-full object-cover">
         <span class="font-semibold text-lg">Boneless</span>
-      </div>
+      </a>
 
-      <button class="bg-blue-600 px-4 py-2 rounded">Log Out</button>
+      <button class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition">
+        Log Out
+      </button>
+
     </div>
   </nav>
+
+  <!-- HEADER -->
+  <header class="bg-cover bg-center"
+    style="background-image: url('https://www.pixelstalk.net/wp-content/uploads/images6/Minecraft-Aesthetic-Wallpaper-HD-Free-download.jpg');">
+    <div class="bg-black/60">
+      <div class="container mx-auto px-4 py-24 text-center">
+        <h1 class="text-4xl font-bold">اختيار الباقة</h1>
+        <p class="text-lg mt-4 text-gray-300">
+          اختر الباقة المناسبة لسيرفر ماينكرافت (Java)
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- PACKAGES -->
+  <section class="container mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- PACKAGE 1 -->
+      <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+        <h3 class="text-2xl font-bold mb-4">Starter</h3>
+        <p class="text-gray-400 mb-4">للسيرفرات الصغيرة</p>
+        <p class="text-4xl font-bold mb-6">$5</p>
+        <button class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+          طلب الباقة
+        </button>
+      </div>
+
+      <!-- PACKAGE 2 -->
+      <div class="bg-gray-800 rounded-lg p-6 text-center border border-blue-500">
+        <h3 class="text-2xl font-bold mb-4">Pro</h3>
+        <p class="text-gray-400 mb-4">الأكثر استخدامًا</p>
+        <p class="text-4xl font-bold mb-6">$10</p>
+        <button class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+          طلب الباقة
+        </button>
+      </div>
+
+      <!-- PACKAGE 3 -->
+      <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+        <h3 class="text-2xl font-bold mb-4">Ultra</h3>
+        <p class="text-gray-400 mb-4">للسيرفرات الكبيرة</p>
+        <p class="text-4xl font-bold mb-6">$20</p>
+        <button class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+          طلب الباقة
+        </button>
+      </div>
+
+    </div>
+  </section>
 
 </body>
 </html>
