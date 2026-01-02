@@ -74,7 +74,6 @@ style="background-image:url('https://www.pixelstalk.net/wp-content/uploads/image
 
 <script>
 let selectedPlan = "";
-let selectedButton = null;
 
 const plansData = {
   asia: [
@@ -87,6 +86,9 @@ const plansData = {
 };
 
 function setRegion(region) {
+  const asiaBtn = document.getElementById("asiaBtn");
+  const euBtn = document.getElementById("euBtn");
+
   asiaBtn.className = region === "asia"
     ? "px-4 py-1 rounded bg-blue-500 text-sm"
     : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
@@ -99,6 +101,10 @@ function setRegion(region) {
   container.innerHTML = "";
 
   plansData[region].forEach(name => {
+    // Check if plan is pending in localStorage
+    const pendingPlan = localStorage.getItem("pendingPlan");
+    const isPending = pendingPlan === name;
+
     container.innerHTML += `
     <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
       <h3 class="text-2xl font-bold mb-4">${name}</h3>
@@ -110,30 +116,37 @@ function setRegion(region) {
         <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: مناسب</li>
       </ul>
 
-      <button data-plan="${name}" onclick="openConfirm('${name}', this)"
-        class="order-btn bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
-        طلب الباقة
+      <button
+        data-plan="${name}"
+        class="order-btn px-6 py-3 rounded transition ${
+          isPending ? "bg-yellow-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+        }"
+        ${isPending ? "disabled" : ""}
+        onclick="openConfirm('${name}')"
+      >
+        ${isPending ? "قيد انتظار قبول طلبك" : "طلب الباقة"}
       </button>
     </div>`;
   });
 }
 
-function openConfirm(plan, btn) {
+function openConfirm(plan) {
   selectedPlan = plan;
-  selectedButton = btn;
+  const planNotes = document.getElementById("planNotes");
   planNotes.innerHTML = `
   <strong>الملاحظات قبل الطلب على الباقة:</strong>
   <ol class="list-decimal list-inside mt-2 space-y-2">
     <li>أول ما تشتري الباقة بياخذ وقت عشان يجيك السيرفر لمدة شهر في الإيميل حقك</li>
-    <li>مافي ترجيع، يعني يوم تاخذ الباقة وتغير رأيك ما نقدر نرجعها</li>     
-    <li>لا تسوي طلب اكثر من مرة للباقة</li>
+    <li>مافي ترجيع، يعني يوم تاخذ الباقة وتغير رأيك ما نقدر نرجعها</li>
     <li>إن شاء الله تعجبك الباقة مع كل تحياتنا</li>
   </ol>`;
+  const confirmModal = document.getElementById("confirmModal");
   confirmModal.classList.remove("hidden");
   confirmModal.classList.add("flex");
 }
 
 function closeConfirm() {
+  const confirmModal = document.getElementById("confirmModal");
   confirmModal.classList.add("hidden");
   confirmModal.classList.remove("flex");
 }
@@ -141,23 +154,11 @@ function closeConfirm() {
 function confirmYes() {
   closeConfirm();
 
-  if (!selectedButton) return;
-
-  selectedButton.innerText = "قيد انتظار قبول طلبك";
-  selectedButton.classList.remove("bg-blue-500", "hover:bg-blue-600");
-  selectedButton.classList.add("bg-yellow-500", "cursor-not-allowed");
-  selectedButton.disabled = true;
-
-  // حفظ الحالة محليًا حتى لو حدثت الصفحة (اختياري)
+  // حفظ الطلب في localStorage
   localStorage.setItem("pendingPlan", selectedPlan);
-}
 
-// عند تحميل الصفحة، إذا في طلب معلق نفعّل زر الانتظار عليه
-window.onload = () => {
-  const pending = localStorage.getItem("pendingPlan");
-  if (!pending) return;
-
-  const btn = document.querySelector(`button.order-btn[data-plan="${pending}"]`);
+  // تحديث زر الباقة ليصبح معطل وأصفر
+  const btn = document.querySelector(`button.order-btn[data-plan="${selectedPlan}"]`);
   if (btn) {
     btn.innerText = "قيد انتظار قبول طلبك";
     btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
@@ -165,16 +166,34 @@ window.onload = () => {
     btn.disabled = true;
   }
 
-  // نعطي تفعيل للمنطقة حسب الباقة المعلقة
-  if(pending.startsWith('X') || pending.startsWith('R')){
-    setRegion('eu');
+  alert("تم تأكيد طلب: " + selectedPlan);
+}
+
+// عند تحميل الصفحة، إذا فيه طلب معلق، نعيد عرض الحالة مع تعطيل الزر المناسب
+window.onload = () => {
+  const pending = localStorage.getItem("pendingPlan");
+  if (pending) {
+    // تحديد المنطقة حسب الباقة
+    if(pending.startsWith('X') || pending.startsWith('R')){
+      setRegion('eu');
+    } else {
+      setRegion('asia');
+    }
+
+    // تعطيل الزر بعد بناء الباقات بفاصل صغير
+    setTimeout(() => {
+      const btn = document.querySelector(`button.order-btn[data-plan="${pending}"]`);
+      if (btn) {
+        btn.innerText = "قيد انتظار قبول طلبك";
+        btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+        btn.classList.add("bg-yellow-500", "cursor-not-allowed");
+        btn.disabled = true;
+      }
+    }, 50);
   } else {
-    setRegion('asia');
+    setRegion("asia");
   }
 };
-
-// شغّل افتراضياً
-setRegion("asia");
 </script>
 
 </body>
