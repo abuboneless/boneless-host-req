@@ -1,90 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Boneless Hosts</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boneless Hosts</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
-    body { font-family: 'Open Sans', sans-serif; }
-  </style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+body { font-family: 'Open Sans', sans-serif; }
+</style>
 </head>
 
 <body class="bg-gray-900 text-white">
 
-<!-- NAV -->
+<!-- NAVBAR -->
 <nav class="bg-black/60 py-3">
   <div class="container mx-auto px-4 flex justify-between items-center">
+    
     <a href="#" class="flex items-center gap-3">
-      <img src="assets/logo.png" class="h-10 w-10 rounded-full object-cover" />
+      <img src="logo.png" class="h-10 w-10 rounded-full object-cover" />
       <span class="font-semibold text-lg">Boneless</span>
     </a>
+
+    <!-- REGION BUTTONS -->
+    <div class="flex gap-2">
+      <button id="asiaBtn" onclick="setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm">
+        Asia
+      </button>
+      <button id="euBtn" onclick="setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm">
+        Europe
+      </button>
+    </div>
+
   </div>
 </nav>
 
 <!-- HEADER -->
 <header class="bg-cover bg-center"
-  style="background-image:url('https://www.pixelstalk.net/wp-content/uploads/images6/Minecraft-Aesthetic-Wallpaper-HD-Free-download.jpg')">
-  <div class="bg-black/60">
-    <div class="container mx-auto px-4 py-24 text-center">
-      <h1 class="text-4xl font-bold">اختيار الباقة</h1>
-      <p class="text-lg mt-4 text-gray-300">اختر الباقة المناسبة لسيرفر ماين كرافت</p>
-    </div>
-  </div>
+style="background-image:url('https://www.pixelstalk.net/wp-content/uploads/images6/Minecraft-Aesthetic-Wallpaper-HD-Free-download.jpg')">
+<div class="bg-black/60">
+<div class="container mx-auto px-4 py-24 text-center">
+<h1 class="text-4xl font-bold">اختيار الباقة</h1>
+<p class="text-lg mt-4 text-gray-300">اختر الباقة المناسبة لسيرفر ماين كرافت</p>
+</div>
+</div>
 </header>
 
 <!-- PLANS -->
 <section class="container mx-auto px-4 py-16">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-    <!-- PLAN CARD -->
-    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
-      <h3 class="text-2xl font-bold mb-4">Starter</h3>
-      <p class="text-4xl font-bold mb-4">$5</p>
-      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
-        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 2GB</li>
-        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 1 vCore</li>
-        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 20GB NVMe</li>
-        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 10</li>
-      </ul>
-      <button onclick="openConfirm('Starter')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
-        طلب الباقة
-      </button>
-    </div>
-
-    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
-      <h3 class="text-2xl font-bold mb-4">Basic</h3>
-      <p class="text-4xl font-bold mb-4">$7</p>
-      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
-        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 3GB</li>
-        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 2 vCores</li>
-        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 30GB NVMe</li>
-        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 15</li>
-      </ul>
-      <button onclick="openConfirm('Basic')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
-        طلب الباقة
-      </button>
-    </div>
-
-    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
-      <h3 class="text-2xl font-bold mb-4">Pro</h3>
-      <p class="text-4xl font-bold mb-4">$10</p>
-      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
-        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 6GB</li>
-        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 3 vCores</li>
-        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 50GB NVMe</li>
-        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 30</li>
-      </ul>
-      <button onclick="openConfirm('Pro')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
-        طلب الباقة
-      </button>
-    </div>
-
-  </div>
+<div id="plans" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
 </section>
 
 <!-- CONFIRM MODAL -->
@@ -95,45 +62,85 @@
     <div id="planNotes" class="text-gray-300 text-sm mb-6"></div>
 
     <div class="flex justify-center gap-4">
-      <button onclick="confirmYes()" class="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600 transition">
+      <button onclick="confirmYes()" class="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600">
         نعم
       </button>
-      <button onclick="closeConfirm()" class="bg-gray-600 px-6 py-2 rounded hover:bg-gray-700 transition">
+      <button onclick="closeConfirm()" class="bg-gray-600 px-6 py-2 rounded hover:bg-gray-700">
         لا
       </button>
     </div>
   </div>
 </div>
 
-<!-- JS -->
 <script>
 let selectedPlan = "";
 
-function openConfirm(planName) {
-  selectedPlan = planName;
+const plansData = {
+  asia: [
+    "Starter","Basic","Master","Extreme","Boneless"
+  ],
+  eu: [
+    "X Starter","X Basic","X Master","X Extreme","X Boneless",
+    "R Starter","R Basic","R Master","R Extreme","R Boneless"
+  ]
+};
 
-  document.getElementById("planNotes").innerHTML = `
-    <strong class="block mb-2">الملاحظات قبل الطلب على الباقة:</strong>
-    <ol class="list-decimal list-inside space-y-2">
-      <li>أول ما تشتري الباقة بياخذ وقت عشان يجيك السيرفر لمدة شهر في الإيميل حقك</li>
-      <li>مافي ترجيع، يعني يوم تاخذ الباقة وتغير رأيك ما نقدر نرجعها</li>
-      <li>إن شاء الله تعجبك الباقة، مع كل تحياتنا</li>
-    </ol>
-  `;
+function setRegion(region) {
+  asiaBtn.className = region === "asia"
+    ? "px-4 py-1 rounded bg-blue-500 text-sm"
+    : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
 
-  document.getElementById("confirmModal").classList.remove("hidden");
-  document.getElementById("confirmModal").classList.add("flex");
+  euBtn.className = region === "eu"
+    ? "px-4 py-1 rounded bg-blue-500 text-sm"
+    : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
+
+  const container = document.getElementById("plans");
+  container.innerHTML = "";
+
+  plansData[region].forEach(name => {
+    container.innerHTML += `
+    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+      <h3 class="text-2xl font-bold mb-4">${name}</h3>
+
+      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
+        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: حسب الباقة</li>
+        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: حسب الباقة</li>
+        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: NVMe</li>
+        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: مناسب</li>
+      </ul>
+
+      <button onclick="openConfirm('${name}')"
+        class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+        طلب الباقة
+      </button>
+    </div>`;
+  });
+}
+
+function openConfirm(plan) {
+  selectedPlan = plan;
+  planNotes.innerHTML = `
+  <strong>الملاحظات قبل الطلب على الباقة:</strong>
+  <ol class="list-decimal list-inside mt-2 space-y-2">
+    <li>أول ما تشتري الباقة بياخذ وقت عشان يجيك السيرفر لمدة شهر في الإيميل حقك</li>
+    <li>مافي ترجيع، يعني يوم تاخذ الباقة وتغير رأيك ما نقدر نرجعها</li>
+    <li>إن شاء الله تعجبك الباقة مع كل تحياتنا</li>
+  </ol>`;
+  confirmModal.classList.remove("hidden");
+  confirmModal.classList.add("flex");
 }
 
 function closeConfirm() {
-  document.getElementById("confirmModal").classList.add("hidden");
-  document.getElementById("confirmModal").classList.remove("flex");
+  confirmModal.classList.add("hidden");
+  confirmModal.classList.remove("flex");
 }
 
 function confirmYes() {
   closeConfirm();
-  alert("تم تأكيد طلب باقة: " + selectedPlan);
+  alert("تم تأكيد طلب: " + selectedPlan);
 }
+
+setRegion("asia");
 </script>
 
 </body>
