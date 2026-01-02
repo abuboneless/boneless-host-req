@@ -74,6 +74,7 @@ style="background-image:url('https://www.pixelstalk.net/wp-content/uploads/image
 
 <script>
 let selectedPlan = "";
+let selectedButton = null;
 
 const plansData = {
   asia: [
@@ -109,16 +110,17 @@ function setRegion(region) {
         <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: مناسب</li>
       </ul>
 
-      <button onclick="openConfirm('${name}')"
-        class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+      <button data-plan="${name}" onclick="openConfirm('${name}', this)"
+        class="order-btn bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
         طلب الباقة
       </button>
     </div>`;
   });
 }
 
-function openConfirm(plan) {
+function openConfirm(plan, btn) {
   selectedPlan = plan;
+  selectedButton = btn;
   planNotes.innerHTML = `
   <strong>الملاحظات قبل الطلب على الباقة:</strong>
   <ol class="list-decimal list-inside mt-2 space-y-2">
@@ -137,9 +139,40 @@ function closeConfirm() {
 
 function confirmYes() {
   closeConfirm();
-  alert("تم تأكيد طلب: " + selectedPlan);
+
+  if (!selectedButton) return;
+
+  selectedButton.innerText = "قيد انتظار قبول طلبك";
+  selectedButton.classList.remove("bg-blue-500", "hover:bg-blue-600");
+  selectedButton.classList.add("bg-yellow-500", "cursor-not-allowed");
+  selectedButton.disabled = true;
+
+  // حفظ الحالة محليًا حتى لو حدثت الصفحة (اختياري)
+  localStorage.setItem("pendingPlan", selectedPlan);
 }
 
+// عند تحميل الصفحة، إذا في طلب معلق نفعّل زر الانتظار عليه
+window.onload = () => {
+  const pending = localStorage.getItem("pendingPlan");
+  if (!pending) return;
+
+  const btn = document.querySelector(`button.order-btn[data-plan="${pending}"]`);
+  if (btn) {
+    btn.innerText = "قيد انتظار قبول طلبك";
+    btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+    btn.classList.add("bg-yellow-500", "cursor-not-allowed");
+    btn.disabled = true;
+  }
+
+  // نعطي تفعيل للمنطقة حسب الباقة المعلقة
+  if(pending.startsWith('X') || pending.startsWith('R')){
+    setRegion('eu');
+  } else {
+    setRegion('asia');
+  }
+};
+
+// شغّل افتراضياً
 setRegion("asia");
 </script>
 
