@@ -16,22 +16,13 @@
 
 <body class="bg-gray-900 text-white">
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav class="bg-black/60 py-3">
   <div class="container mx-auto px-4 flex justify-between items-center">
-
-    <!-- Logo -->
     <a href="#" class="flex items-center gap-3">
-      <img src="logo.png" class="h-10 w-10 rounded-full object-cover" />
+      <img src="assets/logo.png" class="h-10 w-10 rounded-full object-cover" />
       <span class="font-semibold text-lg">Boneless</span>
     </a>
-
-    <!-- Region Buttons -->
-    <div class="flex gap-2 bg-gray-800 p-1 rounded-lg">
-      <button id="asiaBtn" onclick="setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm">Asia</button>
-      <button id="euBtn" onclick="setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm">Europe</button>
-    </div>
-
   </div>
 </nav>
 
@@ -48,66 +39,101 @@
 
 <!-- PLANS -->
 <section class="container mx-auto px-4 py-16">
-  <div id="plans" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- PLAN CARD -->
+    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+      <h3 class="text-2xl font-bold mb-4">Starter</h3>
+      <p class="text-4xl font-bold mb-4">$5</p>
+      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
+        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 2GB</li>
+        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 1 vCore</li>
+        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 20GB NVMe</li>
+        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 10</li>
+      </ul>
+      <button onclick="openConfirm('Starter')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+        طلب الباقة
+      </button>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+      <h3 class="text-2xl font-bold mb-4">Basic</h3>
+      <p class="text-4xl font-bold mb-4">$7</p>
+      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
+        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 3GB</li>
+        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 2 vCores</li>
+        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 30GB NVMe</li>
+        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 15</li>
+      </ul>
+      <button onclick="openConfirm('Basic')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+        طلب الباقة
+      </button>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
+      <h3 class="text-2xl font-bold mb-4">Pro</h3>
+      <p class="text-4xl font-bold mb-4">$10</p>
+      <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
+        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: 6GB</li>
+        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: 3 vCores</li>
+        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: 50GB NVMe</li>
+        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: 30</li>
+      </ul>
+      <button onclick="openConfirm('Pro')" class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">
+        طلب الباقة
+      </button>
+    </div>
+
+  </div>
 </section>
 
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+  <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md border border-white/10">
+    <h2 class="text-2xl font-bold mb-4 text-center">هل أنت متأكد؟</h2>
+
+    <div id="planNotes" class="text-gray-300 text-sm mb-6"></div>
+
+    <div class="flex justify-center gap-4">
+      <button onclick="confirmYes()" class="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600 transition">
+        نعم
+      </button>
+      <button onclick="closeConfirm()" class="bg-gray-600 px-6 py-2 rounded hover:bg-gray-700 transition">
+        لا
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
 <script>
-const plansData = {
-  asia: [
-    {name:"Starter", price:"$7.10", ram:"4GB", cpu:"250% (2.5vCores)", storage:"16GB NVMe", slots:"10"},
-    {name:"Basic", price:"$9.40", ram:"6GB", cpu:"325% (3.25vCores)", storage:"24GB NVMe", slots:"15"},
-    {name:"Master", price:"$11.66", ram:"8GB", cpu:"450% (4.5vCores)", storage:"32GB NVMe", slots:"20"},
-    {name:"Extreme", price:"$16.25", ram:"12GB", cpu:"550% (5.5vCores)", storage:"48GB NVMe", slots:"30"},
-    {name:"Boneless", price:"$22.25", ram:"16GB", cpu:"690% (6.9vCores)", storage:"64GB NVMe", slots:"40"}
-  ],
+let selectedPlan = "";
 
-  eu: [
-    // X
-    {name:"X Starter", price:"$7.10", ram:"8GB", cpu:"Xeon E5-2680 v4 3.30 GHz", storage:"16GB NVMe", slots:"15"},
-    {name:"X Basic", price:"$10", ram:"12GB", cpu:"Xeon E5-2680 v4 3.30 GHz", storage:"24GB NVMe", slots:"20"},
-    {name:"X Master", price:"$13.16", ram:"16GB", cpu:"Xeon E5-2680 v4 3.30 GHz", storage:"32GB NVMe", slots:"30"},
-    {name:"X Extreme", price:"$19.20", ram:"24GB", cpu:"Xeon E5-2680 v4 3.30 GHz", storage:"48GB NVMe", slots:"40"},
-    {name:"X Boneless", price:"$27", ram:"32GB", cpu:"Xeon E5-2680 v4 3.30 GHz", storage:"56GB NVMe", slots:"70/"},
+function openConfirm(planName) {
+  selectedPlan = planName;
 
-    // R
-    {name:"R Starter", price:"$7.10", ram:"4GB", cpu:"Ryzen 9 3900X 3.8GHz", storage:"16GB Fast NVMe", slots:"15"},
-    {name:"R Basic", price:"$10", ram:"6GB", cpu:"Ryzen 9 3900X 3.8GHz", storage:"24GB Fast NVMe", slots:"20"},
-    {name:"R Master", price:"$14", ram:"8GB", cpu:"Ryzen 9 3900X 3.8GHz", storage:"32GB Fast NVMe", slots:"30"},
-    {name:"R Extreme", price:"$20", ram:"12GB", cpu:"Ryzen 9 3900X 3.8GHz", storage:"48GB Fast NVMe", slots:"40"},
-    {name:"R Boneless", price:"$25.30", ram:"16GB", cpu:"Ryzen 9 3900X 3.8GHz", storage:"56GB Fast NVMe", slots:"60"}
-  ]
-};
+  document.getElementById("planNotes").innerHTML = `
+    <strong class="block mb-2">الملاحظات قبل الطلب على الباقة:</strong>
+    <ol class="list-decimal list-inside space-y-2">
+      <li>أول ما تشتري الباقة بياخذ وقت عشان يجيك السيرفر لمدة شهر في الإيميل حقك</li>
+      <li>مافي ترجيع، يعني يوم تاخذ الباقة وتغير رأيك ما نقدر نرجعها</li>
+      <li>إن شاء الله تعجبك الباقة، مع كل تحياتنا</li>
+    </ol>
+  `;
 
-function setRegion(region) {
-  asiaBtn.className = region === "asia"
-    ? "px-4 py-1 rounded bg-blue-500 text-sm"
-    : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
+  document.getElementById("confirmModal").classList.remove("hidden");
+  document.getElementById("confirmModal").classList.add("flex");
+}
 
-  euBtn.className = region === "eu"
-    ? "px-4 py-1 rounded bg-blue-500 text-sm"
-    : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
+function closeConfirm() {
+  document.getElementById("confirmModal").classList.add("hidden");
+  document.getElementById("confirmModal").classList.remove("flex");
+}
 
-  const container = document.getElementById("plans");
-  container.innerHTML = "";
-
-  plansData[region].forEach(p => {
-    container.innerHTML += `
-      <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
-        <h3 class="text-2xl font-bold mb-4">${p.name}</h3>
-        <p class="text-4xl font-bold mb-4">${p.price}</p>
-        <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
-          <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: ${p.ram}</li>
-          <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: ${p.cpu}</li>
-          <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: ${p.storage}</li>
-          <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: ${p.slots}</li>
-        </ul>
-        <button class="bg-blue-500 px-6 py-3 rounded hover:bg-blue-600 transition">طلب الباقة</button>
-      </div>
-    `;
-  });
-} 
-
-setRegion("asia");
+function confirmYes() {
+  closeConfirm();
+  alert("تم تأكيد طلب باقة: " + selectedPlan);
+}
 </script>
 
 </body>
