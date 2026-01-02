@@ -77,11 +77,25 @@ let selectedPlan = "";
 
 const plansData = {
   asia: [
-    "Starter","Basic","Master","Extreme","Boneless"
+    { name: "Starter", price: "$5", ram: "2GB", cpu: "1 vCore", storage: "20GB NVMe", slots: "10" },
+    { name: "Basic", price: "$7", ram: "3GB", cpu: "2 vCores", storage: "30GB NVMe", slots: "15" },
+    { name: "Master", price: "$12", ram: "6GB", cpu: "3 vCores", storage: "60GB NVMe", slots: "35" },
+    { name: "Extreme", price: "$18", ram: "10GB", cpu: "5 vCores", storage: "100GB NVMe", slots: "60" },
+    { name: "Boneless", price: "$25", ram: "16GB", cpu: "8 vCores", storage: "150GB NVMe", slots: "100" }
   ],
   eu: [
-    "X Starter","X Basic","X Master","X Extreme","X Boneless",
-    "R Starter","R Basic","R Master","R Extreme","R Boneless"
+    // X plans
+    { name: "X Starter", price: "$6", ram: "3GB", cpu: "2 vCores", storage: "30GB NVMe", slots: "15" },
+    { name: "X Basic", price: "$9", ram: "5GB", cpu: "3 vCores", storage: "50GB NVMe", slots: "25" },
+    { name: "X Master", price: "$14", ram: "8GB", cpu: "5 vCores", storage: "80GB NVMe", slots: "40" },
+    { name: "X Extreme", price: "$20", ram: "12GB", cpu: "7 vCores", storage: "120GB NVMe", slots: "70" },
+    { name: "X Boneless", price: "$28", ram: "18GB", cpu: "9 vCores", storage: "180GB NVMe", slots: "120" },
+    // R plans
+    { name: "R Starter", price: "$6", ram: "3GB", cpu: "2 vCores", storage: "30GB NVMe", slots: "15" },
+    { name: "R Basic", price: "$9", ram: "5GB", cpu: "3 vCores", storage: "50GB NVMe", slots: "25" },
+    { name: "R Master", price: "$14", ram: "8GB", cpu: "5 vCores", storage: "80GB NVMe", slots: "40" },
+    { name: "R Extreme", price: "$20", ram: "12GB", cpu: "7 vCores", storage: "120GB NVMe", slots: "70" },
+    { name: "R Boneless", price: "$28", ram: "18GB", cpu: "9 vCores", storage: "180GB NVMe", slots: "120" }
   ]
 };
 
@@ -100,29 +114,30 @@ function setRegion(region) {
   const container = document.getElementById("plans");
   container.innerHTML = "";
 
-  plansData[region].forEach(name => {
+  plansData[region].forEach(plan => {
     // Check if plan is pending in localStorage
     const pendingPlan = localStorage.getItem("pendingPlan");
-    const isPending = pendingPlan === name;
+    const isPending = pendingPlan === plan.name;
 
     container.innerHTML += `
     <div class="bg-gray-800 rounded-lg p-6 text-center border border-white/10">
-      <h3 class="text-2xl font-bold mb-4">${name}</h3>
+      <h3 class="text-2xl font-bold mb-4">${plan.name}</h3>
+      <p class="text-4xl font-bold mb-4">${plan.price}</p>
 
       <ul class="text-gray-300 text-sm mb-6 space-y-2 text-left">
-        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: حسب الباقة</li>
-        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: حسب الباقة</li>
-        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: NVMe</li>
-        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: مناسب</li>
+        <li><i class="fas fa-memory text-blue-400 mr-2"></i>RAM: ${plan.ram}</li>
+        <li><i class="fas fa-microchip text-blue-400 mr-2"></i>CPU: ${plan.cpu}</li>
+        <li><i class="fas fa-hdd text-blue-400 mr-2"></i>Storage: ${plan.storage}</li>
+        <li><i class="fas fa-users text-blue-400 mr-2"></i>Slots: ${plan.slots}</li>
       </ul>
 
       <button
-        data-plan="${name}"
+        data-plan="${plan.name}"
         class="order-btn px-6 py-3 rounded transition ${
           isPending ? "bg-yellow-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
         }"
         ${isPending ? "disabled" : ""}
-        onclick="openConfirm('${name}')"
+        onclick="openConfirm('${plan.name}')"
       >
         ${isPending ? "قيد انتظار قبول طلبك" : "طلب الباقة"}
       </button>
