@@ -213,7 +213,7 @@
         if(user) {
             document.getElementById('googleSignIn').style.display = 'none';
             // توجيه المستخدم لصفحة الباقات مباشرة
-            window.location.href = 'packages.html';  // عدل اسم الصفحة الثانية لو عندك اسم ثاني
+            window.location.href = 'Boneless-Hosts';  // عدل اسم الصفحة الثانية لو عندك اسم ثاني
         } else {
             document.getElementById('googleSignIn').style.display = 'inline-flex';
         }
@@ -224,7 +224,7 @@
             .then(result => {
                 document.getElementById('googleSignIn').style.display = 'none';
                 // توجيه المستخدم بعد تسجيل الدخول مباشرة
-                window.location.href = 'packages.html';  // عدل اسم الصفحة الثانية لو عندك اسم ثاني
+                window.location.href = 'Boneless-Hosts';  // عدل اسم الصفحة الثانية لو عندك اسم ثاني
             })
             .catch(error => {
                 console.error("خطأ في تسجيل الدخول:", error);
