@@ -19,7 +19,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
@@ -47,7 +46,7 @@
         </header>
         <div class="text-center pb-20">
             <button id="googleSignIn" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:scale-105 transition-transform">
-                تسجيل الدخول عبر Google
+                <i class="fab fa-google"></i> تسجيل الدخول عبر Google
             </button>
         </div>
     </div>
@@ -56,10 +55,10 @@
 <section id="packagesPage" class="bg-gray-900/95 min-h-screen">
     <nav class="bg-black/60 py-3 sticky top-0 z-50 backdrop-blur-md border-b border-white/5">
       <div class="container mx-auto px-4 flex justify-between items-center">
-        <a href="#" class="flex items-center gap-3">
-          <img src="logo.png" alt="Boneless Logo" class="h-10 w-10 rounded-full object-cover border border-blue-500/50" onerror="this.src='https://ui-avatars.com/api/?name=B&background=2563eb&color=fff'">
-          <span class="font-semibold text-lg tracking-wide">Boneless</span>
-        </a>
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="Logo" class="h-10 w-10 rounded-full border border-blue-500/50" onerror="this.src='https://ui-avatars.com/api/?name=B&background=2563eb&color=fff'">
+          <span class="font-semibold text-lg">Boneless</span>
+        </div>
         <div class="flex gap-2">
           <button id="asiaBtn" onclick="setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm font-medium">Asia</button>
           <button id="euBtn" onclick="setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium">Europe</button>
@@ -69,6 +68,17 @@
 
     <div class="container mx-auto px-4 py-16">
         <div id="plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[100] p-4">
+      <div class="bg-gray-800 rounded-xl p-8 w-full max-w-md border border-white/10 shadow-2xl text-right">
+        <h2 class="text-2xl font-bold mb-4 text-center">هل أنت متأكد؟</h2>
+        <div id="planNotes" class="text-gray-300 text-sm mb-6 leading-relaxed"></div>
+        <div class="flex justify-center gap-4">
+          <button onclick="confirmYes()" id="confirmBtnAction" class="bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-lg transition-colors">نعم</button>
+          <button onclick="closeConfirm()" class="bg-gray-600 hover:bg-gray-700 px-8 py-2 rounded-lg transition-colors">لا</button>
+        </div>
+      </div>
     </div>
 </section>
 
@@ -93,7 +103,6 @@
 
     window.userAuth = null;
 
-    // دالة للتحقق من حالة الطلب ومعالجتها
     async function handleOrderState(data, uid) {
         if (data.status === "a") {
             localStorage.removeItem("pendingPlan");
@@ -111,17 +120,11 @@
 
             const orderRef = doc(db, "orders", user.uid);
 
-            // 1. فحص فوري عند الدخول أو الريفريش
             const docSnap = await getDoc(orderRef);
-            if (docSnap.exists()) {
-                await handleOrderState(docSnap.data(), user.uid);
-            }
+            if (docSnap.exists()) { await handleOrderState(docSnap.data(), user.uid); }
 
-            // 2. مستمع حي للتغييرات أثناء التواجد في الصفحة
             onSnapshot(orderRef, (snap) => {
-                if (snap.exists()) {
-                    handleOrderState(snap.data(), user.uid);
-                }
+                if (snap.exists()) { handleOrderState(snap.data(), user.uid); }
             });
 
             initPackages(); 
@@ -152,10 +155,75 @@
 </script>
 
 <script>
-    // بقية كود عرض الباقات والـ Regions كما هو في نسختك السابقة
-    // ... (كود setRegion و initPackages)
-</script>
+    let selectedPlan = "";
+    const plansData = {
+      asia: [
+        { name: "Starter", price: "$7.10", ram: "4GB", cpu: "250% CPU", storage: "16GB NVMe", slots: "10" },
+        { name: "Basic", price: "$10", ram: "6GB", cpu: "325% CPU", storage: "24GB NVMe", slots: "15" },
+        { name: "Master", price: "$13.63", ram: "8GB", cpu: "450% CPU", storage: "32GB NVMe", slots: "35" },
+        { name: "Extreme", price: "$16.30", ram: "12GB", cpu: "550% CPU", storage: "48GB NVMe", slots: "60" },
+        { name: "Boneless", price: "$23.25", ram: "16GB", cpu: "690% CPU", storage: "64GB NVMe", slots: "100" }
+      ],
+      eu: [
+        { name: "X Starter", price: "$7.10", ram: "8GB", cpu: "Xeon E5-2680", storage: "16GB NVMe", slots: "15" },
+        { name: "X Basic", price: "$12.15", ram: "12GB", cpu: "Xeon E5-2680", storage: "24GB NVMe", slots: "25" },
+        { name: "X Master", price: "$14.20", ram: "16GB", cpu: "Xeon E5-2680", storage: "32GB NVMe", slots: "40" },
+        { name: "X Extreme", price: "$20.20", ram: "24GB", cpu: "Xeon E5-2680", storage: "48GB NVMe", slots: "70" },
+        { name: "X Boneless", price: "$25.20", ram: "32GB", cpu: "Xeon E5-2680", storage: "56GB NVMe", slots: "120" },
+        { name: "R Starter", price: "$7.10", ram: "4GB", cpu: "Ryzen 9 3900X", storage: "16GB NVMe", slots: "15" },
+        { name: "R Basic", price: "$10", ram: "6GB", cpu: "Ryzen 9 3900X", storage: "24GB NVMe", slots: "25" },
+        { name: "R Master", price: "$13.33", ram: "8GB", cpu: "Ryzen 9 3900X", storage: "32GB NVMe", slots: "40" },
+        { name: "R Extreme", price: "$20", ram: "12GB", cpu: "Ryzen 9 3900X", storage: "48GB NVMe", slots: "70" },
+        { name: "R Boneless", price: "$24.70", ram: "16GB", cpu: "Ryzen 9 3900X", storage: "56GB NVMe", slots: "120" }
+      ]
+    };
 
+    function setRegion(region) {
+      document.getElementById("asiaBtn").className = region === "asia" ? "px-4 py-1 rounded bg-blue-500 text-sm font-medium" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium";
+      document.getElementById("euBtn").className = region === "eu" ? "px-4 py-1 rounded bg-blue-500 text-sm font-medium" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium";
+      const container = document.getElementById("plans");
+      container.innerHTML = "";
+      plansData[region].forEach(plan => {
+        const isPending = localStorage.getItem("pendingPlan") === plan.name;
+        container.innerHTML += `
+        <div class="bg-gray-800 rounded-xl p-6 text-center border border-white/5 hover:border-blue-500/50 transition-all shadow-lg group">
+          <h3 class="text-2xl font-bold mb-2 text-blue-400">${plan.name}</h3>
+          <p class="text-4xl font-bold mb-6">${plan.price}</p>
+          <ul class="text-gray-400 text-sm mb-8 space-y-3 text-right">
+            <li><i class="fas fa-memory text-blue-500 ml-2"></i>الرام: ${plan.ram}</li>
+            <li><i class="fas fa-microchip text-blue-500 ml-2"></i>المعالج: ${plan.cpu}</li>
+            <li><i class="fas fa-hdd text-blue-500 ml-2"></i>التخزين: ${plan.storage}</li>
+            <li><i class="fas fa-users text-blue-500 ml-2"></i>اللاعبين: ${plan.slots}</li>
+          </ul>
+          <button data-plan="${plan.name}" class="order-btn w-full px-6 py-3 rounded-lg font-bold transition-all ${isPending ? "bg-yellow-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}" ${isPending ? "disabled" : ""} onclick="openConfirm('${plan.name}')">
+            ${isPending ? "قيد انتظار المراجعة" : "طلب الباقة الآن"}
+          </button>
+        </div>`;
+      });
+    }
+
+    function openConfirm(plan) {
+      selectedPlan = plan;
+      document.getElementById("planNotes").innerHTML = `<p>ملاحظات هامة لطلب باقة ${plan}:</p><ul class="list-disc pr-5"><li>تجهيز السيرفر قد يستغرق وقتاً.</li><li>سيتم التواصل معك عبر البريد.</li></ul>`;
+      document.getElementById("confirmModal").style.display = 'flex';
+    }
+    function closeConfirm() { document.getElementById("confirmModal").style.display = 'none'; }
+
+    async function confirmYes() {
+      const btn = document.getElementById("confirmBtnAction");
+      btn.innerText = "جاري الإرسال..."; btn.disabled = true;
+      const success = await window.submitOrderToFirebase(selectedPlan);
+      if (success) {
+        localStorage.setItem("pendingPlan", selectedPlan);
+        closeConfirm();
+        setRegion(document.getElementById("asiaBtn").classList.contains("bg-blue-500") ? "asia" : "eu");
+        alert("✅ تم إرسال طلبك!");
+      }
+      btn.innerText = "نعم"; btn.disabled = false;
+    }
+
+    function initPackages() { setRegion("asia"); }
+</script>
 </body>
 </html>
 
