@@ -4,7 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
+
+    <link rel="icon" type="image/png" href="logo.png">
     
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://abuboneless.github.io/boneless-host-req/">
+    <meta property="og:title" content="Boneless Hosts - استضافة سيرفرات احترافية">
+    <meta property="og:description" content="نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً">
+    <meta property="og:image" content="https://abuboneless.github.io/boneless-host-req/logo.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Boneless Hosts - استضافة سيرفرات احترافية">
+    <meta property="twitter:image" content="https://abuboneless.github.io/boneless-host-req/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -163,7 +174,6 @@
             document.getElementById('packagesPage').style.display = 'block';
             document.body.style.overflow = 'auto'; 
             
-            // مراقبة حالة الطلب في Firestore
             const orderRef = doc(db, "orders", user.uid);
             onSnapshot(orderRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -171,7 +181,6 @@
                     if (data.status === "a") {
                         localStorage.removeItem("pendingPlan");
                         alert("🎉 تهانينا! تم قبول طلبك لباقة " + data.planName);
-                        // مسح الطلب ليعود الزر طبيعياً
                         deleteDoc(orderRef).then(() => {
                             location.reload();
                         });
