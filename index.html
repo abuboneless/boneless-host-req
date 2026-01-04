@@ -168,7 +168,7 @@
             onSnapshot(orderRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (data.status === "accepted") {
+                    if (data.status === "a") {
                         localStorage.removeItem("pendingPlan");
                         alert("🎉 تهانينا! تم قبول طلبك لباقة " + data.planName);
                         // مسح الطلب ليعود الزر طبيعياً
