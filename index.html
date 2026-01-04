@@ -213,7 +213,7 @@
         if(user) {
             document.getElementById('googleSignIn').style.display = 'none';
             // ممكن توجّه المستخدم لصفحة ثانية لو حبيت
-            // window.location.href = 'dashboard.html';
+            // window.location.href = 'packages.html';
         } else {
             document.getElementById('googleSignIn').style.display = 'inline-flex';
         }
@@ -224,7 +224,7 @@
             .then(result => {
                 document.getElementById('googleSignIn').style.display = 'none';
                 // بعد تسجيل الدخول يمكن توجه لصفحة ثانية
-                // window.location.href = 'dashboard.html';
+                // window.location.href = 'packages.html';
             })
             .catch(error => {
                 console.error("خطأ في تسجيل الدخول:", error);
