@@ -61,7 +61,7 @@
 <section id="loginPage">
     <div class="container mx-auto max-w-[1200px] px-5">
         <header class="text-center py-16">
-            <h1 class="text-5xl md:text-6xl font-bold mb-5">Boneless <span class="highlight">Hosts</span> <span class="text-gray-500">Requests</span></h1>
+            <h1 class="text-5xl md:text-6xl font-bold mb-5 shadow-emerald-400">Boneless <span class="highlight">Hosts</span> <span class="text-gray-500">Requests</span></h1>
             <p class="text-xl text-gray-400">نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً</p>
         </header>
 
@@ -98,15 +98,15 @@
 </section>
 
 <section id="packagesPage" class="bg-gray-900/95 min-h-screen">
-    <nav class="bg-black/60 py-3 sticky top-0 z-50 backdrop-blur-md">
+    <nav class="bg-black/60 py-3 sticky top-0 z-50 backdrop-blur-md border-b border-white/5">
       <div class="container mx-auto px-4 flex justify-between items-center">
         <a href="#" class="flex items-center gap-3">
-          <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">B</div>
-          <span class="font-semibold text-lg">Boneless</span>
+          <img src="logo.png" alt="Boneless Logo" class="h-10 w-10 rounded-full object-cover border border-blue-500/50" onerror="this.src='https://ui-avatars.com/api/?name=B&background=2563eb&color=fff'">
+          <span class="font-semibold text-lg tracking-wide">Boneless</span>
         </a>
         <div class="flex gap-2">
-          <button id="asiaBtn" onclick="setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm">Asia</button>
-          <button id="euBtn" onclick="setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm">Europe</button>
+          <button id="asiaBtn" onclick="setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm font-medium">Asia</button>
+          <button id="euBtn" onclick="setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium">Europe</button>
         </div>
       </div>
     </nav>
@@ -138,7 +138,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-    // إعدادات الفايربيس الخاصة بك (لا تقم بتغييرها)
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -153,27 +152,22 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // مراقب حالة المستخدم
     onAuthStateChanged(auth, (user) => {
         if(user) {
-            // المستخدم مسجل دخوله
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.body.style.overflow = 'auto'; 
             initPackages(); 
         } else {
-            // المستخدم غير مسجل
             document.getElementById('loginPage').style.display = 'block';
             document.getElementById('packagesPage').style.display = 'none';
         }
     });
 
-    // زر تسجيل الدخول
     document.getElementById('googleSignIn').addEventListener('click', () => {
         signInWithPopup(auth, provider).catch(err => console.error("Login Failed:", err));
     });
 
-    // حركة الخلفية
     document.addEventListener('mousemove', (e) => {
         const pattern = document.querySelector('.pattern');
         if (pattern && window.getComputedStyle(document.getElementById('loginPage')).display !== 'none') {
@@ -185,7 +179,6 @@
 </script>
 
 <script>
-    /* منطق الباقات (فانيلا جافا سكريبت) */
     let selectedPlan = "";
     const plansData = {
       asia: [
@@ -210,16 +203,16 @@
     };
 
     function setRegion(region) {
-      document.getElementById("asiaBtn").className = region === "asia" ? "px-4 py-1 rounded bg-blue-500 text-sm" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
-      document.getElementById("euBtn").className = region === "eu" ? "px-4 py-1 rounded bg-blue-500 text-sm" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm";
+      document.getElementById("asiaBtn").className = region === "asia" ? "px-4 py-1 rounded bg-blue-500 text-sm font-medium" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium";
+      document.getElementById("euBtn").className = region === "eu" ? "px-4 py-1 rounded bg-blue-500 text-sm font-medium" : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium";
 
       const container = document.getElementById("plans");
       container.innerHTML = "";
       plansData[region].forEach(plan => {
         const isPending = localStorage.getItem("pendingPlan") === plan.name;
         container.innerHTML += `
-        <div class="bg-gray-800 rounded-xl p-6 text-center border border-white/5 hover:border-blue-500/50 transition-all shadow-lg">
-          <h3 class="text-2xl font-bold mb-2 text-blue-400">${plan.name}</h3>
+        <div class="bg-gray-800 rounded-xl p-6 text-center border border-white/5 hover:border-blue-500/50 transition-all shadow-lg group">
+          <h3 class="text-2xl font-bold mb-2 text-blue-400 group-hover:text-blue-300">${plan.name}</h3>
           <p class="text-4xl font-bold mb-6">${plan.price}</p>
           <ul class="text-gray-400 text-sm mb-8 space-y-3 text-right">
             <li><i class="fas fa-memory text-blue-500 ml-2"></i>الرام: ${plan.ram}</li>
@@ -227,7 +220,7 @@
             <li><i class="fas fa-hdd text-blue-500 ml-2"></i>التخزين: ${plan.storage}</li>
             <li><i class="fas fa-users text-blue-500 ml-2"></i>اللاعبين: ${plan.slots}</li>
           </ul>
-          <button data-plan="${plan.name}" class="order-btn w-full px-6 py-3 rounded-lg font-bold transition-all ${isPending ? "bg-yellow-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}" ${isPending ? "disabled" : ""} onclick="openConfirm('${plan.name}')">
+          <button data-plan="${plan.name}" class="order-btn w-full px-6 py-3 rounded-lg font-bold transition-all ${isPending ? "bg-yellow-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 shadow-blue-900/20"}" ${isPending ? "disabled" : ""} onclick="openConfirm('${plan.name}')">
             ${isPending ? "قيد انتظار المراجعة" : "طلب الباقة الآن"}
           </button>
         </div>`;
@@ -237,8 +230,8 @@
     function openConfirm(plan) {
       selectedPlan = plan;
       document.getElementById("planNotes").innerHTML = `
-      <p class="font-bold text-blue-400 mb-2">ملاحظات هامة قبل طلب باقة ${plan}:</p>
-      <ul class="list-disc list-inside space-y-2">
+      <p class="font-bold text-blue-400 mb-2 text-right">ملاحظات هامة قبل طلب باقة ${plan}:</p>
+      <ul class="list-disc list-inside space-y-2 text-right">
         <li>تجهيز السيرفر قد يستغرق بعض الوقت، ستصلك التفاصيل عبر بريدك الإلكتروني.</li>
         <li>بمجرد تأكيد الطلب، لا يمكن استرداد المبلغ أو إلغاء الباقة.</li>
         <li>نحن نضمن لك أفضل أداء وجودة لخدمتك.</li>
@@ -273,5 +266,5 @@
 </script>
 
 </body>
-</html>
-
+    </html>
+    
