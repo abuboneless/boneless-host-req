@@ -7,6 +7,8 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
         
@@ -18,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* تنسيقات الصفحة الأولى (التسجيل) */
         .background {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
@@ -49,7 +50,6 @@
         }
         .highlight { color: #00d4ff; text-shadow: 0 0 20px rgba(0,212,255,0.6); }
 
-        /* التحكم في إظهار الأقسام */
         #packagesPage { display: none; } 
     </style>
 </head>
@@ -127,7 +127,7 @@
         <h2 class="text-2xl font-bold mb-4 text-center">هل أنت متأكد؟</h2>
         <div id="planNotes" class="text-gray-300 text-sm mb-6 leading-relaxed"></div>
         <div class="flex justify-center gap-4">
-          <button onclick="confirmYes()" class="bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-lg transition-colors">نعم</button>
+          <button onclick="confirmYes()" id="confirmBtnAction" class="bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-lg transition-colors">نعم</button>
           <button onclick="closeConfirm()" class="bg-gray-600 hover:bg-gray-700 px-8 py-2 rounded-lg transition-colors">لا</button>
         </div>
       </div>
@@ -137,6 +137,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
@@ -150,19 +151,58 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
+
+    window.userAuth = null;
 
     onAuthStateChanged(auth, (user) => {
         if(user) {
+            window.userAuth = user;
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.body.style.overflow = 'auto'; 
+            
+            // مراقبة حالة الطلب في Firestore
+            const orderRef = doc(db, "orders", user.uid);
+            onSnapshot(orderRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.status === "accepted") {
+                        localStorage.removeItem("pendingPlan");
+                        alert("🎉 تهانينا! تم قبول طلبك لباقة " + data.planName);
+                        // مسح الطلب ليعود الزر طبيعياً
+                        deleteDoc(orderRef).then(() => {
+                            location.reload();
+                        });
+                    }
+                }
+            });
+
             initPackages(); 
         } else {
             document.getElementById('loginPage').style.display = 'block';
             document.getElementById('packagesPage').style.display = 'none';
         }
     });
+
+    window.submitOrderToFirebase = async (planName) => {
+        if (!window.userAuth) return false;
+        try {
+            await setDoc(doc(db, "orders", window.userAuth.uid), {
+                userId: window.userAuth.uid,
+                email: window.userAuth.email,
+                displayName: window.userAuth.displayName,
+                planName: planName,
+                status: "pending",
+                timestamp: new Date()
+            });
+            return true;
+        } catch (error) {
+            console.error("Error:", error);
+            return false;
+        }
+    }
 
     document.getElementById('googleSignIn').addEventListener('click', () => {
         signInWithPopup(auth, provider).catch(err => console.error("Login Failed:", err));
@@ -233,7 +273,6 @@
       <p class="font-bold text-blue-400 mb-2 text-right">ملاحظات هامة قبل طلب باقة ${plan}:</p>
       <ul class="list-disc list-inside space-y-2 text-right">
         <li>تجهيز السيرفر قد يستغرق بعض الوقت، ستصلك التفاصيل عبر بريدك الإلكتروني.</li>
-        <li>بمجرد تأكيد الطلب، لا يمكن استرداد المبلغ أو إلغاء الباقة.</li>
         <li>نحن نضمن لك أفضل أداء وجودة لخدمتك.</li>
       </ul>`;
       document.getElementById("confirmModal").style.display = 'flex';
@@ -243,16 +282,28 @@
       document.getElementById("confirmModal").style.display = 'none';
     }
 
-    function confirmYes() {
-      localStorage.setItem("pendingPlan", selectedPlan);
-      const btn = document.querySelector(`button.order-btn[data-plan="${selectedPlan}"]`);
-      if (btn) {
-        btn.innerText = "قيد انتظار المراجعة";
-        btn.classList.replace("bg-blue-600", "bg-yellow-600");
-        btn.disabled = true;
+    async function confirmYes() {
+      const btnInModal = document.getElementById("confirmBtnAction");
+      btnInModal.innerText = "جاري الإرسال...";
+      btnInModal.disabled = true;
+
+      const success = await window.submitOrderToFirebase(selectedPlan);
+      
+      if (success) {
+        localStorage.setItem("pendingPlan", selectedPlan);
+        const btn = document.querySelector(`button.order-btn[data-plan="${selectedPlan}"]`);
+        if (btn) {
+          btn.innerText = "قيد انتظار المراجعة";
+          btn.classList.replace("bg-blue-600", "bg-yellow-600");
+          btn.disabled = true;
+        }
+        closeConfirm();
+        alert("✅ تم إرسال طلبك بنجاح!");
+      } else {
+        alert("❌ فشل الإرسال، تحقق من الاتصال.");
       }
-      closeConfirm();
-      alert("تم استلام طلبك لباقة: " + selectedPlan);
+      btnInModal.innerText = "نعم";
+      btnInModal.disabled = false;
     }
 
     function initPackages() {
@@ -266,5 +317,5 @@
 </script>
 
 </body>
-    </html>
-    
+</html>
+
