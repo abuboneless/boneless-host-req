@@ -145,19 +145,23 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
 
-            // تحويل الإيميل لعنوان مستند (تبديل النقاط بشرطات لسهولة القراءة)
             const docId = user.email.replace(/\./g, '_');
             const orderRef = doc(db, "orders", docId);
             
-            // فحص فوري عند التحميل
             const docSnap = await getDoc(orderRef);
             if (docSnap.exists()) {
                 await handleOrderState(docSnap.data(), docId);
             }
 
-            // مستمع حي للتغييرات
+            // مستمع حي للتغييرات مع إضافة ميزة عودة الزر عند الحذف
             onSnapshot(orderRef, (snap) => {
-                if (snap.exists()) { handleOrderState(snap.data(), docId); }
+                if (!snap.exists() && localStorage.getItem("pendingPlan")) {
+                    // إذا تم حذف الطلب من الداتابيس، نمسح حالة الانتظار ونحدث الصفحة
+                    localStorage.removeItem("pendingPlan");
+                    location.reload();
+                } else if (snap.exists()) { 
+                    handleOrderState(snap.data(), docId); 
+                }
             });
 
             initPackages(); 
@@ -170,7 +174,6 @@
     window.submitOrderToFirebase = async (planName) => {
         if (!window.userAuth) return false;
         try {
-            // استخدام الإيميل كعنوان للمستند في الداتابيس
             const docId = window.userAuth.email.replace(/\./g, '_');
             await setDoc(doc(db, "orders", docId), {
                 userId: window.userAuth.uid,
@@ -270,4 +273,3 @@
 </script>
 </body>
 </html>
-
