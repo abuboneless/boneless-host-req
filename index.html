@@ -129,12 +129,12 @@
 
     window.userAuth = null;
 
-    // دالة التعامل مع القبول حتى لو العميل مسوي ريفرش
-    async function handleOrderState(data, uid) {
+    // دالة التعامل مع القبول
+    async function handleOrderState(data, docId) {
         if (data && data.status === "a") {
             localStorage.removeItem("pendingPlan");
             alert("🎉 تهانينا! تم قبول طلبك لباقة " + data.planName);
-            await deleteDoc(doc(db, "orders", uid));
+            await deleteDoc(doc(db, "orders", docId));
             location.reload();
         }
     }
@@ -145,17 +145,19 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
 
-            const orderRef = doc(db, "orders", user.uid);
+            // تحويل الإيميل لعنوان مستند (تبديل النقاط بشرطات لسهولة القراءة)
+            const docId = user.email.replace(/\./g, '_');
+            const orderRef = doc(db, "orders", docId);
             
-            // فحص فوري عند التحميل (لحل مشكلة الريفرش)
+            // فحص فوري عند التحميل
             const docSnap = await getDoc(orderRef);
             if (docSnap.exists()) {
-                await handleOrderState(docSnap.data(), user.uid);
+                await handleOrderState(docSnap.data(), docId);
             }
 
             // مستمع حي للتغييرات
             onSnapshot(orderRef, (snap) => {
-                if (snap.exists()) { handleOrderState(snap.data(), user.uid); }
+                if (snap.exists()) { handleOrderState(snap.data(), docId); }
             });
 
             initPackages(); 
@@ -168,7 +170,9 @@
     window.submitOrderToFirebase = async (planName) => {
         if (!window.userAuth) return false;
         try {
-            await setDoc(doc(db, "orders", window.userAuth.uid), {
+            // استخدام الإيميل كعنوان للمستند في الداتابيس
+            const docId = window.userAuth.email.replace(/\./g, '_');
+            await setDoc(doc(db, "orders", docId), {
                 userId: window.userAuth.uid,
                 email: window.userAuth.email,
                 displayName: window.userAuth.displayName,
