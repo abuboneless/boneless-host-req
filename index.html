@@ -117,12 +117,12 @@
     let user = null;
     let selectedPlanData = null;
 
-    // باقات محدثة لـ 96GB RAM
+    // باقات محدثة بأسعار تنافسية لسوق 2026
     const plans = [
-        { id: 'p1', name: "Starter", ram: "6GB", cpu: "150% (1.5 Core)", disk: "40GB NVMe", price: "9.99", featured: false },
-        { id: 'p2', name: "Professional", ram: "12GB", cpu: "250% (2.5 Cores)", disk: "80GB NVMe", price: "18.50", featured: true },
-        { id: 'p3', name: "Ultimate", ram: "24GB", cpu: "400% (4 Cores)", disk: "120GB NVMe", price: "32.00", featured: false },
-        { id: 'p4', name: "Extreme", ram: "32GB", cpu: "600% (6 Cores)", disk: "160GB NVMe", price: "45.00", featured: false }
+        { id: 'p1', name: "Starter", ram: "6GB", cpu: "150% CPU", disk: "40GB NVMe", price: "5.99", featured: false },
+        { id: 'p2', name: "Basic", ram: "10GB", cpu: "200% CPU", disk: "70GB NVMe", price: "9.99", featured: true },
+        { id: 'p3', name: "Master", ram: "16GB", cpu: "300% CPU", disk: "100GB NVMe", price: "14.99", featured: false },
+        { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
     ];
 
     window.renderPlans = () => {
@@ -201,7 +201,6 @@
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerText = `مرحباً، ${u.displayName}`;
             
-            // مراقبة الطلب
             const docId = u.email.replace(/\./g, '_');
             onSnapshot(doc(db, "orders", docId), (snap) => {
                 if (snap.exists()) {
