@@ -3,34 +3,31 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Boneless Hosts Requests - استضافة طلبات باقات سيرفرات احترافية</title>
+    <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
 
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#000000">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://abuboneless.github.io/boneless-host-req/">
-    <meta property="og:title" content="Boneless Hosts Requests">
-    <meta property="og:description" content="نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً">
-    <meta property="og:image" content="https://abuboneless.github.io/boneless-host-req/logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', 'Open Sans', Tahoma, sans-serif; background: #000000; color: white; overflow-x: hidden; }
-        .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%); z-index: -2; }
-        .pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px); z-index: -1; animation: patternMove 20s linear infinite; }
-        @keyframes patternMove { 0% { transform: translate(0,0); } 100% { transform: translate(70px,70px); } }
-        .feature-card { background: rgba(255,255,255,0.05); border: 2px solid rgba(0,255,100,0.2); border-radius: 15px; transition: all 0.3s ease; }
-        .feature-card:hover { transform: translateY(-10px); border-color: rgba(0,255,100,0.5); box-shadow: 0 10px 40px rgba(0,255,100,0.3); }
-        .highlight { color: #00d4ff; text-shadow: 0 0 20px rgba(0,212,255,0.6); }
-        #packagesPage { display: none; } 
+        body { font-family: 'Cairo', sans-serif; background: #000000; color: white; overflow-x: hidden; }
+        
+        .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #111 0%, #000 100%); z-index: -2; }
+        .pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; z-index: -1; }
+        
+        .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: 0.3s; }
+        .feature-card:hover { border-color: #00d4ff; box-shadow: 0 0 30px rgba(0,212,255,0.2); transform: translateY(-5px); }
+        
+        .highlight { color: #00d4ff; text-shadow: 0 0 15px rgba(0,212,255,0.5); }
+        #packagesPage { display: none; }
+
+        .plan-card { position: relative; overflow: hidden; background: #0a0a0a; border: 1px solid #222; border-radius: 24px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .plan-card:hover { border-color: #00ff64; transform: scale(1.02); }
+        .plan-card.featured { border: 2px solid #00d4ff; box-shadow: 0 0 40px rgba(0,212,255,0.1); }
     </style>
 </head>
 <body>
@@ -38,83 +35,70 @@
 <div class="background"></div>
 <div class="pattern"></div>
 
-<section id="loginPage">
-    <div class="container mx-auto max-w-[1200px] px-5">
-        <header class="text-center py-16">
-            <h1 class="text-5xl md:text-6xl font-bold mb-5 shadow-emerald-400">Boneless <span class="highlight">Hosts</span> <span class="text-gray-500">Requests</span></h1>
-            <p class="text-xl text-gray-400">نظام طلبات استضافة سيرفرات ماين كرافت الأكثر تطوراً</p>
+<section id="loginPage" class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-4xl w-full text-center">
+        <header class="mb-12">
+            <h1 class="text-6xl font-black mb-4">Boneless <span class="highlight">Hosts</span></h1>
+            <p class="text-xl text-gray-400">القوة المطلقة لسيرفرات ماين كرافت - عتاد 96GB RAM</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center">
-            <div class="feature-card p-10">
-                <div class="text-5xl mb-5 text-[#00ff64]">🛡️</div>
-                <h3 class="text-2xl font-bold mb-3">حماية متقدمة</h3>
-                <p class="text-gray-400">أمان عالي المستوى لسيرفرك مع حماية ضد جميع الهجمات</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="feature-card p-8">
+                <i class="fas fa-bolt text-4xl text-yellow-400 mb-4"></i>
+                <h3 class="font-bold text-xl mb-2">أداء خارق</h3>
+                <p class="text-gray-500 text-sm">معالجات بـ 24 نواة لضمان عدم وجود لاق</p>
             </div>
-            <div class="feature-card p-10">
-                <div class="text-5xl mb-5 text-[#00d4ff]">⚡</div>
-                <h3 class="text-2xl font-bold mb-3">استجابة فورية</h3>
-                <p class="text-gray-400">معالجة سريعة لجميع الطلبات مع أداء ممتاز</p>
+            <div class="feature-card p-8">
+                <i class="fas fa-shield-alt text-4xl text-green-400 mb-4"></i>
+                <h3 class="font-bold text-xl mb-2">حماية DDoS</h3>
+                <p class="text-gray-500 text-sm">حماية متطورة ضد أقوى الهجمات</p>
             </div>
-            <div class="feature-card p-10">
-                <div class="text-5xl mb-5 text-[#ff6b35]">📊</div>
-                <h3 class="text-2xl font-bold mb-3">استضافة قوية</h3>
-                <p class="text-gray-400">سيرفرات ماين كرافت عالية الأداء </p>
+            <div class="feature-card p-8">
+                <i class="fas fa-memory text-4xl text-blue-400 mb-4"></i>
+                <h3 class="font-bold text-xl mb-2">رامات ضخمة</h3>
+                <p class="text-gray-500 text-sm">نستخدم رامات DDR4/DDR5 عالية التردد</p>
             </div>
         </div>
 
-        <div class="text-center pb-20">
-            <button id="googleSignIn" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:scale-105 transition-transform cursor-pointer">
-                <i class="fab fa-google"></i> تسجيل الدخول عبر Google
-            </button>
-        </div>
+        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-400 hover:text-white transition-all transform hover:scale-105">
+            <i class="fab fa-google ml-2"></i> ابدأ رحلتك الآن
+        </button>
     </div>
 </section>
 
-<section id="packagesPage" class="bg-gray-900/95 min-h-screen">
-    <nav class="bg-black/60 py-3 sticky top-0 z-50 backdrop-blur-md border-b border-white/5">
-      <div class="container mx-auto px-4 flex justify-between items-center">
-        <a href="#" class="flex items-center gap-3">
-          <img src="logo.png" alt="Logo" class="h-10 w-10 rounded-full border border-blue-500/50" onerror="this.src='https://ui-avatars.com/api/?name=B&background=2563eb&color=fff'">
-          <span class="font-semibold text-lg">Boneless</span>
-        </a>
-        <div class="flex gap-2">
-          <button id="asiaBtn" onclick="window.setRegion('asia')" class="px-4 py-1 rounded bg-blue-500 text-sm font-medium transition-colors">Asia</button>
-          <button id="euBtn" onclick="window.setRegion('eu')" class="px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium transition-colors">Europe</button>
-        </div>
-      </div>
+<section id="packagesPage">
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
+        <div class="text-2xl font-bold">Boneless <span class="highlight">Hosts</span></div>
+        <div id="userInfo" class="text-sm text-gray-400"></div>
     </nav>
 
-    <header class="bg-cover bg-center" style="background-image:url('https://www.pixelstalk.net/wp-content/uploads/images6/Minecraft-Aesthetic-Wallpaper-HD-Free-download.jpg')">
-        <div class="bg-black/70 py-20 text-center">
-            <h1 class="text-4xl font-bold">اختيار الباقة</h1>
-            <p class="text-lg mt-4 text-gray-300">اختر الباقة المناسبة لسيرفر ماين كرافت الخاص بك</p>
-        </div>
-    </header>
-
-    <div class="container mx-auto px-4 py-16">
-        <div id="plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    <div class="text-center py-12">
+        <h2 class="text-4xl font-bold mb-2">باقات السيرفرات الاحترافية</h2>
+        <p class="text-gray-500">تم تحديث الموارد لتناسب العتاد الجديد VPS-6</p>
     </div>
 
-    <div id="confirmModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
-      <div class="bg-gray-800 rounded-xl p-8 w-full max-w-md border border-white/10 shadow-2xl text-right relative">
-        <h2 class="text-2xl font-bold mb-4 text-center text-white">تأكيد الطلب</h2>
-        <div id="planNotes" class="text-gray-300 text-sm mb-6 leading-relaxed"></div>
-        <div class="flex justify-center gap-4">
-          <button onclick="window.confirmYes()" id="confirmBtnAction" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg transition-colors font-bold">نعم، اطلب الآن</button>
-          <button onclick="window.closeConfirm()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-lg transition-colors">إلغاء</button>
+    <div class="container mx-auto px-6 pb-20">
+        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[100] p-4 backdrop-blur-md">
+      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right">
+        <h2 class="text-2xl font-bold mb-4 text-center">تأكيد طلب الباقة</h2>
+        <div id="planDetails" class="mb-6 space-y-2 py-4 border-y border-white/5"></div>
+        <div class="flex gap-4">
+          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors">تأكيد الطلب</button>
+          <button onclick="window.closeModal()" class="flex-1 bg-gray-800 py-3 rounded-xl font-bold">إلغاء</button>
         </div>
       </div>
     </div>
 </section>
 
 <script type="module">
-    // 1. استيراد المكتبات بإصدار ثابت (v10.8.0)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 2. إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -130,212 +114,116 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    // متغيرات الحالة
-    let currentUser = null;
-    let selectedPlan = "";
+    let user = null;
+    let selectedPlanData = null;
 
-    // 3. بيانات الباقات
-    const plansData = {
-        asia: [
-            { name: "Starter", price: "$7.10", ram: "4GB", cpu: "250% CPU", storage: "16GB NVMe", slots: "10" },
-            { name: "Basic", price: "$10", ram: "6GB", cpu: "325% CPU", storage: "24GB NVMe", slots: "15" },
-            { name: "Master", price: "$13.63", ram: "8GB", cpu: "450% CPU", storage: "32GB NVMe", slots: "35" },
-            { name: "Extreme", price: "$16.30", ram: "12GB", cpu: "550% CPU", storage: "48GB NVMe", slots: "60" },
-            { name: "Boneless", price: "$23.25", ram: "16GB", cpu: "690% CPU", storage: "64GB NVMe", slots: "100" }
-        ],
-        eu: [
-            { name: "X Starter", price: "$7.10", ram: "8GB", cpu: "Xeon E5-2680", storage: "16GB NVMe", slots: "15" },
-            { name: "X Basic", price: "$12.15", ram: "12GB", cpu: "Xeon E5-2680", storage: "24GB NVMe", slots: "25" },
-            { name: "X Master", price: "$14.20", ram: "16GB", cpu: "Xeon E5-2680", storage: "32GB NVMe", slots: "40" },
-            { name: "X Extreme", price: "$20.20", ram: "24GB", cpu: "Xeon E5-2680", storage: "48GB NVMe", slots: "70" },
-            { name: "X Boneless", price: "$25.20", ram: "32GB", cpu: "Xeon E5-2680", storage: "56GB NVMe", slots: "120" },
-            { name: "R Starter", price: "$7.10", ram: "4GB", cpu: "Ryzen 9 3900X", storage: "16GB NVMe", slots: "15" },
-            { name: "R Basic", price: "$10", ram: "6GB", cpu: "Ryzen 9 3900X", storage: "24GB NVMe", slots: "25" },
-            { name: "R Master", price: "$13.33", ram: "8GB", cpu: "Ryzen 9 3900X", storage: "32GB NVMe", slots: "40" },
-            { name: "R Extreme", price: "$20", ram: "12GB", cpu: "Ryzen 9 3900X", storage: "48GB NVMe", slots: "70" },
-            { name: "R Boneless", price: "$24.70", ram: "16GB", cpu: "Ryzen 9 3900X", storage: "56GB NVMe", slots: "120" }
-        ]
-    };
+    // باقات محدثة لـ 96GB RAM
+    const plans = [
+        { id: 'p1', name: "Starter", ram: "6GB", cpu: "150% (1.5 Core)", disk: "40GB NVMe", price: "9.99", featured: false },
+        { id: 'p2', name: "Professional", ram: "12GB", cpu: "250% (2.5 Cores)", disk: "80GB NVMe", price: "18.50", featured: true },
+        { id: 'p3', name: "Ultimate", ram: "24GB", cpu: "400% (4 Cores)", disk: "120GB NVMe", price: "32.00", featured: false },
+        { id: 'p4', name: "Extreme", ram: "32GB", cpu: "600% (6 Cores)", disk: "160GB NVMe", price: "45.00", featured: false }
+    ];
 
-    // 4. تعريف الدوال وربطها بالـ Window لتصبح مرئية لملف HTML
-    
-    // دالة تغيير المنطقة وعرض الباقات
-    window.setRegion = (region) => {
-        // تحديث أزرار التبديل
-        document.getElementById("asiaBtn").className = region === "asia" 
-            ? "px-4 py-1 rounded bg-blue-500 text-white text-sm font-medium transition-colors shadow-md" 
-            : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium hover:bg-gray-600 transition-colors";
-            
-        document.getElementById("euBtn").className = region === "eu" 
-            ? "px-4 py-1 rounded bg-blue-500 text-white text-sm font-medium transition-colors shadow-md" 
-            : "px-4 py-1 rounded bg-gray-700 text-gray-300 text-sm font-medium hover:bg-gray-600 transition-colors";
-
-        const container = document.getElementById("plans");
-        container.innerHTML = "";
+    window.renderPlans = () => {
+        const grid = document.getElementById('plansGrid');
+        const pending = localStorage.getItem('pendingPlan');
         
-        // جلب حالة الانتظار من التخزين المحلي
-        const pendingPlan = localStorage.getItem("pendingPlan");
-
-        plansData[region].forEach(plan => {
-            const isPending = pendingPlan === plan.name;
-            container.innerHTML += `
-            <div class="bg-gray-800 rounded-xl p-6 text-center border border-white/5 hover:border-blue-500/50 transition-all shadow-lg group hover:-translate-y-2 duration-300">
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">${plan.name}</h3>
-                <p class="text-4xl font-bold mb-6">${plan.price}</p>
-                <ul class="text-gray-400 text-sm mb-8 space-y-3 text-right px-4">
-                    <li class="flex items-center justify-end gap-2"><span dir="ltr">${plan.ram}</span> <i class="fas fa-memory text-blue-500"></i></li>
-                    <li class="flex items-center justify-end gap-2"><span dir="ltr">${plan.cpu}</span> <i class="fas fa-microchip text-blue-500"></i></li>
-                    <li class="flex items-center justify-end gap-2"><span dir="ltr">${plan.storage}</span> <i class="fas fa-hdd text-blue-500"></i></li>
-                    <li class="flex items-center justify-end gap-2"><span dir="ltr">${plan.slots}</span> <i class="fas fa-users text-blue-500"></i></li>
+        grid.innerHTML = plans.map(p => `
+            <div class="plan-card p-8 ${p.featured ? 'featured' : ''}">
+                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
+                <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
+                <div class="text-3xl font-black mb-6">$${p.price}<span class="text-sm text-gray-500">/شهر</span></div>
+                
+                <ul class="space-y-4 mb-8 text-sm text-gray-400">
+                    <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> رامات: ${p.ram}</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> معالج: ${p.cpu}</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> مساحة: ${p.disk}</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> حماية هجمات مجانية</li>
                 </ul>
+
                 <button 
-                    class="w-full px-6 py-3 rounded-lg font-bold transition-all ${isPending ? "bg-yellow-600 text-white cursor-not-allowed opacity-80" : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-blue-500/30"}" 
-                    ${isPending ? "disabled" : ""} 
-                    onclick="window.openConfirm('${plan.name}')">
-                    ${isPending ? "<i class='fas fa-clock'></i> قيد المراجعة" : "طلب الباقة الآن"}
+                    onclick="window.initOrder('${p.id}')"
+                    ${pending ? 'disabled' : ''}
+                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 cursor-not-allowed' : 'bg-white text-black hover:bg-blue-400 hover:text-white'}"
+                >
+                    ${pending === p.name ? 'قيد المراجعة...' : (pending ? 'لديك طلب معلق' : 'اطلب الآن')}
                 </button>
-            </div>`;
-        });
+            </div>
+        `).join('');
     };
 
-    // دالة فتح نافذة التأكيد
-    window.openConfirm = (plan) => {
-        if (!currentUser) {
-            alert("يرجى تسجيل الدخول أولاً");
-            return;
-        }
-        selectedPlan = plan;
-        document.getElementById("planNotes").innerHTML = `
-            <p class="text-right font-bold text-blue-400 mb-2">أنت على وشك طلب باقة: ${plan}</p>
-            <ul class="list-disc pr-5 text-right text-gray-300 space-y-1">
-                <li>سيتم إرسال الطلب للمراجعة فوراً.</li>
-                <li>تجهيز السيرفر قد يستغرق بعض الوقت.</li>
-                <li>سيتم إعلامك عند قبول الطلب.</li>
-            </ul>`;
-        document.getElementById("confirmModal").style.display = 'flex';
+    window.initOrder = (planId) => {
+        selectedPlanData = plans.find(p => p.id === planId);
+        const details = document.getElementById('planDetails');
+        details.innerHTML = `
+            <div class="flex justify-between"><span>الباقة:</span><span class="font-bold">${selectedPlanData.name}</span></div>
+            <div class="flex justify-between"><span>الرام:</span><span class="font-bold">${selectedPlanData.ram}</span></div>
+            <div class="flex justify-between"><span>السعر:</span><span class="font-bold">$${selectedPlanData.price}</span></div>
+        `;
+        document.getElementById('confirmModal').style.display = 'flex';
     };
 
-    // دالة إغلاق النافذة
-    window.closeConfirm = () => {
-        document.getElementById("confirmModal").style.display = 'none';
-    };
+    window.closeModal = () => document.getElementById('confirmModal').style.display = 'none';
 
-    // دالة إرسال الطلب الفعلية
-    window.confirmYes = async () => {
-        if (!currentUser) return;
-        
-        const btn = document.getElementById("confirmBtnAction");
-        const originalText = btn.innerHTML;
-        
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+    window.confirmOrder = async () => {
+        const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
+        btn.innerText = "جاري الإرسال...";
 
         try {
-            // استخدام الإيميل كمعرف للمستند (مع استبدال النقاط)
-            const docId = currentUser.email.replace(/\./g, '_');
-            
+            const docId = user.email.replace(/\./g, '_');
             await setDoc(doc(db, "orders", docId), {
-                userId: currentUser.uid,
-                email: currentUser.email,
-                displayName: currentUser.displayName || "User",
-                planName: selectedPlan,
+                email: user.email,
+                name: user.displayName,
+                plan: selectedPlanData.name,
+                ram: selectedPlanData.ram,
                 status: "pending",
-                timestamp: new Date()
+                time: new Date()
             });
 
-            // حفظ الحالة محلياً
-            localStorage.setItem("pendingPlan", selectedPlan);
-            window.closeConfirm();
-            
-            // تحديث الواجهة
-            const currentRegion = document.getElementById("asiaBtn").classList.contains("bg-blue-500") ? "asia" : "eu";
-            window.setRegion(currentRegion);
-            
-            alert("✅ تم إرسال طلبك بنجاح! يرجى انتظار الموافقة.");
-
-        } catch (error) {
-            console.error("Error:", error);
-            alert("❌ حدث خطأ أثناء الطلب: " + error.message);
+            localStorage.setItem('pendingPlan', selectedPlanData.name);
+            window.closeModal();
+            window.renderPlans();
+            alert("✅ تم إرسال طلبك! سيتم التواصل معك عبر البريد.");
+        } catch (e) {
+            alert("❌ خطأ: تأكد من إعدادات الـ Rules في Firebase.");
         } finally {
-            btn.innerHTML = originalText;
             btn.disabled = false;
+            btn.innerText = "تأكيد الطلب";
         }
     };
 
-    // تهيئة الباقات عند التحميل
-    function initPackages() {
-        const pending = localStorage.getItem("pendingPlan");
-        if (pending) {
-            // إذا كان هناك طلب معلق، نفتح المنطقة الخاصة به
-            (pending.startsWith('X') || pending.startsWith('R')) ? window.setRegion('eu') : window.setRegion('asia');
-        } else {
-            window.setRegion("asia");
-        }
-    }
-
-    // 5. إدارة حالة المصادقة (Auth Listener)
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            currentUser = user;
-            // إظهار صفحة الباقات وإخفاء تسجيل الدخول
+    onAuthStateChanged(auth, (u) => {
+        if (u) {
+            user = u;
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
-
-            const docId = user.email.replace(/\./g, '_');
-            const orderRef = doc(db, "orders", docId);
+            document.getElementById('userInfo').innerText = `مرحباً، ${u.displayName}`;
             
-            // مراقبة التغييرات في الطلب (Realtime Listener)
-            onSnapshot(orderRef, async (snap) => {
-                const pendingLocal = localStorage.getItem("pendingPlan");
-
+            // مراقبة الطلب
+            const docId = u.email.replace(/\./g, '_');
+            onSnapshot(doc(db, "orders", docId), (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    
-                    // حالة 1: تم قبول الطلب
                     if (data.status === "a") {
-                        if (pendingLocal) {
-                            alert("🎉 تهانينا! تم قبول طلبك لباقة " + data.planName + ".\nسيتم التواصل معك قريباً.");
-                            localStorage.removeItem("pendingPlan");
-                        }
-                        // حذف الطلب من الداتابيس بعد القبول لتنظيف السجلات (اختياري حسب رغبتك)
-                        await deleteDoc(doc(db, "orders", docId));
-                        location.reload(); 
+                        alert("🎉 مبروك! تم قبول طلبك لـ " + data.plan);
+                        localStorage.removeItem('pendingPlan');
+                        deleteDoc(doc(db, "orders", docId)).then(() => location.reload());
                     }
-                    // حالة 2: الطلب لا يزال قيد الانتظار - تحديث LocalStorage للتأكد
-                    else if (data.status === "pending") {
-                        if (data.planName !== pendingLocal) {
-                            localStorage.setItem("pendingPlan", data.planName);
-                            initPackages(); // تحديث الأزرار
-                        }
-                    }
-                } else {
-                    // حالة 3: المستند غير موجود ولكن لدينا طلب معلق محلياً
-                    // هذا يعني أن الأدمن قام بحذف الطلب (رفضه)
-                    if (pendingLocal) {
-                        localStorage.removeItem("pendingPlan");
-                        alert("⚠️ تم تحديث حالة طلبك (تم رفضه أو إلغاؤه من قبل الإدارة).");
-                        initPackages(); // إعادة تحميل الأزرار لتصبح قابلة للنقر
-                    }
+                } else if (localStorage.getItem('pendingPlan')) {
+                    localStorage.removeItem('pendingPlan');
+                    window.renderPlans();
                 }
             });
-
-            initPackages();
+            window.renderPlans();
         } else {
-            // المستخدم غير مسجل دخول
-            currentUser = null;
-            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('packagesPage').style.display = 'none';
         }
     });
 
-    // زر تسجيل الدخول
-    document.getElementById('googleSignIn').addEventListener('click', () => {
-        signInWithPopup(auth, provider).catch((error) => {
-            console.error("Login Failed:", error);
-            alert("فشل تسجيل الدخول: " + error.message);
-        });
-    });
+    document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider);
 </script>
-
 </body>
 </html>
