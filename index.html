@@ -26,6 +26,30 @@
         .plan-card:hover { border-color: #00ff64; transform: translateY(-5px); }
         .plan-card.featured { border: 2px solid #00d4ff; }
 
+        /* زر الواتساب العائم */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 10px 25px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            transition: 0.3s;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #128c7e;
+        }
+
         .payment-methods img { height: 25px; filter: grayscale(1) brightness(1.5); transition: 0.3s; opacity: 0.7; }
         .payment-methods img:hover { filter: grayscale(0) brightness(1); opacity: 1; }
     </style>
@@ -35,22 +59,26 @@
 <div class="background"></div>
 <div class="pattern"></div>
 
+<a href="https://wa.me/973XXXXXX" id="whatsappLink" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <section id="loginPage" class="min-h-screen flex items-center justify-center p-6 text-center">
     <div class="max-w-4xl">
-        <h1 class="text-6xl font-black mb-4">Boneless <span class="highlight">Hosts</span></h1>
-        <p class="text-xl text-gray-400 mb-12">استضافة أحلامك تبدأ هنا بأقوى المواصفات وأفضل الأسعار</p>
+        <h1 class="text-6xl font-black mb-4 text-white">Boneless <span class="highlight">Hosts</span></h1>
+        <p class="text-xl text-gray-400 mb-12">أقوى عتاد 96GB RAM لتجربة لعب خالية من اللاق</p>
         
-        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105">
-            <i class="fab fa-google ml-2"></i> سجل دخولك للطلب
+        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 shadow-xl">
+            <i class="fab fa-google ml-2"></i> سجل دخولك للبدء
         </button>
 
-        <div class="mt-12 opacity-50 flex justify-center gap-6 items-center flex-wrap">
-            <span class="text-sm">نقبل الدفع عبر:</span>
+        <div class="mt-12 opacity-50 flex justify-center gap-6 items-center flex-wrap text-white">
+            <span class="text-sm">ندعم وسائل الدفع:</span>
             <div class="flex gap-4 items-center">
                 <i class="fab fa-cc-visa text-2xl"></i>
-                <i class="fab fa-cc-mastercard text-2xl"></i>
                 <i class="fab fa-cc-paypal text-2xl"></i>
-                <span class="font-bold border px-2 py-1 rounded text-xs">BENEFIT</span>
+                <span class="font-bold border px-2 py-1 rounded text-[10px]">BENEFIT</span>
+                <span class="font-bold border px-2 py-1 rounded text-[10px]">STC PAY</span>
             </div>
         </div>
     </div>
@@ -63,8 +91,8 @@
     </nav>
 
     <div class="text-center py-10">
-        <h2 class="text-4xl font-bold mb-2">باقات الـ 96GB الجبارة</h2>
-        <p class="text-gray-400">اختر باقتك وسنتواصل معك لإتمام الدفع وتفعيل السيرفر</p>
+        <h2 class="text-4xl font-bold mb-2">باقات الـ VPS-6 الجبارة</h2>
+        <p class="text-gray-400">باقات مدروسة لتناسب ميزانيتك وقوة سيرفرك</p>
     </div>
 
     <div class="container mx-auto px-6 pb-12">
@@ -76,24 +104,24 @@
             <div class="payment-methods flex gap-8 items-center flex-wrap justify-center grayscale">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
                 <span class="text-white font-bold tracking-widest text-lg border-2 px-3 py-1 border-white/20 rounded">BENEFIT</span>
             </div>
-            <p class="text-gray-600 text-xs mt-6">جميع المعاملات مشفرة وآمنة 100%</p>
+            <p class="text-gray-600 text-[10px] mt-6 italic">للدفع عبر Benefit أو التحويل البنكي يرجى التواصل واتساب</p>
         </div>
     </footer>
 
     <div id="confirmModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
       <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right">
-        <h2 class="text-2xl font-bold mb-4 text-center">تأكيد الطلب</h2>
+        <h2 class="text-2xl font-bold mb-4 text-center">تأكيد حجز الباقة</h2>
         <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5"></div>
         
-        <p class="text-[10px] text-gray-500 mb-6 text-center">
-            بعد ضغط "تأكيد"، سيتم مراجعة طلبك وإرسال فاتورة الدفع (PayPal/Benefit/Card) إلى بريدك الإلكتروني.
+        <p class="text-xs text-yellow-500 mb-6 text-center">
+            <i class="fas fa-info-circle ml-1"></i>
+            بعد تأكيد الطلب، يرجى إرسال لقطة شاشة (Screenshot) للتحويل عبر الواتساب لتفعيل السيرفر فوراً.
         </p>
 
         <div class="flex gap-4">
-          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors shadow-lg shadow-blue-500/20">إرسال الطلب</button>
+          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors">تأكيد وإرسال</button>
           <button onclick="window.closeModal()" class="flex-1 bg-white/5 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors">إلغاء</button>
         </div>
       </div>
@@ -105,7 +133,6 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // إعداداتك (تأكد أنها مطابقة لـ Firebase الخاص بك)
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -130,13 +157,16 @@
         { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
     ];
 
+    // ضع رقمك هنا (بدون أصفار أو علامة +) مثال: 97333000000
+    const MY_PHONE = "97333857500"; 
+
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
         const pending = localStorage.getItem('pendingPlan');
         
         grid.innerHTML = plans.map(p => `
             <div class="plan-card p-8 ${p.featured ? 'featured' : ''}">
-                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">Best Value</span>' : ''}
+                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
                 <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
                 <div class="text-3xl font-black mb-6">$${p.price}<span class="text-sm text-gray-500">/شهر</span></div>
                 
@@ -144,13 +174,13 @@
                     <li><i class="fas fa-microchip ml-2 text-blue-500"></i> معالج: ${p.cpu}</li>
                     <li><i class="fas fa-memory ml-2 text-blue-500"></i> رامات: ${p.ram}</li>
                     <li><i class="fas fa-hdd ml-2 text-blue-500"></i> مساحة: ${p.disk}</li>
-                    <li><i class="fas fa-shield-alt ml-2 text-blue-500"></i> حماية هجمات متقدمة</li>
+                    <li><i class="fas fa-shield-alt ml-2 text-blue-500"></i> حماية DDoS مجانية</li>
                 </ul>
 
                 <button 
                     onclick="window.initOrder('${p.id}')"
                     ${pending ? 'disabled' : ''}
-                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 text-white' : (pending ? 'bg-gray-800 text-gray-500' : 'bg-white text-black hover:bg-[#00ff64]')} "
+                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 text-white' : (pending ? 'bg-gray-800 text-gray-600' : 'bg-white text-black hover:bg-[#00ff64]')} "
                 >
                     ${pending === p.name ? 'قيد الانتظار...' : (pending ? 'لديك طلب حالي' : 'اطلب الآن')}
                 </button>
@@ -161,9 +191,8 @@
     window.initOrder = (planId) => {
         selectedPlanData = plans.find(p => p.id === planId);
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between"><span>الباقة:</span><span>${selectedPlanData.name}</span></div>
-            <div class="flex justify-between font-bold text-blue-400"><span>المبلغ المطلوب:</span><span>$${selectedPlanData.price}</span></div>
-            <div class="flex justify-between text-xs text-gray-400"><span>وسائل الدفع:</span><span>PayPal / Card / Benefit</span></div>
+            <div class="flex justify-between"><span>الباقة المختارة:</span><span>${selectedPlanData.name}</span></div>
+            <div class="flex justify-between text-blue-400 font-bold"><span>المبلغ:</span><span>$${selectedPlanData.price}</span></div>
         `;
         document.getElementById('confirmModal').style.display = 'flex';
     };
@@ -173,7 +202,6 @@
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
-        btn.innerText = "جاري الحفظ...";
 
         try {
             const docId = user.email.replace(/\./g, '_');
@@ -184,15 +212,19 @@
                 status: "pending",
                 requestedAt: new Date()
             });
+
             localStorage.setItem('pendingPlan', selectedPlanData.name);
+            
+            // تجهيز رسالة الواتساب التلقائية
+            const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع. إيميلي هو: ${user.email}. أرغب في إتمام الدفع.`);
+            window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
+
             window.closeModal();
             window.renderPlans();
-            alert("✅ تم استلام طلبك! سنتواصل معك عبر البريد لإرسال رابط الدفع.");
         } catch (e) {
-            alert("❌ حدث خطأ في الصلاحيات. تأكد من إعدادات Rules في Firebase.");
+            alert("خطأ في الاتصال بقاعدة البيانات.");
         } finally {
             btn.disabled = false;
-            btn.innerText = "إرسال الطلب";
         }
     };
 
@@ -206,7 +238,7 @@
             const docId = u.email.replace(/\./g, '_');
             onSnapshot(doc(db, "orders", docId), (snap) => {
                 if (snap.exists() && snap.data().status === "a") {
-                    alert("🎉 تم تفعيل طلبك بنجاح!");
+                    alert("🎉 تم تفعيل سيرفرك بنجاح! راجع بريدك الإلكتروني.");
                     localStorage.removeItem('pendingPlan');
                     deleteDoc(doc(db, "orders", docId)).then(() => location.reload());
                 } else if (!snap.exists() && localStorage.getItem('pendingPlan')) {
