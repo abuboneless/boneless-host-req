@@ -46,8 +46,7 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
 
-        .payment-methods img { height: 25px; filter: grayscale(1) brightness(1.5); transition: 0.3s; opacity: 0.7; }
-        .payment-methods img:hover { filter: grayscale(0) brightness(1); opacity: 1; }
+        .step-card { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
@@ -69,12 +68,11 @@
         </button>
 
         <div class="mt-12 opacity-50 flex justify-center gap-6 items-center flex-wrap text-white">
-            <span class="text-sm">ندعم وسائل الدفع:</span>
+            <span class="text-sm">وسائل الدفع المدعومة:</span>
             <div class="flex gap-4 items-center">
                 <i class="fab fa-cc-visa text-2xl"></i>
                 <i class="fab fa-cc-paypal text-2xl"></i>
                 <span class="font-bold border px-2 py-1 rounded text-[10px]">BENEFIT</span>
-                <span class="font-bold border px-2 py-1 rounded text-[10px]">STC PAY</span>
             </div>
         </div>
     </div>
@@ -86,38 +84,62 @@
         <div id="userInfo" class="text-sm text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10"></div>
     </nav>
 
-    <div class="text-center py-10">
+    <div class="text-center py-10 px-4">
         <h2 class="text-4xl font-bold mb-2">باقات الـ VPS-6 الجبارة</h2>
-        <p class="text-gray-400">باقات مدروسة لتناسب ميزانيتك وقوة سيرفرك</p>
+        <p class="text-gray-400">اختر القوة التي يحتاجها سيرفرك</p>
     </div>
 
     <div class="container mx-auto px-6 pb-12">
         <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </div>
 
+    <section class="max-w-5xl mx-auto px-6 py-16">
+        <h3 class="text-2xl font-bold text-center mb-10"><span class="highlight text-blue-400">كيف تطلب وتدفع؟</span></h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="step-card">
+                <div class="text-3xl mb-4 text-blue-500 font-bold">01</div>
+                <h4 class="font-bold mb-2">اطلب باقتك</h4>
+                <p class="text-sm text-gray-500">اختر الباقة المناسبة واضغط "اطلب الآن" لتسجيل طلبك في النظام.</p>
+            </div>
+            <div class="step-card">
+                <div class="text-3xl mb-4 text-green-500 font-bold">02</div>
+                <h4 class="font-bold mb-2">تواصل معنا</h4>
+                <p class="text-sm text-gray-500">سيتم توجيهك للواتساب لإرسال لقطة شاشة للتحويل (Benefit/PayPal).</p>
+            </div>
+            <div class="step-card">
+                <div class="text-3xl mb-4 text-yellow-500 font-bold">03</div>
+                <h4 class="font-bold mb-2">استلم سيرفرك</h4>
+                <p class="text-sm text-gray-500">بعد تأكيد الدفع، سيتم تفعيل سيرفرك وإرسال بيانات اللوحة فوراً.</p>
+            </div>
+        </div>
+    </section>
+
     <footer class="border-t border-white/5 py-10">
         <div class="container mx-auto px-6 flex flex-col items-center">
-            <div class="payment-methods flex gap-8 items-center flex-wrap justify-center grayscale">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
-                <span class="text-white font-bold tracking-widest text-lg border-2 px-3 py-1 border-white/20 rounded">BENEFIT</span>
+            <div class="flex gap-8 items-center grayscale opacity-60">
+                <i class="fab fa-cc-paypal text-3xl"></i>
+                <i class="fab fa-cc-visa text-3xl"></i>
+                <span class="text-xl font-bold border-2 px-2 py-1 border-white/20 rounded">BENEFIT</span>
             </div>
-            <p class="text-gray-600 text-[10px] mt-6 italic">للدفع عبر Benefit أو التحويل البنكي يرجى التواصل واتساب</p>
+            <p class="text-gray-600 text-[10px] mt-6 italic text-center">بونليس هوستس - جميع الحقوق محفوظة 2026</p>
         </div>
     </footer>
 
     <div id="confirmModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
-      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right">
-        <h2 class="text-2xl font-bold mb-4 text-center">تأكيد حجز الباقة</h2>
+      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right shadow-2xl">
+        <h2 class="text-2xl font-bold mb-2 text-center">تأكيد الحجز</h2>
+        <p class="text-gray-500 text-center text-sm mb-6">أنت على وشك طلب أقوى استضافة في السوق</p>
+        
         <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5"></div>
         
-        <p class="text-xs text-yellow-500 mb-6 text-center">
-            <i class="fas fa-info-circle ml-1"></i>
-            بعد تأكيد الطلب، يرجى إرسال لقطة شاشة (Screenshot) للتحويل عبر الواتساب لتفعيل السيرفر فوراً.
-        </p>
+        <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl mb-6">
+            <p class="text-xs text-blue-400 leading-relaxed">
+                📢 <b>ملاحظة:</b> سيتم فتح الواتساب تلقائياً بعد التأكيد. يرجى إرسال الرسالة لتسريع عملية التفعيل.
+            </p>
+        </div>
 
         <div class="flex gap-4">
-          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors">تأكيد وإرسال</button>
+          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20">تأكيد وإرسال</button>
           <button onclick="window.closeModal()" class="flex-1 bg-white/5 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors">إلغاء</button>
         </div>
       </div>
@@ -161,7 +183,7 @@
         
         grid.innerHTML = plans.map(p => `
             <div class="plan-card p-8 ${p.featured ? 'featured' : ''}">
-                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
+                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأفضل قيمة</span>' : ''}
                 <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
                 <div class="text-3xl font-black mb-6">$${p.price}<span class="text-sm text-gray-500">/شهر</span></div>
                 
@@ -175,9 +197,9 @@
                 <button 
                     onclick="window.initOrder('${p.id}')"
                     ${pending ? 'disabled' : ''}
-                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 text-white' : (pending ? 'bg-gray-800 text-gray-600' : 'bg-white text-black hover:bg-[#00ff64]')} "
+                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 text-white' : (pending ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-white text-black hover:bg-[#00ff64]')} "
                 >
-                    ${pending === p.name ? 'قيد الانتظار...' : (pending ? 'لديك طلب حالي' : 'اطلب الآن')}
+                    ${pending === p.name ? '📦 قيد المراجعة...' : (pending ? 'لديك طلب حالي' : 'اطلب الآن')}
                 </button>
             </div>
         `).join('');
@@ -186,8 +208,9 @@
     window.initOrder = (planId) => {
         selectedPlanData = plans.find(p => p.id === planId);
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between"><span>الباقة المختارة:</span><span>${selectedPlanData.name}</span></div>
-            <div class="flex justify-between text-blue-400 font-bold"><span>المبلغ:</span><span>$${selectedPlanData.price}</span></div>
+            <div class="flex justify-between"><span>الباقة:</span><span>${selectedPlanData.name}</span></div>
+            <div class="flex justify-between font-bold text-blue-400"><span>السعر:</span><span>$${selectedPlanData.price}</span></div>
+            <div class="flex justify-between text-xs text-gray-500"><span>الدفع عبر:</span><span>Benefit / PayPal</span></div>
         `;
         document.getElementById('confirmModal').style.display = 'flex';
     };
@@ -197,6 +220,7 @@
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
+        btn.innerText = "جاري الحجز...";
 
         try {
             const docId = user.email.replace(/\./g, '_');
@@ -210,15 +234,22 @@
 
             localStorage.setItem('pendingPlan', selectedPlanData.name);
             
-            const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع. إيميلي هو: ${user.email}. أرغب في إتمام الدفع.`);
+            const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع.\n\n📧 الإيميل: ${user.email}\n💰 السعر: $${selectedPlanData.price}\n\nأرغب في إتمام عملية الدفع وتفعيل السيرفر.`);
             window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
 
             window.closeModal();
             window.renderPlans();
+            
+            // تحسين رسالة النجاح
+            setTimeout(() => {
+                alert("🚀 تم تسجيل طلبك بنجاح!\nيرجى التواصل معنا عبر الواتساب الذي فتح لك الآن لإتمام الدفع.");
+            }, 500);
+
         } catch (e) {
-            alert("خطأ في الاتصال بقاعدة البيانات.");
+            alert("❌ حدث خطأ! تأكد من اتصال الإنترنت أو إعدادات Firebase.");
         } finally {
             btn.disabled = false;
+            btn.innerText = "تأكيد وإرسال";
         }
     };
 
@@ -227,12 +258,12 @@
             user = u;
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
-            document.getElementById('userInfo').innerHTML = `<i class="fas fa-user-circle ml-2"></i> ${u.displayName}`;
+            document.getElementById('userInfo').innerHTML = `<i class="fas fa-user-circle ml-2 text-blue-400"></i> ${u.displayName}`;
             
             const docId = u.email.replace(/\./g, '_');
             onSnapshot(doc(db, "orders", docId), (snap) => {
                 if (snap.exists() && snap.data().status === "a") {
-                    alert("🎉 تم تفعيل سيرفرك بنجاح! راجع بريدك الإلكتروني.");
+                    alert("🎉 مبروك! تم تفعيل سيرفرك.\nتحقق من بريدك الإلكتروني الآن للحصول على بيانات الدخول.");
                     localStorage.removeItem('pendingPlan');
                     deleteDoc(doc(db, "orders", docId)).then(() => location.reload());
                 } else if (!snap.exists() && localStorage.getItem('pendingPlan')) {
