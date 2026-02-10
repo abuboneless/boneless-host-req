@@ -26,7 +26,6 @@
         .plan-card:hover { border-color: #00ff64; transform: translateY(-5px); }
         .plan-card.featured { border: 2px solid #00d4ff; }
 
-        /* زر الواتساب العائم */
         .whatsapp-float {
             position: fixed;
             bottom: 30px;
@@ -45,10 +44,7 @@
             height: 60px;
             transition: 0.3s;
         }
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            background-color: #128c7e;
-        }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
 
         .payment-methods img { height: 25px; filter: grayscale(1) brightness(1.5); transition: 0.3s; opacity: 0.7; }
         .payment-methods img:hover { filter: grayscale(0) brightness(1); opacity: 1; }
@@ -59,7 +55,7 @@
 <div class="background"></div>
 <div class="pattern"></div>
 
-<a href="https://wa.me/973XXXXXX" id="whatsappLink" class="whatsapp-float" target="_blank">
+<a href="https://wa.me/97336464439" id="whatsappLink" class="whatsapp-float" target="_blank">
     <i class="fab fa-whatsapp"></i>
 </a>
 
@@ -157,8 +153,7 @@
         { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
     ];
 
-    // ضع رقمك هنا (بدون أصفار أو علامة +) مثال: 97333000000
-    const MY_PHONE = "97333857500"; 
+    const MY_PHONE = "97336464439"; 
 
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
@@ -215,7 +210,6 @@
 
             localStorage.setItem('pendingPlan', selectedPlanData.name);
             
-            // تجهيز رسالة الواتساب التلقائية
             const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع. إيميلي هو: ${user.email}. أرغب في إتمام الدفع.`);
             window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
 
