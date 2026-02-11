@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Boneless Hosts - استضافة سيرفرات احترافية</title>
 
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#000000">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,28 +25,22 @@
         .plan-card { position: relative; overflow: hidden; background: #0a0a0a; border: 1px solid #222; border-radius: 24px; transition: 0.4s; }
         .plan-card:hover { border-color: #00ff64; transform: translateY(-5px); }
         .plan-card.featured { border: 2px solid #00d4ff; }
+        
+        /* حالة الطلب النشط */
+        .plan-card.active-plan { border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); }
 
         .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0px 10px 25px rgba(37, 211, 102, 0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            transition: 0.3s;
+            position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
+            border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 0px 10px 25px rgba(37, 211, 102, 0.3);
+            z-index: 1000; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; transition: 0.3s;
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
 
         .step-card { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; text-align: center; }
+        
+        /* Loader */
+        .loader { border: 2px solid #f3f3f3; border-radius: 50%; border-top: 2px solid #3498db; width: 14px; height: 14px; -webkit-animation: spin 2s linear infinite; animation: spin 2s linear infinite; display: inline-block; margin-left: 5px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -61,14 +55,14 @@
 <section id="loginPage" class="min-h-screen flex items-center justify-center p-6 text-center">
     <div class="max-w-4xl">
         <h1 class="text-6xl font-black mb-4 text-white">Boneless <span class="highlight">Hosts</span></h1>
-        <p class="text-xl text-gray-400 mb-12">أقوى عتاد 96GB RAM لتجربة لعب خالية من اللاق</p>
+        <p class="text-xl text-gray-400 mb-12">سيرفرات 96GB RAM لأداء لا يقبل المنافسة</p>
         
-        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 shadow-xl">
-            <i class="fab fa-google ml-2"></i> سجل دخولك للبدء
+        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 shadow-xl flex items-center gap-3 mx-auto">
+            <i class="fab fa-google"></i> <span>سجل دخولك للبدء</span>
         </button>
 
         <div class="mt-12 opacity-50 flex justify-center gap-6 items-center flex-wrap text-white">
-            <span class="text-sm">وسائل الدفع المدعومة:</span>
+            <span class="text-sm">وسائل الدفع:</span>
             <div class="flex gap-4 items-center">
                 <i class="fab fa-cc-visa text-2xl"></i>
                 <i class="fab fa-cc-paypal text-2xl"></i>
@@ -79,14 +73,20 @@
 </section>
 
 <section id="packagesPage">
-    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto border-b border-white/5">
         <div class="text-2xl font-bold">Boneless <span class="highlight">Hosts</span></div>
-        <div id="userInfo" class="text-sm text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10"></div>
+        <div class="flex gap-4 items-center">
+            <div id="statusBadge" class="hidden text-xs font-bold px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
+                <i class="fas fa-clock"></i> بانتظار التفعيل
+            </div>
+            <div id="userInfo" class="text-sm text-gray-300 bg-white/5 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2"></div>
+            <button id="logoutBtn" class="text-red-500 hover:text-red-400 text-sm font-bold"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
     </nav>
 
     <div class="text-center py-10 px-4">
-        <h2 class="text-4xl font-bold mb-2">باقات الـ VPS-6 الجبارة</h2>
-        <p class="text-gray-400">اختر القوة التي يحتاجها سيرفرك</p>
+        <h2 class="text-4xl font-bold mb-2">اختر خطتك</h2>
+        <p class="text-gray-400">جميع السيرفرات تعمل بمعالجات Ryzen 9</p>
     </div>
 
     <div class="container mx-auto px-6 pb-12">
@@ -94,63 +94,54 @@
     </div>
 
     <section class="max-w-5xl mx-auto px-6 py-16">
-        <h3 class="text-2xl font-bold text-center mb-10"><span class="highlight text-blue-400">كيف تطلب وتدفع؟</span></h3>
+        <h3 class="text-2xl font-bold text-center mb-10"><span class="highlight text-blue-400">خطوات الاستلام</span></h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="step-card">
                 <div class="text-3xl mb-4 text-blue-500 font-bold">01</div>
-                <h4 class="font-bold mb-2">اطلب باقتك</h4>
-                <p class="text-sm text-gray-500">اختر الباقة المناسبة واضغط "اطلب الآن" لتسجيل طلبك في النظام.</p>
+                <h4 class="font-bold mb-2">اطلب الباقة</h4>
+                <p class="text-sm text-gray-500">اختر المواصفات التي تناسبك واضغط طلب.</p>
             </div>
             <div class="step-card">
                 <div class="text-3xl mb-4 text-green-500 font-bold">02</div>
-                <h4 class="font-bold mb-2">تواصل معنا</h4>
-                <p class="text-sm text-gray-500">سيتم توجيهك للواتساب لإرسال لقطة شاشة للتحويل (Benefit/PayPal).</p>
+                <h4 class="font-bold mb-2">حول المبلغ</h4>
+                <p class="text-sm text-gray-500">سيفتح الواتساب تلقائياً. أرسل صورة التحويل.</p>
             </div>
             <div class="step-card">
                 <div class="text-3xl mb-4 text-yellow-500 font-bold">03</div>
-                <h4 class="font-bold mb-2">استلم سيرفرك</h4>
-                <p class="text-sm text-gray-500">بعد تأكيد الدفع، سيتم تفعيل سيرفرك وإرسال بيانات اللوحة فوراً.</p>
+                <h4 class="font-bold mb-2">الاستلام فوري</h4>
+                <p class="text-sm text-gray-500">سيقوم الأدمن بتفعيل السيرفر وإرسال البيانات فوراً.</p>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-white/5 py-10">
-        <div class="container mx-auto px-6 flex flex-col items-center">
-            <div class="flex gap-8 items-center grayscale opacity-60">
-                <i class="fab fa-cc-paypal text-3xl"></i>
-                <i class="fab fa-cc-visa text-3xl"></i>
-                <span class="text-xl font-bold border-2 px-2 py-1 border-white/20 rounded">BENEFIT</span>
-            </div>
-            <p class="text-gray-600 text-[10px] mt-6 italic text-center">بونليس هوستس - جميع الحقوق محفوظة 2026</p>
-        </div>
-    </footer>
-
     <div id="confirmModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
-      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right shadow-2xl">
-        <h2 class="text-2xl font-bold mb-2 text-center">تأكيد الحجز</h2>
-        <p class="text-gray-500 text-center text-sm mb-6">أنت على وشك طلب أقوى استضافة في السوق</p>
+      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right shadow-2xl relative">
+        <button onclick="window.closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
         
-        <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5"></div>
+        <h2 class="text-2xl font-bold mb-2 text-center text-white">تأكيد الحجز</h2>
+        <p class="text-gray-500 text-center text-sm mb-6">مراجعة تفاصيل الطلب قبل الإرسال</p>
+        
+        <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5 text-gray-300"></div>
         
         <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl mb-6">
-            <p class="text-xs text-blue-400 leading-relaxed">
-                📢 <b>ملاحظة:</b> سيتم فتح الواتساب تلقائياً بعد التأكيد. يرجى إرسال الرسالة لتسريع عملية التفعيل.
+            <p class="text-xs text-blue-400 leading-relaxed text-center">
+                بعد الضغط على تأكيد، سيتم توجيهك للواتساب لإرسال إيصال الدفع.
             </p>
         </div>
 
-        <div class="flex gap-4">
-          <button onclick="window.confirmOrder()" id="confirmBtn" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20">تأكيد وإرسال</button>
-          <button onclick="window.closeModal()" class="flex-1 bg-white/5 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors">إلغاء</button>
-        </div>
+        <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20 text-white">
+            تأكيد وإرسال الطلب
+        </button>
       </div>
     </div>
 </section>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -165,8 +156,9 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    let user = null;
+    let currentUser = null;
     let selectedPlanData = null;
+    let currentOrder = null; // لتخزين حالة الطلب الحالي
     const MY_PHONE = "97336464439"; 
 
     const plans = [
@@ -176,13 +168,46 @@
         { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
     ];
 
+    // دالة لتنظيف النصوص (XSS Protection)
+    function escapeHtml(text) {
+        if (!text) return "";
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // رسم الباقات
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
-        const pending = localStorage.getItem('pendingPlan');
         
-        grid.innerHTML = plans.map(p => `
-            <div class="plan-card p-8 ${p.featured ? 'featured' : ''}">
-                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأفضل قيمة</span>' : ''}
+        grid.innerHTML = plans.map(p => {
+            // التحقق مما إذا كان المستخدم لديه طلب لهذا الباقة
+            const isPending = currentOrder && currentOrder.status === 'pending';
+            const isActive = currentOrder && currentOrder.status === 'active';
+            const hasOrder = currentOrder !== null;
+            
+            // تحديد حالة الزر
+            let btnText = "اطلب الآن";
+            let btnClass = "bg-white text-black hover:bg-[#00ff64]";
+            let isDisabled = false;
+
+            if (isActive) {
+                btnText = "لديك سيرفر مفعل";
+                btnClass = "bg-green-500/20 text-green-500 border border-green-500/50 cursor-default";
+                isDisabled = true;
+            } else if (isPending) {
+                if (currentOrder.plan === p.name) {
+                    btnText = "⏳ قيد المراجعة...";
+                    btnClass = "bg-yellow-600 text-white cursor-default";
+                    isDisabled = true;
+                } else {
+                    btnText = "لديك طلب آخر معلق";
+                    btnClass = "bg-gray-800 text-gray-500 cursor-not-allowed";
+                    isDisabled = true;
+                }
+            }
+
+            return `
+            <div class="plan-card p-8 ${p.featured ? 'featured' : ''} ${isPending && currentOrder.plan === p.name ? 'active-plan' : ''}">
+                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
                 <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
                 <div class="text-3xl font-black mb-6">$${p.price}<span class="text-sm text-gray-500">/شهر</span></div>
                 
@@ -195,21 +220,23 @@
 
                 <button 
                     onclick="window.initOrder('${p.id}')"
-                    ${pending ? 'disabled' : ''}
-                    class="w-full py-3 rounded-xl font-bold transition-all ${pending === p.name ? 'bg-yellow-600 text-white' : (pending ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-white text-black hover:bg-[#00ff64]')} "
+                    ${isDisabled ? 'disabled' : ''}
+                    class="w-full py-3 rounded-xl font-bold transition-all ${btnClass}"
                 >
-                    ${pending === p.name ? '📦 قيد المراجعة...' : (pending ? 'لديك طلب حالي' : 'اطلب الآن')}
+                    ${btnText}
                 </button>
             </div>
-        `).join('');
+        `}).join('');
     };
 
     window.initOrder = (planId) => {
+        if (!currentUser) return alert("الرجاء تسجيل الدخول أولاً");
+        
         selectedPlanData = plans.find(p => p.id === planId);
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between"><span>الباقة:</span><span>${selectedPlanData.name}</span></div>
-            <div class="flex justify-between font-bold text-blue-400"><span>السعر:</span><span>$${selectedPlanData.price}</span></div>
-            <div class="flex justify-between text-xs text-gray-500"><span>الدفع عبر:</span><span>Benefit / PayPal</span></div>
+            <div class="flex justify-between border-b border-white/10 pb-2 mb-2"><span>الباقة المختارة:</span><span class="font-bold text-white">${selectedPlanData.name}</span></div>
+            <div class="flex justify-between font-bold text-blue-400 text-lg"><span>المبلغ المطلوب:</span><span>$${selectedPlanData.price}</span></div>
+            <div class="mt-4 text-xs text-gray-500 text-center">سيتم ربط الطلب بحسابك: <br> ${escapeHtml(currentUser.email)}</div>
         `;
         document.getElementById('confirmModal').style.display = 'flex';
     };
@@ -219,64 +246,94 @@
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
-        btn.innerText = "جاري الحجز...";
+        btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
 
         try {
-            const docId = user.email.replace(/\./g, '_');
-            await setDoc(doc(db, "orders", docId), {
-                email: user.email,
-                name: user.displayName,
+            // نستخدم UID كمعرف للمستند لضمان الأمان وعدم التكرار
+            const orderRef = doc(db, "orders", currentUser.uid);
+            
+            await setDoc(orderRef, {
+                uid: currentUser.uid, // مهم جداً لقواعد الحماية
+                email: currentUser.email,
+                name: currentUser.displayName,
                 plan: selectedPlanData.name,
+                price: selectedPlanData.price,
                 status: "pending",
-                requestedAt: new Date()
+                requestedAt: serverTimestamp() // توقيت السيرفر لمنع التلاعب
             });
 
-            localStorage.setItem('pendingPlan', selectedPlanData.name);
-            localStorage.removeItem('activated');
-
-            const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع.\n\n📧 الإيميل: ${user.email}\n💰 السعر: $${selectedPlanData.price}\n\nأرغب في إتمام عملية الدفع وتفعيل السيرفر.`);
+            // تجهيز رسالة الواتساب
+            const msg = encodeURIComponent(
+                `مرحباً Boneless Hosts 👋\n` +
+                `لقد قمت بطلب باقة *${selectedPlanData.name}* عبر الموقع.\n` +
+                `📧 الإيميل: ${currentUser.email}\n` +
+                `💰 السعر: $${selectedPlanData.price}\n\n` +
+                `مرفق صورة التحويل لإتمام التفعيل 📎`
+            );
+            
             window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
-
             window.closeModal();
-            window.renderPlans();
 
         } catch (e) {
-            alert("❌ حدث خطأ! تأكد من اتصال الإنترنت أو إعدادات Firebase.");
+            console.error(e);
+            alert("❌ حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
         } finally {
             btn.disabled = false;
-            btn.innerText = "تأكيد وإرسال";
+            btn.innerText = "تأكيد وإرسال الطلب";
         }
     };
 
+    // تسجيل الدخول والخروج
+    document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
+    document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
+
+    // مراقبة حالة المستخدم
     onAuthStateChanged(auth, (u) => {
         if (u) {
-            user = u;
+            currentUser = u;
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
-            document.getElementById('userInfo').innerHTML = `<i class="fas fa-user-circle ml-2 text-blue-400"></i> ${u.displayName}`;
+            document.getElementById('userInfo').innerHTML = `
+                <img src="${u.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
+                <span class="max-w-[100px] truncate">${escapeHtml(u.displayName)}</span>
+            `;
 
-            const docId = u.email.replace(/\./g, '_');
-            onSnapshot(doc(db, "orders", docId), (snap) => {
-                if (snap.exists() && snap.data().status === "a") {
-                    if (!localStorage.getItem('activated')) {
-                        alert("🎉 مبروك! تم تفعيل سيرفرك.\nتحقق من بريدك الإلكتروني الآن للحصول على بيانات الدخول.");
-                        localStorage.setItem('activated', 'true');
+            // مراقبة حالة الطلب الخاص بالمستخدم
+            // نراقب المستند الذي يحمل اسم الـ UID الخاص بالمستخدم
+            onSnapshot(doc(db, "orders", u.uid), (docSnap) => {
+                if (docSnap.exists()) {
+                    currentOrder = docSnap.data();
+                    
+                    // تحديث شريط الحالة العلوي
+                    const badge = document.getElementById('statusBadge');
+                    if (currentOrder.status === 'active') {
+                        badge.classList.remove('hidden', 'text-yellow-500', 'bg-yellow-500/10', 'border-yellow-500/20');
+                        badge.classList.add('text-green-500', 'bg-green-500/10', 'border-green-500/20');
+                        badge.innerHTML = '<i class="fas fa-check-circle"></i> السيرفر نشط';
+                    } else {
+                        badge.classList.remove('hidden');
+                        badge.classList.add('text-yellow-500', 'bg-yellow-500/10', 'border-yellow-500/20');
+                        badge.innerHTML = '<i class="fas fa-clock"></i> بانتظار التفعيل';
                     }
-                    localStorage.removeItem('pendingPlan');
-                    window.renderPlans();
-                } else if (!snap.exists() && localStorage.getItem('pendingPlan')) {
-                    localStorage.removeItem('pendingPlan');
-                    window.renderPlans();
+
+                    // تنبيه عند التفعيل (مرة واحدة)
+                    if (currentOrder.status === 'active' && !localStorage.getItem(`notified_${u.uid}`)) {
+                        alert("🎉 مبروك! تم تفعيل سيرفرك بنجاح.\nراجع بريدك الإلكتروني للحصول على بيانات الدخول.");
+                        localStorage.setItem(`notified_${u.uid}`, 'true');
+                    }
+                } else {
+                    currentOrder = null;
+                    document.getElementById('statusBadge').classList.add('hidden');
                 }
+                window.renderPlans(); // إعادة رسم الباقات بناء على الحالة الجديدة
             });
-            window.renderPlans();
+
         } else {
+            currentUser = null;
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('packagesPage').style.display = 'none';
         }
     });
-
-    document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider);
 </script>
 </body>
 </html>
