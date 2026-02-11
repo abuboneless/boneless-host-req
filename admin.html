@@ -48,7 +48,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
@@ -63,14 +63,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // حماية اللوحة: تأكد أن إيميلك هو المسموح له فقط
+    // حماية اللوحة: تأكد أن إيميلك هو المسموح له فقط (استبدله بإيميلك)
     const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
-
-    // حماية متقدمة: منع الوصول أو التفاعل من console
-    function secureAdmin() {
-        Object.freeze(window);
-        Object.freeze(document);
-    }
 
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
@@ -81,7 +75,6 @@
             </div>`;
         } else {
             document.getElementById('adminInfo').innerText = `أهلاً بك، ${user.displayName}`;
-            secureAdmin();
             loadOrders();
         }
     });
@@ -89,13 +82,16 @@
     function loadOrders() {
         const ordersList = document.getElementById('ordersList');
         const pendingCount = document.getElementById('pendingCount');
-        
+
         onSnapshot(collection(db, "orders"), (snapshot) => {
             const orders = [];
-            snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
-            
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                orders.push({ id: docSnap.id, ...data });
+            });
+
             pendingCount.innerText = orders.length;
-            
+
             if (orders.length === 0) {
                 ordersList.innerHTML = "";
                 document.getElementById('noOrders').classList.remove('hidden');
@@ -103,12 +99,13 @@
             }
 
             document.getElementById('noOrders').classList.add('hidden');
+
             ordersList.innerHTML = orders.map(order => `
                 <div class="order-card p-6 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-4">
                             <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-1 rounded font-bold">${order.plan}</span>
-                            <span class="text-[10px] text-gray-600">${new Date(order.requestedAt?.seconds * 1000).toLocaleString('ar-BH')}</span>
+                            <span class="text-[10px] text-gray-600">${order.requestedAt?.seconds ? new Date(order.requestedAt.seconds * 1000).toLocaleString('ar-BH') : ''}</span>
                         </div>
                         <h3 class="font-bold text-lg mb-1">${order.name}</h3>
                         <p class="text-sm text-gray-500 mb-4">${order.email}</p>
@@ -128,25 +125,24 @@
     }
 
     window.activateOrder = async (id) => {
+        const docRef = doc(db, "orders", id);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) return alert("❌ الطلب غير موجود بالفعل.");
+
         if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
-            try {
-                const docRef = doc(db, "orders", id);
-                const snap = await docRef.get?.();
-                if(snap) await updateDoc(docRef, { status: "a" });
-                alert("تم إرسال إشعار التفعيل للزبون ✅");
-            } catch(e) {
-                alert("❌ خطأ أثناء التفعيل!");
-            }
+            await updateDoc(docRef, { status: "a" });
+            alert("تم إرسال إشعار التفعيل للزبون ✅");
         }
     };
 
     window.cancelOrder = async (id) => {
+        const docRef = doc(db, "orders", id);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) return alert("❌ الطلب غير موجود بالفعل.");
+
         if(confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
-            try {
-                await deleteDoc(doc(db, "orders", id));
-            } catch(e) {
-                alert("❌ خطأ أثناء الحذف!");
-            }
+            await deleteDoc(docRef);
+            alert("تم حذف الطلب بنجاح 🗑️");
         }
     };
 </script>
