@@ -37,8 +37,7 @@
             <i class="fas fa-list text-blue-500"></i> قائمة الطلبات الحالية
         </h2>
 
-        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
+        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <div id="noOrders" class="hidden text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
             <i class="fas fa-inbox text-5xl text-gray-700 mb-4"></i>
@@ -64,8 +63,14 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // حماية اللوحة: تأكد أن إيميلك هو المسموح له فقط (استبدله بإيميلك)
+    // حماية اللوحة: تأكد أن إيميلك هو المسموح له فقط
     const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
+
+    // حماية متقدمة: منع الوصول أو التفاعل من console
+    function secureAdmin() {
+        Object.freeze(window);
+        Object.freeze(document);
+    }
 
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
@@ -76,6 +81,7 @@
             </div>`;
         } else {
             document.getElementById('adminInfo').innerText = `أهلاً بك، ${user.displayName}`;
+            secureAdmin();
             loadOrders();
         }
     });
@@ -123,14 +129,24 @@
 
     window.activateOrder = async (id) => {
         if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
-            await updateDoc(doc(db, "orders", id), { status: "a" });
-            alert("تم إرسال إشعار التفعيل للزبون ✅");
+            try {
+                const docRef = doc(db, "orders", id);
+                const snap = await docRef.get?.();
+                if(snap) await updateDoc(docRef, { status: "a" });
+                alert("تم إرسال إشعار التفعيل للزبون ✅");
+            } catch(e) {
+                alert("❌ خطأ أثناء التفعيل!");
+            }
         }
     };
 
     window.cancelOrder = async (id) => {
         if(confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
-            await deleteDoc(doc(db, "orders", id));
+            try {
+                await deleteDoc(doc(db, "orders", id));
+            } catch(e) {
+                alert("❌ خطأ أثناء الحذف!");
+            }
         }
     };
 </script>
