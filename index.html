@@ -149,7 +149,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
@@ -167,6 +167,7 @@
 
     let user = null;
     let selectedPlanData = null;
+    const MY_PHONE = "97336464439"; 
 
     const plans = [
         { id: 'p1', name: "Starter", ram: "6GB", cpu: "150% CPU", disk: "40GB NVMe", price: "5.99", featured: false },
@@ -174,8 +175,6 @@
         { id: 'p3', name: "Master", ram: "16GB", cpu: "300% CPU", disk: "100GB NVMe", price: "14.99", featured: false },
         { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
     ];
-
-    const MY_PHONE = "97336464439"; 
 
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
@@ -233,21 +232,13 @@
             });
 
             localStorage.setItem('pendingPlan', selectedPlanData.name);
-            
+            localStorage.removeItem('activated');
+
             const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع.\n\n📧 الإيميل: ${user.email}\n💰 السعر: $${selectedPlanData.price}\n\nأرغب في إتمام عملية الدفع وتفعيل السيرفر.`);
             window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
 
             window.closeModal();
             window.renderPlans();
-            
-            // تنبيه مرة واحدة لكل طلب
-            setTimeout(() => {
-                const alertedKey = `alerted_${docId}`;
-                if (!localStorage.getItem(alertedKey)) {
-                    alert("🚀 تم تسجيل طلبك بنجاح!\nيرجى التواصل معنا عبر الواتساب الذي فتح لك الآن لإتمام الدفع.");
-                    localStorage.setItem(alertedKey, "true");
-                }
-            }, 500);
 
         } catch (e) {
             alert("❌ حدث خطأ! تأكد من اتصال الإنترنت أو إعدادات Firebase.");
@@ -263,16 +254,16 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerHTML = `<i class="fas fa-user-circle ml-2 text-blue-400"></i> ${u.displayName}`;
-            
+
             const docId = u.email.replace(/\./g, '_');
             onSnapshot(doc(db, "orders", docId), (snap) => {
-                const alertedKey = `alerted_${docId}`;
                 if (snap.exists() && snap.data().status === "a") {
-                    if (!localStorage.getItem(alertedKey)) {
+                    if (!localStorage.getItem('activated')) {
                         alert("🎉 مبروك! تم تفعيل سيرفرك.\nتحقق من بريدك الإلكتروني الآن للحصول على بيانات الدخول.");
-                        localStorage.setItem(alertedKey, "true");
+                        localStorage.setItem('activated', 'true');
                     }
                     localStorage.removeItem('pendingPlan');
+                    window.renderPlans();
                 } else if (!snap.exists() && localStorage.getItem('pendingPlan')) {
                     localStorage.removeItem('pendingPlan');
                     window.renderPlans();
