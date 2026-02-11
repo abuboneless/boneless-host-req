@@ -217,27 +217,14 @@
 
     window.closeModal = () => document.getElementById('confirmModal').style.display = 'none';
 
-    // ✅ دالة confirmOrder الجديدة
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
         btn.innerText = "جاري الحجز...";
 
         try {
-            if (!user) {
-                alert("يجب تسجيل الدخول أولاً.");
-                return;
-            }
-
-            if (!selectedPlanData) {
-                alert("لم يتم اختيار باقة.");
-                return;
-            }
-
-            const docId = user.uid;
-
+            const docId = user.email.replace(/\./g, '_');
             await setDoc(doc(db, "orders", docId), {
-                userId: user.uid,
                 email: user.email,
                 name: user.displayName,
                 plan: selectedPlanData.name,
@@ -246,23 +233,24 @@
             });
 
             localStorage.setItem('pendingPlan', selectedPlanData.name);
-
-            const msg = encodeURIComponent(
-                `مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع.\n\n📧 الإيميل: ${user.email}\n💰 السعر: $${selectedPlanData.price}\n\nأرغب في إتمام عملية الدفع وتفعيل السيرفر.`
-            );
-
+            
+            const msg = encodeURIComponent(`مرحباً Boneless Hosts، لقد قمت بطلب باقة (${selectedPlanData.name}) عبر الموقع.\n\n📧 الإيميل: ${user.email}\n💰 السعر: $${selectedPlanData.price}\n\nأرغب في إتمام عملية الدفع وتفعيل السيرفر.`);
             window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
 
             window.closeModal();
             window.renderPlans();
-
+            
+            // تنبيه مرة واحدة لكل طلب
             setTimeout(() => {
-                alert("🚀 تم تسجيل طلبك بنجاح!\nيرجى التواصل معنا عبر الواتساب لإتمام الدفع.");
+                const alertedKey = `alerted_${docId}`;
+                if (!localStorage.getItem(alertedKey)) {
+                    alert("🚀 تم تسجيل طلبك بنجاح!\nيرجى التواصل معنا عبر الواتساب الذي فتح لك الآن لإتمام الدفع.");
+                    localStorage.setItem(alertedKey, "true");
+                }
             }, 500);
 
         } catch (e) {
-            console.error("Order Error:", e);
-            alert("❌ حدث خطأ أثناء تسجيل الطلب.");
+            alert("❌ حدث خطأ! تأكد من اتصال الإنترنت أو إعدادات Firebase.");
         } finally {
             btn.disabled = false;
             btn.innerText = "تأكيد وإرسال";
@@ -276,12 +264,15 @@
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerHTML = `<i class="fas fa-user-circle ml-2 text-blue-400"></i> ${u.displayName}`;
             
-            const docId = u.uid; // 🔑 استخدمنا UID بدل email
+            const docId = u.email.replace(/\./g, '_');
             onSnapshot(doc(db, "orders", docId), (snap) => {
+                const alertedKey = `alerted_${docId}`;
                 if (snap.exists() && snap.data().status === "a") {
-                    alert("🎉 مبروك! تم تفعيل سيرفرك.\nتحقق من بريدك الإلكتروني الآن للحصول على بيانات الدخول.");
+                    if (!localStorage.getItem(alertedKey)) {
+                        alert("🎉 مبروك! تم تفعيل سيرفرك.\nتحقق من بريدك الإلكتروني الآن للحصول على بيانات الدخول.");
+                        localStorage.setItem(alertedKey, "true");
+                    }
                     localStorage.removeItem('pendingPlan');
-                    deleteDoc(doc(db, "orders", docId)).then(() => location.reload());
                 } else if (!snap.exists() && localStorage.getItem('pendingPlan')) {
                     localStorage.removeItem('pendingPlan');
                     window.renderPlans();
