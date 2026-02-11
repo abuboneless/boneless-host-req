@@ -37,7 +37,8 @@
             <i class="fas fa-list text-blue-500"></i> قائمة الطلبات الحالية
         </h2>
 
-        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
 
         <div id="noOrders" class="hidden text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
             <i class="fas fa-inbox text-5xl text-gray-700 mb-4"></i>
@@ -48,7 +49,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
@@ -82,16 +83,13 @@
     function loadOrders() {
         const ordersList = document.getElementById('ordersList');
         const pendingCount = document.getElementById('pendingCount');
-
+        
         onSnapshot(collection(db, "orders"), (snapshot) => {
             const orders = [];
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                orders.push({ id: docSnap.id, ...data });
-            });
-
+            snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
+            
             pendingCount.innerText = orders.length;
-
+            
             if (orders.length === 0) {
                 ordersList.innerHTML = "";
                 document.getElementById('noOrders').classList.remove('hidden');
@@ -99,13 +97,12 @@
             }
 
             document.getElementById('noOrders').classList.add('hidden');
-
             ordersList.innerHTML = orders.map(order => `
                 <div class="order-card p-6 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-4">
                             <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-1 rounded font-bold">${order.plan}</span>
-                            <span class="text-[10px] text-gray-600">${order.requestedAt?.seconds ? new Date(order.requestedAt.seconds * 1000).toLocaleString('ar-BH') : ''}</span>
+                            <span class="text-[10px] text-gray-600">${new Date(order.requestedAt?.seconds * 1000).toLocaleString('ar-BH')}</span>
                         </div>
                         <h3 class="font-bold text-lg mb-1">${order.name}</h3>
                         <p class="text-sm text-gray-500 mb-4">${order.email}</p>
@@ -125,24 +122,22 @@
     }
 
     window.activateOrder = async (id) => {
-        const docRef = doc(db, "orders", id);
-        const snap = await getDoc(docRef);
-        if (!snap.exists()) return alert("❌ الطلب غير موجود بالفعل.");
+        const alertedKey = `alerted_${id}`;
+        if (localStorage.getItem(alertedKey)) {
+            alert("✅ تم تفعيل هذا الطلب مسبقاً.");
+            return;
+        }
 
         if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
-            await updateDoc(docRef, { status: "a" });
+            await updateDoc(doc(db, "orders", id), { status: "a" });
             alert("تم إرسال إشعار التفعيل للزبون ✅");
+            localStorage.setItem(alertedKey, "true"); // يمنع تكرار التنبيه
         }
     };
 
     window.cancelOrder = async (id) => {
-        const docRef = doc(db, "orders", id);
-        const snap = await getDoc(docRef);
-        if (!snap.exists()) return alert("❌ الطلب غير موجود بالفعل.");
-
         if(confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
-            await deleteDoc(docRef);
-            alert("تم حذف الطلب بنجاح 🗑️");
+            await deleteDoc(doc(db, "orders", id));
         }
     };
 </script>
