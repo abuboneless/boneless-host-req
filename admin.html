@@ -11,6 +11,8 @@
         body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; }
         .order-card { background: #111; border: 1px solid #222; border-radius: 15px; transition: 0.3s; }
         .order-card:hover { border-color: #00d4ff; }
+        /* تحسينات لأزرار التفاعل */
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="p-6">
@@ -19,7 +21,7 @@
         <header class="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
             <div>
                 <h1 class="text-3xl font-bold italic">BONELESS <span class="text-blue-500">ADMIN</span></h1>
-                <p class="text-gray-500 text-sm">إدارة طلبات سيرفرات VPS-6</p>
+                <p class="text-gray-500 text-sm">إدارة طلبات سيرفرات VPS-6 (محمية)</p>
             </div>
             <div id="adminInfo" class="text-sm bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full border border-blue-500/20">
                 جاري التحقق...
@@ -37,8 +39,13 @@
             <i class="fas fa-list text-blue-500"></i> قائمة الطلبات الحالية
         </h2>
 
-        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="authError" class="hidden text-center text-red-500 py-10 bg-red-900/10 rounded-xl border border-red-500/20">
+            <i class="fas fa-lock text-3xl mb-2"></i>
+            <p>فشل التحميل: ليس لديك صلاحية الوصول لقاعدة البيانات.</p>
         </div>
+
+        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
 
         <div id="noOrders" class="hidden text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
             <i class="fas fa-inbox text-5xl text-gray-700 mb-4"></i>
@@ -49,8 +56,9 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -64,17 +72,31 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const ADMIN_EMAIL = "yaunfang76@gmail.com"; // استبدل بإيميلك
+    // هذا المتغير للواجهة فقط، الحماية الحقيقية في Firestore Rules
+    const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
+
+    // دالة لتنظيف النصوص لمنع ثغرات XSS
+    function escapeHtml(text) {
+        if (!text) return "";
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
-            document.body.innerHTML = `<div class="h-screen flex items-center justify-center flex-col gap-4">
-                <h1 class="text-2xl font-bold text-red-500">غير مصرح لك بالدخول</h1>
-                <p class="text-gray-500 text-center">هذه اللوحة مخصصة للأدمن فقط.</p>
-                <a href="index.html" class="bg-white text-black px-6 py-2 rounded-full font-bold">العودة للموقع</a>
+            document.body.innerHTML = `
+            <div class="h-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
+                <i class="fas fa-user-shield text-6xl text-red-600"></i>
+                <h1 class="text-2xl font-bold text-red-500">وصول مرفوض</h1>
+                <p class="text-gray-400 text-center">يجب تسجيل الدخول بحساب الأدمن.</p>
+                <a href="index.html" class="bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-gray-200 transition">العودة</a>
             </div>`;
         } else {
-            document.getElementById('adminInfo').innerText = `أهلاً بك، ${user.displayName}`;
+            document.getElementById('adminInfo').innerText = `أهلاً بك، ${escapeHtml(user.displayName)}`;
             loadOrders();
         }
     });
@@ -82,12 +104,23 @@
     function loadOrders() {
         const ordersList = document.getElementById('ordersList');
         const pendingCount = document.getElementById('pendingCount');
+        const authError = document.getElementById('authError');
 
-        onSnapshot(collection(db, "orders"), (snapshot) => {
+        // ترتيب الطلبات حسب التاريخ (الأحدث أولاً)
+        const q = query(collection(db, "orders"), orderBy("requestedAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
             const orders = [];
-            snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
+            let pendingCounter = 0;
 
-            pendingCount.innerText = orders.length;
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.status !== 'active') pendingCounter++;
+                orders.push({ id: doc.id, ...data });
+            });
+
+            pendingCount.innerText = pendingCounter;
+            authError.classList.add('hidden'); // إخفاء رسالة الخطأ إذا نجح الاتصال
 
             if (orders.length === 0) {
                 ordersList.innerHTML = "";
@@ -96,45 +129,73 @@
             }
 
             document.getElementById('noOrders').classList.add('hidden');
-            ordersList.innerHTML = orders.map(order => `
-                <div class="order-card p-6 flex flex-col justify-between">
+            
+            ordersList.innerHTML = orders.map(order => {
+                const isActivated = order.status === 'active';
+                const date = order.requestedAt ? new Date(order.requestedAt.seconds * 1000).toLocaleString('ar-BH') : 'غير محدد';
+                
+                return `
+                <div class="order-card p-6 flex flex-col justify-between ${isActivated ? 'border-green-500/30 bg-green-900/10' : ''}">
                     <div>
                         <div class="flex justify-between items-start mb-4">
-                            <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-1 rounded font-bold">${order.plan}</span>
-                            <span class="text-[10px] text-gray-600">${new Date(order.requestedAt?.seconds * 1000).toLocaleString('ar-BH')}</span>
+                            <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-1 rounded font-bold">${escapeHtml(order.plan)}</span>
+                            <span class="text-[10px] text-gray-600" dir="ltr">${date}</span>
                         </div>
-                        <h3 class="font-bold text-lg mb-1">${order.name}</h3>
-                        <p class="text-sm text-gray-500 mb-4">${order.email}</p>
+                        <h3 class="font-bold text-lg mb-1">${escapeHtml(order.name)}</h3>
+                        <p class="text-sm text-gray-500 mb-4 select-all">${escapeHtml(order.email)}</p>
+                        ${isActivated ? '<span class="text-xs text-green-500 font-bold mb-2 block"><i class="fas fa-check-circle"></i> تم التفعيل</span>' : ''}
                     </div>
                     
-                    <div class="flex gap-2">
-                        <button onclick="window.activateOrder('${order.id}')" class="flex-1 bg-green-600 hover:bg-green-500 py-2 rounded-lg text-xs font-bold transition-all">
-                            تفعيل (تم الدفع)
+                    <div class="flex gap-2 mt-2">
+                        ${!isActivated ? `
+                        <button onclick="window.activateOrder('${order.id}')" class="flex-1 bg-green-600 hover:bg-green-500 py-2 rounded-lg text-xs font-bold transition-all text-white shadow-lg shadow-green-900/20">
+                            تأكيد واستلام المبلغ
                         </button>
-                        <button onclick="window.cancelOrder('${order.id}')" class="bg-red-500/10 hover:bg-red-500 text-red-500 p-2 rounded-lg transition-all">
+                        ` : `
+                        <button disabled class="flex-1 bg-gray-700 py-2 rounded-lg text-xs font-bold text-gray-400 cursor-not-allowed">
+                            مفعل
+                        </button>
+                        `}
+                        
+                        <button onclick="window.cancelOrder('${order.id}')" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-2 rounded-lg transition-all w-10 h-10 flex items-center justify-center">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
+
+        }, (error) => {
+            console.error("Error getting documents: ", error);
+            if(error.code === 'permission-denied') {
+                ordersList.innerHTML = "";
+                authError.classList.remove('hidden');
+            }
         });
     }
 
+    // ربط الدوال بالنافذة (Window) لتعمل مع onclick
     window.activateOrder = async (id) => {
-        if (!localStorage.getItem(`activated_${id}`)) {
-            if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
-                await updateDoc(doc(db, "orders", id), { status: "a" });
-                alert("تم إرسال إشعار التفعيل للزبون ✅");
-                localStorage.setItem(`activated_${id}`, 'true'); // منع سبام التنبيه
+        if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
+            try {
+                // نحدث حالة الطلب في قاعدة البيانات بدلاً من LocalStorage
+                await updateDoc(doc(db, "orders", id), { 
+                    status: "active",
+                    activatedAt: new Date()
+                });
+                alert("تم تحديث حالة الطلب ✅");
+            } catch (error) {
+                alert("حدث خطأ: " + error.message);
             }
-        } else {
-            alert("⚠️ تم تفعيل هذا الطلب مسبقاً.");
         }
     };
 
     window.cancelOrder = async (id) => {
-        if(confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
-            await deleteDoc(doc(db, "orders", id));
+        if(confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟")) {
+            try {
+                await deleteDoc(doc(db, "orders", id));
+            } catch (error) {
+                alert("حدث خطأ في الحذف: " + error.message);
+            }
         }
     };
 </script>
