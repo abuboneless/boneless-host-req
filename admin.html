@@ -64,8 +64,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // حماية اللوحة: تأكد أن إيميلك هو المسموح له فقط (استبدله بإيميلك)
-    const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
+    const ADMIN_EMAIL = "yaunfang76@gmail.com"; // استبدل بإيميلك
 
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
@@ -83,13 +82,13 @@
     function loadOrders() {
         const ordersList = document.getElementById('ordersList');
         const pendingCount = document.getElementById('pendingCount');
-        
+
         onSnapshot(collection(db, "orders"), (snapshot) => {
             const orders = [];
             snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
-            
+
             pendingCount.innerText = orders.length;
-            
+
             if (orders.length === 0) {
                 ordersList.innerHTML = "";
                 document.getElementById('noOrders').classList.remove('hidden');
@@ -122,16 +121,14 @@
     }
 
     window.activateOrder = async (id) => {
-        const alertedKey = `alerted_${id}`;
-        if (localStorage.getItem(alertedKey)) {
-            alert("✅ تم تفعيل هذا الطلب مسبقاً.");
-            return;
-        }
-
-        if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
-            await updateDoc(doc(db, "orders", id), { status: "a" });
-            alert("تم إرسال إشعار التفعيل للزبون ✅");
-            localStorage.setItem(alertedKey, "true"); // يمنع تكرار التنبيه
+        if (!localStorage.getItem(`activated_${id}`)) {
+            if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
+                await updateDoc(doc(db, "orders", id), { status: "a" });
+                alert("تم إرسال إشعار التفعيل للزبون ✅");
+                localStorage.setItem(`activated_${id}`, 'true'); // منع سبام التنبيه
+            }
+        } else {
+            alert("⚠️ تم تفعيل هذا الطلب مسبقاً.");
         }
     };
 
