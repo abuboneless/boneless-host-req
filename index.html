@@ -55,7 +55,7 @@
 <section id="loginPage" class="min-h-screen flex items-center justify-center p-6 text-center">
     <div class="max-w-4xl">
         <h1 class="text-6xl font-black mb-4 text-white">Boneless <span class="highlight">Hosts</span></h1>
-        <p class="text-xl text-gray-400 mb-12">سيرفرات ماين كرافت لأداء لا يقبل المنافسة</p>
+        <p class="text-xl text-gray-400 mb-12">سيرفرات 96GB RAM لأداء لا يقبل المنافسة</p>
         
         <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 shadow-xl flex items-center gap-3 mx-auto">
             <i class="fab fa-google"></i> <span>سجل دخولك للبدء</span>
@@ -86,7 +86,23 @@
 
     <div class="text-center py-10 px-4">
         <h2 class="text-4xl font-bold mb-2">اختر خطتك</h2>
-        <p class="text-gray-400">جميع السيرفرات ذات جودة راقية و مفتوحة 24/7</p>
+        <p class="text-gray-400">جميع السيرفرات تعمل بمعالجات Ryzen/EPYC عالية الأداء</p>
+    </div>
+
+    <div class="text-center mb-8 bg-[#111] p-4 rounded-2xl border border-white/5 inline-block mx-auto flex justify-center w-fit mx-auto">
+        <div class="text-right">
+            <label class="text-gray-400 text-sm block mb-2 font-bold">📍 اختر موقع السيرفر (Location):</label>
+            <div class="relative inline-flex w-full md:w-auto">
+                <select id="locationSelector" onchange="window.renderPlans()" class="w-full appearance-none bg-black border border-gray-600 text-white py-2 pl-4 pr-10 rounded-lg outline-none font-bold cursor-pointer hover:border-blue-500 focus:border-blue-500 transition-colors" dir="ltr">
+                    <option value="us">🇺🇸 USA</option>
+                    <option value="de">🇩🇪 Deutschland</option>
+                    <option value="sg">🇸🇬 Singapore</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container mx-auto px-6 pb-12">
@@ -99,17 +115,17 @@
             <div class="step-card">
                 <div class="text-3xl mb-4 text-blue-500 font-bold">01</div>
                 <h4 class="font-bold mb-2">اطلب الباقة</h4>
-                <p class="text-sm text-gray-500">اختر المواصفات التي تناسبك واضغط طلب.</p>
+                <p class="text-sm text-gray-500">اختر المواصفات والدولة المناسبة.</p>
             </div>
             <div class="step-card">
                 <div class="text-3xl mb-4 text-green-500 font-bold">02</div>
-                <h4 class="font-bold mb-2">حول المبلغ</h4>
-                <p class="text-sm text-gray-500">سيفتح الواتساب تلقائياً. أرسل صورة التحويل.</p>
+                <h4 class="font-bold mb-2">الدفع والتواصل</h4>
+                <p class="text-sm text-gray-500">ادفع عبر Benefit/PayPal وارسل الإيصال بالواتساب.</p>
             </div>
             <div class="step-card">
                 <div class="text-3xl mb-4 text-yellow-500 font-bold">03</div>
-                <h4 class="font-bold mb-2">الاستلام فوري</h4>
-                <p class="text-sm text-gray-500">سيقوم الأدمن بتفعيل السيرفر وإرسال البيانات فوراً.</p>
+                <h4 class="font-bold mb-2">استلام السيرفر</h4>
+                <p class="text-sm text-gray-500">سيتم تفعيل السيرفر وإرسال البيانات لك فوراً.</p>
             </div>
         </div>
     </section>
@@ -123,25 +139,18 @@
         
         <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5 text-gray-300"></div>
         
-        <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl mb-6">
-            <p class="text-xs text-blue-400 leading-relaxed text-center">
-                بعد الضغط على تأكيد، سيتم توجيهك للواتساب لإرسال إيصال الدفع.
-            </p>
-        </div>
-
         <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20 text-white">
             تأكيد وإرسال الطلب
         </button>
       </div>
     </div>
-</section>
-
-<script type="module">
+            </section>
+            <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // إعدادات Firebase
+    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -158,33 +167,85 @@
 
     let currentUser = null;
     let selectedPlanData = null;
-    let currentOrder = null; // لتخزين حالة الطلب الحالي
+    let currentOrder = null;
+    
+    // رقم الواتساب الخاص بك
     const MY_PHONE = "97336464439"; 
 
+    // الباقات (بناءً على صور OVH ومواصفاتها الحقيقية)
     const plans = [
-        { id: 'p1', name: "Starter", ram: "6GB", cpu: "150% CPU", disk: "40GB NVMe", price: "5.99", featured: false },
-        { id: 'p2', name: "Basic", ram: "10GB", cpu: "200% CPU", disk: "70GB NVMe", price: "9.99", featured: true },
-        { id: 'p3', name: "Master", ram: "16GB", cpu: "300% CPU", disk: "100GB NVMe", price: "14.99", featured: false },
-        { id: 'p4', name: "Elite", ram: "32GB", cpu: "500% CPU", disk: "200GB NVMe", price: "28.99", featured: false }
+        { 
+            id: 'p1', 
+            name: "Starter", 
+            ram: "8GB",          // VPS-1
+            cpu: "4 vCores",     
+            disk: "75GB NVMe",   
+            basePrice: 7.99,     
+            featured: false 
+        },
+        { 
+            id: 'p2', 
+            name: "Basic", 
+            ram: "12GB",         // VPS-2
+            cpu: "6 vCores",     
+            disk: "100GB NVMe",  
+            basePrice: 12.99,    
+            featured: true 
+        },
+        { 
+            id: 'p3', 
+            name: "Pro",         
+            ram: "24GB",         // VPS-3
+            cpu: "8 vCores",     
+            disk: "200GB NVMe",  
+            basePrice: 22.99,    
+            featured: false 
+        },
+        { 
+            id: 'p4', 
+            name: "Elite",       
+            ram: "96GB",         // VPS-6
+            cpu: "24 vCores",    
+            disk: "400GB NVMe",  
+            basePrice: 69.99,    
+            featured: false 
+        }
     ];
 
-    // دالة لتنظيف النصوص (XSS Protection)
+    // رسوم الموقع حسب الدولة (تغطية الفروقات)
+    const locationFees = {
+        'us': 0,     // أمريكا: السعر الأساسي
+        'de': 6.00,  // ألمانيا: زيادة 6 دولار (فرق السعر + العملة)
+        'sg': 3.00   // سنغافورة: زيادة 3 دولار
+    };
+
+    // أسماء الدول للعرض
+    const locationNames = {
+        'us': '🇺🇸 USA',
+        'de': '🇩🇪 Deutschland',
+        'sg': '🇸🇬 Singapore'
+    };
+
+    // حماية النصوص من الثغرات
     function escapeHtml(text) {
         if (!text) return "";
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    // رسم الباقات
+    // عرض الباقات وتحديث الأسعار
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
-        
+        const selector = document.getElementById('locationSelector');
+        const selectedLocCode = selector.value;
+        const extraFee = locationFees[selectedLocCode];
+        const locNameDisplay = locationNames[selectedLocCode];
+
         grid.innerHTML = plans.map(p => {
-            // التحقق مما إذا كان المستخدم لديه طلب لهذا الباقة
+            const finalPrice = (p.basePrice + extraFee).toFixed(2);
+            
             const isPending = currentOrder && currentOrder.status === 'pending';
             const isActive = currentOrder && currentOrder.status === 'active';
-            const hasOrder = currentOrder !== null;
             
-            // تحديد حالة الزر
             let btnText = "اطلب الآن";
             let btnClass = "bg-white text-black hover:bg-[#00ff64]";
             let isDisabled = false;
@@ -198,10 +259,6 @@
                     btnText = "⏳ قيد المراجعة...";
                     btnClass = "bg-yellow-600 text-white cursor-default";
                     isDisabled = true;
-                } else {
-                    btnText = "لديك طلب آخر معلق";
-                    btnClass = "bg-gray-800 text-gray-500 cursor-not-allowed";
-                    isDisabled = true;
                 }
             }
 
@@ -209,17 +266,25 @@
             <div class="plan-card p-8 ${p.featured ? 'featured' : ''} ${isPending && currentOrder.plan === p.name ? 'active-plan' : ''}">
                 ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
                 <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
-                <div class="text-3xl font-black mb-6">$${p.price}<span class="text-sm text-gray-500">/شهر</span></div>
+                
+                <div class="flex items-end gap-1 mb-6">
+                    <span class="text-3xl font-black">$${finalPrice}</span>
+                    <span class="text-sm text-gray-500 mb-1">/شهر</span>
+                </div>
+                
+                ${extraFee > 0 ? `<div class="text-[10px] text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded mb-4 w-fit mx-auto md:mx-0">
+                    <i class="fas fa-info-circle"></i> يشمل رسوم المنطقة ($${extraFee}+)
+                </div>` : ''}
                 
                 <ul class="space-y-4 mb-8 text-sm text-gray-400">
-                    <li><i class="fas fa-microchip ml-2 text-blue-500"></i> معالج: ${p.cpu}</li>
-                    <li><i class="fas fa-memory ml-2 text-blue-500"></i> رامات: ${p.ram}</li>
-                    <li><i class="fas fa-hdd ml-2 text-blue-500"></i> مساحة: ${p.disk}</li>
-                    <li><i class="fas fa-shield-alt ml-2 text-blue-500"></i> حماية DDoS مجانية</li>
+                    <li><i class="fas fa-microchip ml-2 text-blue-500"></i> المعالج: <span class="text-white">${p.cpu}</span></li>
+                    <li><i class="fas fa-memory ml-2 text-blue-500"></i> الرامات: <span class="text-white">${p.ram}</span></li>
+                    <li><i class="fas fa-hdd ml-2 text-blue-500"></i> التخزين: <span class="text-white">${p.disk}</span></li>
+                    <li><i class="fas fa-tachometer-alt ml-2 text-blue-500"></i> ترافيك: غير محدود</li>
                 </ul>
 
                 <button 
-                    onclick="window.initOrder('${p.id}')"
+                    onclick="window.initOrder('${p.id}', '${locNameDisplay}', ${finalPrice})"
                     ${isDisabled ? 'disabled' : ''}
                     class="w-full py-3 rounded-xl font-bold transition-all ${btnClass}"
                 >
@@ -229,65 +294,87 @@
         `}).join('');
     };
 
-    window.initOrder = (planId) => {
+    // فتح نافذة التأكيد
+    window.initOrder = (planId, locName, price) => {
         if (!currentUser) return alert("الرجاء تسجيل الدخول أولاً");
         
         selectedPlanData = plans.find(p => p.id === planId);
+        selectedPlanData.finalPrice = price;
+        selectedPlanData.locName = locName;
+
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between border-b border-white/10 pb-2 mb-2"><span>الباقة المختارة:</span><span class="font-bold text-white">${selectedPlanData.name}</span></div>
-            <div class="flex justify-between font-bold text-blue-400 text-lg"><span>المبلغ المطلوب:</span><span>$${selectedPlanData.price}</span></div>
-            <div class="mt-4 text-xs text-gray-500 text-center">سيتم ربط الطلب بحسابك: <br> ${escapeHtml(currentUser.email)}</div>
+            <div class="flex justify-between border-b border-white/10 pb-2 mb-2">
+                <span>الباقة المختارة:</span>
+                <div class="text-left">
+                    <span class="font-bold text-white block">${selectedPlanData.name}</span>
+                    <span class="text-xs text-gray-400">${locName}</span>
+                </div>
+            </div>
+            
+            <div class="space-y-1 text-sm text-gray-400 mb-4 bg-white/5 p-3 rounded-lg">
+                <div class="flex justify-between"><span>RAM:</span> <span class="text-white">${selectedPlanData.ram}</span></div>
+                <div class="flex justify-between"><span>CPU:</span> <span class="text-white">${selectedPlanData.cpu}</span></div>
+            </div>
+
+            <div class="flex justify-between font-bold text-blue-400 text-lg border-t border-white/10 pt-2">
+                <span>المبلغ المطلوب:</span><span>$${price}</span>
+            </div>
+            
+            <div class="mt-4 text-xs text-gray-500 text-center">
+                سيتم إرسال تفاصيل السيرفر إلى: <br> <span class="text-white font-bold">${escapeHtml(currentUser.email)}</span>
+            </div>
         `;
         document.getElementById('confirmModal').style.display = 'flex';
     };
 
     window.closeModal = () => document.getElementById('confirmModal').style.display = 'none';
 
+    // إرسال الطلب وحفظه
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         btn.disabled = true;
-        btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
+        btn.innerHTML = '<div class="loader"></div> جاري الحجز...';
 
         try {
-            // نستخدم UID كمعرف للمستند لضمان الأمان وعدم التكرار
-            const orderRef = doc(db, "orders", currentUser.uid);
-            
-            await setDoc(orderRef, {
-                uid: currentUser.uid, // مهم جداً لقواعد الحماية
+            // حفظ الطلب في Firestore
+            await setDoc(doc(db, "orders", currentUser.uid), {
+                uid: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName,
                 plan: selectedPlanData.name,
-                price: selectedPlanData.price,
+                location: selectedPlanData.locName,
+                price: selectedPlanData.finalPrice,
                 status: "pending",
-                requestedAt: serverTimestamp() // توقيت السيرفر لمنع التلاعب
+                requestedAt: serverTimestamp()
             });
 
-            // تجهيز رسالة الواتساب
-            const msg = encodeURIComponent(
+            // فتح الواتساب
+            const msgBody = 
                 `مرحباً Boneless Hosts 👋\n` +
-                `لقد قمت بطلب باقة *${selectedPlanData.name}* عبر الموقع.\n` +
-                `📧 الإيميل: ${currentUser.email}\n` +
-                `💰 السعر: $${selectedPlanData.price}\n\n` +
-                `مرفق صورة التحويل لإتمام التفعيل 📎`
-            );
-            
-            window.open(`https://wa.me/${MY_PHONE}?text=${msg}`, '_blank');
+                `أرغب في شراء سيرفر جديد:\n\n` +
+                `📦 الباقة: *${selectedPlanData.name}*\n` +
+                `📍 الموقع: *${selectedPlanData.locName}*\n` +
+                `💰 السعر: *$${selectedPlanData.finalPrice}*\n` +
+                `📧 إيميلي: ${currentUser.email}\n\n` +
+                `مرفق صورة التحويل لإتمام التفعيل 📎`;
+
+            const url = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msgBody)}`;
+            window.open(url, '_blank');
             window.closeModal();
 
         } catch (e) {
             console.error(e);
-            alert("❌ حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
+            alert("❌ حدث خطأ. تأكد من اتصال الإنترنت.");
         } finally {
             btn.disabled = false;
             btn.innerText = "تأكيد وإرسال الطلب";
         }
     };
 
-    // تسجيل الدخول والخروج
+    // تسجيل الدخول والخروج والمراقبة
     document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
     document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
 
-    // مراقبة حالة المستخدم
     onAuthStateChanged(auth, (u) => {
         if (u) {
             currentUser = u;
@@ -298,36 +385,28 @@
                 <span class="max-w-[100px] truncate">${escapeHtml(u.displayName)}</span>
             `;
 
-            // مراقبة حالة الطلب الخاص بالمستخدم
-            // نراقب المستند الذي يحمل اسم الـ UID الخاص بالمستخدم
             onSnapshot(doc(db, "orders", u.uid), (docSnap) => {
                 if (docSnap.exists()) {
                     currentOrder = docSnap.data();
-                    
-                    // تحديث شريط الحالة العلوي
                     const badge = document.getElementById('statusBadge');
+                    
                     if (currentOrder.status === 'active') {
-                        badge.classList.remove('hidden', 'text-yellow-500', 'bg-yellow-500/10', 'border-yellow-500/20');
-                        badge.classList.add('text-green-500', 'bg-green-500/10', 'border-green-500/20');
+                        badge.classList.remove('hidden', 'text-yellow-500', 'bg-yellow-500/10');
+                        badge.classList.add('text-green-500', 'bg-green-500/10');
                         badge.innerHTML = '<i class="fas fa-check-circle"></i> السيرفر نشط';
+
+                        if (!localStorage.getItem(`notified_${u.uid}`)) {
+                            alert("🎉 مبروك! تم تفعيل سيرفرك.");
+                            localStorage.setItem(`notified_${u.uid}`, 'true');
+                        }
                     } else {
                         badge.classList.remove('hidden');
-                        badge.classList.add('text-yellow-500', 'bg-yellow-500/10', 'border-yellow-500/20');
                         badge.innerHTML = '<i class="fas fa-clock"></i> بانتظار التفعيل';
                     }
-
-                    // تنبيه عند التفعيل (مرة واحدة)
-                    if (currentOrder.status === 'active' && !localStorage.getItem(`notified_${u.uid}`)) {
-                        alert("🎉 مبروك! تم تفعيل سيرفرك بنجاح.\nراجع بريدك الإلكتروني للحصول على بيانات الدخول.");
-                        localStorage.setItem(`notified_${u.uid}`, 'true');
-                    }
-                } else {
-                    currentOrder = null;
-                    document.getElementById('statusBadge').classList.add('hidden');
                 }
-                window.renderPlans(); // إعادة رسم الباقات بناء على الحالة الجديدة
+                window.renderPlans();
             });
-
+            window.renderPlans();
         } else {
             currentUser = null;
             document.getElementById('loginPage').style.display = 'flex';
