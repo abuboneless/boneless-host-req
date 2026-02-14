@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Boneless Hosts | استضافة سيرفرات ماين كرافت قوية وحماية DDoS</title>
-    <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة مع حماية متقدمة ضد الهجمات (Anti-DDoS). سيرفرات تعمل 24/7، قابلة للتعديل بالكامل.">
+    <title>Boneless Hosts | استضافة سيرفرات ماين كرافت</title>
+    <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة.">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3062/3062634.png">
     <meta name="theme-color" content="#000000">
 
@@ -17,46 +17,42 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         
-        /* الخلفية الجديدة */
+        /* الخلفية */
         .bg-fixed-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            /* صورة سيرفرات احترافية داكنة */
-            background: url('https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
+            background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
         }
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)); /* تدرج لوني للتعتيم */
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
         }
 
         .highlight { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
         
+        /* كرت الباقة */
         .plan-card { 
             background: rgba(20, 20, 20, 0.6); 
             border: 1px solid rgba(255,255,255,0.08); 
             border-radius: 20px; 
             transition: all 0.3s ease; 
-            backdrop-filter: blur(10px);
         }
         .plan-card:hover { 
             border-color: #3b82f6; 
             transform: translateY(-5px); 
-            background: rgba(30, 30, 30, 0.8);
+            background: rgba(30, 30, 30, 0.9);
             box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2);
         }
 
-        /* تصميم كرت الطلب في قائمة طلباتي */
+        /* كرت الطلب داخل القائمة */
         .order-history-card {
-            background: linear-gradient(145deg, rgba(25,25,25,0.9), rgba(15,15,15,0.95));
-            border: 1px solid rgba(255,255,255,0.05);
-            border-right: 4px solid #3b82f6; /* لون مميز على الجانب */
-            transition: 0.3s;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-right: 4px solid #3b82f6; /* شريط ملون جانبي */
+            transition: 0.2s;
         }
-        .order-history-card:hover {
-            transform: scale(1.02);
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        
+        .order-history-card:hover { background: #222; }
+
         .whatsapp-float {
             position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
             border-radius: 50px; width: 60px; height: 60px; 
@@ -70,6 +66,12 @@
         
         .quantity-btn { cursor: pointer; user-select: none; transition: 0.2s; }
         .quantity-btn:active { transform: scale(0.9); }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
 <body>
@@ -90,7 +92,6 @@
             استضافة سيرفرات ماين كرافت <span class="text-blue-400 font-bold">احترافية</span>.<br>
             أداء عالي، حماية شاملة، ودعم فني مستمر.
         </p>
-        
         <button id="googleSignIn" class="group bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-600 hover:text-white transition-all shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
             <i class="fab fa-google text-xl group-hover:text-white transition-colors"></i>
             <span>تسجيل الدخول للبدء</span>
@@ -99,33 +100,27 @@
 </section>
 
 <section id="packagesPage" class="min-h-screen pb-20 hidden">
-    <nav class="bg-black/60 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav class="bg-black/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-2xl font-black">Boneless <span class="highlight">Hosts</span></div>
-            <div class="flex gap-4 items-center">
-                <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10"></div>
-                <button id="logoutBtn" class="text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors" title="تسجيل خروج">
-                    <i class="fas fa-sign-out-alt"></i>
+            
+            <div class="flex flex-wrap justify-center gap-4 items-center">
+                <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10 text-sm"></div>
+                
+                <button onclick="window.openOrdersModal()" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-600/50 px-5 py-2 rounded-full font-bold transition-all flex items-center gap-2">
+                    <i class="fas fa-box-open"></i> طلباتي
+                    <span id="ordersBadge" class="bg-red-500 text-white text-[10px] px-1.5 rounded-full hidden">0</span>
+                </button>
+
+                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-full transition-all text-sm font-bold">
+                    <i class="fas fa-sign-out-alt"></i> خروج
                 </button>
             </div>
         </div>
     </nav>
 
     <div class="container mx-auto px-6 py-10">
-        
-        <div id="myOrdersSection" class="mb-16 hidden">
-            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-                <h3 class="text-2xl font-bold flex items-center gap-2">
-                    <i class="fas fa-history text-blue-500"></i> سجل طلباتي
-                </h3>
-                <span id="ordersCount" class="bg-blue-600/20 text-blue-400 text-xs px-3 py-1 rounded-full font-bold">0 طلبات</span>
-            </div>
-            
-            <div id="ordersList" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                </div>
-        </div>
-
-        <div class="text-center mb-10 pt-10 border-t border-white/5">
+        <div class="text-center mb-10 pt-5">
             <h2 class="text-4xl font-bold mb-3">سيرفر جديد؟</h2>
             <p class="text-gray-400">اختر المواصفات التي تناسبك وابدأ اللعب فوراً</p>
         </div>
@@ -146,6 +141,27 @@
     </div>
 </section>
 
+<div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-sm">
+    <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[80vh] flex flex-col relative shadow-2xl">
+        
+        <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#151515] rounded-t-3xl">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                <i class="fas fa-history text-blue-500"></i> سجل طلباتك
+            </h2>
+            <button onclick="window.closeOrdersModal()" class="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="ordersListContent" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div class="text-center py-20 text-gray-500">
+                <i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i>
+                <p>جاري تحميل الطلبات...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="confirmModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[200] p-4 backdrop-blur-md overflow-y-auto">
     <div class="bg-[#151515] border border-white/10 p-6 md:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl my-auto">
         <button onclick="window.closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-white transition-colors">
@@ -154,8 +170,7 @@
         
         <h2 class="text-2xl font-bold mb-6 text-center text-white">تأكيد تفاصيل الطلب 🛠️</h2>
         
-        <div id="planDetails" class="bg-black/40 p-5 rounded-xl border border-white/5 mb-6 space-y-3">
-        </div>
+        <div id="planDetails" class="bg-black/40 p-5 rounded-xl border border-white/5 mb-6 space-y-3"></div>
 
         <div class="mb-6">
             <label class="block text-sm text-gray-400 mb-2 font-bold">عدد السيرفرات المطلوبة:</label>
@@ -220,6 +235,7 @@
     let currentUser = null;
     let selectedPlanData = null;
     let currentQty = 1;
+    let myOrdersSnapshot = []; // لتخزين الطلبات
     const MY_PHONE = "97336464439";
 
     const plans = [
@@ -232,6 +248,82 @@
     const locationFees = { 'us': 0, 'de': 6.00, 'sg': 3.00 };
     const locationNames = { 'us': '🇺🇸 USA', 'de': '🇩🇪 Germany', 'sg': '🇸🇬 Singapore' };
 
+    // --- Modal Logic ---
+    window.openOrdersModal = () => {
+        document.getElementById('ordersModal').style.display = 'flex';
+        renderOrdersList(); // تحديث القائمة عند الفتح
+    };
+    window.closeOrdersModal = () => document.getElementById('ordersModal').style.display = 'none';
+
+    window.copyOrderId = (id) => {
+        navigator.clipboard.writeText(id).then(() => alert("تم نسخ رقم الطلب: " + id));
+    };
+
+    // --- Rendering Orders ---
+    function renderOrdersList() {
+        const container = document.getElementById('ordersListContent');
+        
+        if (myOrdersSnapshot.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-20 opacity-50">
+                    <i class="fas fa-ghost text-6xl mb-4 text-gray-600"></i>
+                    <p class="text-xl font-bold">لا توجد طلبات سابقة</p>
+                    <p class="text-sm">اطلب سيرفرك الأول الآن!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = myOrdersSnapshot.map(doc => {
+            const data = doc.data();
+            const id = doc.id;
+            const isPending = data.status !== 'active';
+            
+            const statusConfig = isPending 
+                ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-clock' }
+                : { text: 'نشط ويعمل', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-check-circle' };
+            
+            const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
+            const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope"></i>' : '<i class="fab fa-whatsapp"></i>';
+
+            return `
+            <div class="order-history-card p-5 rounded-2xl relative mb-4">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-blue-600 text-white font-bold px-3 py-1 rounded-lg text-sm">${data.plan}</span>
+                        <div class="text-xs text-gray-400 bg-black/30 px-2 py-1 rounded cursor-pointer hover:text-white transition" onclick="window.copyOrderId('${id}')" title="نسخ الرقم">
+                            #${id.slice(0, 6)}... <i class="fas fa-copy ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full border ${statusConfig.color} ${statusConfig.bg} ${statusConfig.border}">
+                        <i class="fas ${statusConfig.icon}"></i> ${statusConfig.text}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-sm mt-4 border-t border-white/5 pt-4">
+                    <div>
+                        <span class="text-gray-500 text-xs block">الموقع والكمية</span>
+                        <div class="font-bold text-white">${data.location} <span class="text-gray-500">x${data.quantity || 1}</span></div>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 text-xs block">السعر الإجمالي</span>
+                        <div class="font-bold text-blue-400">$${data.price}</div>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 text-xs block">تاريخ الطلب</span>
+                        <div class="font-bold text-white">${date}</div>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 text-xs block">طريقة التواصل</span>
+                        <div class="font-bold text-gray-300">${methodIcon}</div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    // --- Main Logic (Similar to before) ---
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
         const selector = document.getElementById('locationSelector');
@@ -240,76 +332,60 @@
 
         grid.innerHTML = plans.map(p => {
             const finalPrice = (p.basePrice + extraFee).toFixed(2);
-            
             return `
             <div class="plan-card p-6 flex flex-col relative overflow-hidden ${p.featured ? 'border-blue-500/50' : ''}">
                 ${p.featured ? '<div class="absolute top-0 right-0 bg-blue-600 text-xs px-3 py-1 rounded-bl-lg font-bold shadow-lg">الأكثر طلباً</div>' : ''}
-                
                 <h3 class="text-2xl font-bold mb-2">${p.name}</h3>
                 <div class="flex items-baseline gap-1 mb-6">
                     <span class="text-4xl font-black text-blue-400">$${finalPrice}</span>
                     <span class="text-sm text-gray-500">/شهر</span>
                 </div>
-
                 <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-300">
                     <li class="flex items-center gap-2"><i class="fas fa-microchip text-blue-500 w-5"></i> ${p.cpu}</li>
                     <li class="flex items-center gap-2"><i class="fas fa-memory text-blue-500 w-5"></i> ${p.ram} RAM</li>
                     <li class="flex items-center gap-2"><i class="fas fa-hdd text-blue-500 w-5"></i> ${p.disk}</li>
                 </ul>
-
-                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" 
-                    class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-blue-500 hover:text-white transition-all shadow-lg">
-                    اطلب الآن
-                </button>
-            </div>
-            `;
+                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-blue-500 hover:text-white transition-all shadow-lg">اطلب الآن</button>
+            </div>`;
         }).join('');
     };
 
     window.initOrder = (planId, locCode, unitPrice) => {
         if (!currentUser) return alert("يرجى تسجيل الدخول أولاً");
-        
         currentQty = 1; 
         selectedPlanData = plans.find(p => p.id === planId);
         selectedPlanData.unitPrice = unitPrice;
         selectedPlanData.locName = locationNames[locCode];
-
         document.getElementById('qtyDisplay').innerText = currentQty;
-        
         document.getElementById('planDetails').innerHTML = `
             <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-400">نوع السيرفر:</span>
                 <span class="font-bold text-white text-lg">${selectedPlanData.name}</span>
             </div>
             <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-400">موقع الاستضافة:</span>
+                <span class="text-gray-400">الموقع:</span>
                 <span class="font-bold text-white">${selectedPlanData.locName}</span>
             </div>
             <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-400">سعر الوحدة:</span>
                 <span class="font-bold text-gray-300">$${unitPrice}</span>
-            </div>
-        `;
-        
+            </div>`;
         window.updateTotal();
         window.updateBtnText();
         document.getElementById('confirmModal').style.display = 'flex';
     };
 
     window.closeModal = () => document.getElementById('confirmModal').style.display = 'none';
-
     window.changeQty = (amount) => {
         if (currentQty + amount < 1) return;
         currentQty += amount;
         document.getElementById('qtyDisplay').innerText = currentQty;
         window.updateTotal();
     };
-
     window.updateTotal = () => {
         const total = (selectedPlanData.unitPrice * currentQty).toFixed(2);
         document.getElementById('totalPriceDisplay').innerText = `$${total}`;
     };
-
     window.updateBtnText = () => {
         const method = document.querySelector('input[name="contactMethod"]:checked').value;
         const btn = document.getElementById('confirmBtn');
@@ -321,16 +397,14 @@
             btn.className = "w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-blue-500/20";
         }
     };
-
+    
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         const originalContent = btn.innerHTML;
         btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
         btn.disabled = true;
-
         const method = document.querySelector('input[name="contactMethod"]:checked').value;
         const totalPrice = (selectedPlanData.unitPrice * currentQty).toFixed(2);
-
         try {
             await addDoc(collection(db, "orders"), {
                 uid: currentUser.uid,
@@ -344,34 +418,23 @@
                 status: "pending",
                 timestamp: serverTimestamp()
             });
-
             if (method === 'whatsapp') {
-                const msg = `السلام عليكم Boneless Hosts 👋\n\n` +
-                            `طلبت سيرفر جديد:\n` +
-                            `📦 الباقة: *${selectedPlanData.name}*\n` +
-                            `🔢 العدد: *${currentQty}*\n` +
-                            `📍 الموقع: *${selectedPlanData.locName}*\n` +
-                            `💰 الإجمالي: *$${totalPrice}*\n` +
-                            `📧 إيميلي: ${currentUser.email}\n\n` +
-                            `كيف طريقة الدفع؟`;
-                
+                const msg = `السلام عليكم Boneless Hosts 👋\nطلبت سيرفر جديد:\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice}*\n📧 إيميلي: ${currentUser.email}\nكيف طريقة الدفع؟`;
                 window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
             } else {
                 alert("✅ تم استلام طلبك بنجاح!\nسنتواصل معك عبر الإيميل قريباً.");
             }
-            
             window.closeModal();
-            
         } catch (error) {
             console.error(error);
-            alert("حدث خطأ أثناء الاتصال، يرجى المحاولة مرة أخرى.");
+            alert("حدث خطأ أثناء الاتصال.");
         } finally {
             btn.innerHTML = originalContent;
             btn.disabled = false;
         }
     };
 
-    // Firebase Auth & Logic
+    // Firebase Auth & Listener
     document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
@@ -381,72 +444,22 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerHTML = `
-                <img src="${user.photoURL}" class="w-8 h-8 rounded-full border border-white/20">
-                <span class="text-sm font-bold hidden md:block">${user.displayName}</span>
-            `;
-
-            // جلب الطلبات وعرضها بشكل مفصل
+                <img src="${user.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
+                <span class="max-w-[100px] truncate">${user.displayName}</span>`;
+            
+            // Listen for orders
             const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
-                const ordersList = document.getElementById('ordersList');
-                const myOrdersSection = document.getElementById('myOrdersSection');
-                
-                if (snapshot.empty) {
-                    myOrdersSection.classList.add('hidden');
+                myOrdersSnapshot = snapshot.docs;
+                const badge = document.getElementById('ordersBadge');
+                if(!snapshot.empty) {
+                    badge.innerText = snapshot.size;
+                    badge.classList.remove('hidden');
                 } else {
-                    myOrdersSection.classList.remove('hidden');
-                    document.getElementById('ordersCount').innerText = `${snapshot.size} طلبات`;
-                    
-                    ordersList.innerHTML = snapshot.docs.map(doc => {
-                        const data = doc.data();
-                        const isPending = data.status !== 'active';
-                        
-                        // تحديد الألوان والنصوص حسب الحالة
-                        const statusConfig = isPending 
-                            ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30' }
-                            : { text: 'نشط ✅', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30' };
-                        
-                        // تنسيق التاريخ
-                        const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
-                        
-                        // أيقونة طريقة التواصل
-                        const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope"></i> إيميل' : '<i class="fab fa-whatsapp"></i> واتساب';
-
-                        return `
-                        <div class="order-history-card rounded-2xl p-5 relative overflow-hidden">
-                            
-                            <div class="flex justify-between items-start mb-4 border-b border-white/5 pb-3">
-                                <div>
-                                    <h4 class="text-lg font-bold text-white flex items-center gap-2">
-                                        ${data.plan}
-                                        <span class="text-xs font-normal text-gray-400 bg-white/5 px-2 py-1 rounded">x${data.quantity || 1}</span>
-                                    </h4>
-                                    <span class="text-xs text-gray-500 font-mono">ID: ${doc.id.slice(0, 8)}...</span>
-                                </div>
-                                <div class="text-xs px-3 py-1 rounded-full font-bold border ${statusConfig.color} ${statusConfig.bg} ${statusConfig.border}">
-                                    ${statusConfig.text}
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-y-3 text-sm">
-                                <div class="text-gray-400">📅 التاريخ:</div>
-                                <div class="text-white font-bold text-left">${date}</div>
-
-                                <div class="text-gray-400">💰 الإجمالي:</div>
-                                <div class="text-blue-400 font-bold text-left">$${data.price}</div>
-
-                                <div class="text-gray-400">📍 الموقع:</div>
-                                <div class="text-white font-bold text-left">${data.location}</div>
-                                
-                                <div class="text-gray-400">📞 التواصل:</div>
-                                <div class="text-gray-300 text-left text-xs">${methodIcon}</div>
-                            </div>
-                        </div>
-                        `;
-                    }).join('');
+                    badge.classList.add('hidden');
                 }
+                renderOrdersList();
             });
-            
             window.renderPlans();
         } else {
             currentUser = null;
@@ -455,6 +468,5 @@
         }
     });
 </script>
-
 </body>
 </html>
