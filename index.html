@@ -1,156 +1,189 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"> 
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Boneless Hosts - استضافة سيرفرات ماين كرافت احترافية</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Boneless Hosts | استضافة سيرفرات ماين كرافت قوية وحماية DDoS</title>
+    <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة مع حماية متقدمة ضد الهجمات (Anti-DDoS). سيرفرات تعمل 24/7، قابلة للتعديل بالكامل.">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3062/3062634.png">
     <meta name="theme-color" content="#000000">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background: #000000; color: white; overflow-x: hidden; }
+        body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         
-        .background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #111 0%, #000 100%); z-index: -2; }
-        .pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; z-index: -1; }
-        
-        .highlight { color: #00d4ff; text-shadow: 0 0 15px rgba(0,212,255,0.5); }
-        #packagesPage { display: none; }
+        /* الخلفية الجديدة */
+        .bg-fixed-image {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: url('https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: rgba(0, 0, 0, 0.85); /* تعتيم الخلفية */
+            backdrop-filter: blur(3px);
+        }
 
-        .plan-card { position: relative; overflow: hidden; background: #0a0a0a; border: 1px solid #222; border-radius: 24px; transition: 0.4s; }
-        .plan-card:hover { border-color: #00ff64; transform: translateY(-5px); }
-        .plan-card.featured { border: 2px solid #00d4ff; }
+        .highlight { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
         
-        /* حالة الطلب النشط */
-        .plan-card.active-plan { border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); }
-
+        .plan-card { 
+            background: rgba(20, 20, 20, 0.7); 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 20px; 
+            transition: all 0.3s ease; 
+        }
+        .plan-card:hover { 
+            border-color: #3b82f6; 
+            transform: translateY(-5px); 
+            background: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2);
+        }
+        
         .whatsapp-float {
             position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
-            border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 0px 10px 25px rgba(37, 211, 102, 0.3);
-            z-index: 1000; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; transition: 0.3s;
+            border-radius: 50px; width: 60px; height: 60px; 
+            display: flex; align-items: center; justify-content: center; font-size: 30px; 
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); z-index: 100; transition: 0.3s;
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
 
-        .step-card { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; text-align: center; }
-        
-        /* Loader */
-        .loader { border: 2px solid #f3f3f3; border-radius: 50%; border-top: 2px solid #3498db; width: 14px; height: 14px; -webkit-animation: spin 2s linear infinite; animation: spin 2s linear infinite; display: inline-block; margin-left: 5px; }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* كمية السيرفرات */
+        .quantity-btn { cursor: pointer; user-select: none; transition: 0.2s; }
+        .quantity-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
-<div class="background"></div>
-<div class="pattern"></div>
+<div class="bg-fixed-image"></div>
+<div class="bg-overlay"></div>
 
-<a href="https://wa.me/97336464439" id="whatsappLink" class="whatsapp-float" target="_blank">
+<a href="https://wa.me/97336464439" target="_blank" class="whatsapp-float">
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<section id="loginPage" class="min-h-screen flex items-center justify-center p-6 text-center">
-    <div class="max-w-4xl">
-        <h1 class="text-6xl font-black mb-4 text-white">Boneless <span class="highlight">Hosts</span></h1>
-        <p class="text-xl text-gray-400 mb-12">سيرفرات 96GB RAM لأداء لا يقبل المنافسة</p>
+<section id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 text-center">
+    <div class="max-w-3xl animate-fade-in-up">
+        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">
+            Boneless <span class="highlight">Hosts</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 font-light leading-relaxed">
+            احصل على سيرفرك الخاص الآن. <br>
+            <span class="text-blue-400 font-bold">حماية DDoS</span>، مودات مفتوحة، وتعمل <span class="text-green-400 font-bold">24/7</span>.
+        </p>
         
-        <button id="googleSignIn" class="bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 shadow-xl flex items-center gap-3 mx-auto">
-            <i class="fab fa-google"></i> <span>سجل دخولك للبدء</span>
+        <button id="googleSignIn" class="group bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-600 hover:text-white transition-all shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
+            <i class="fab fa-google text-xl group-hover:text-white transition-colors"></i>
+            <span>تسجيل الدخول للبدء</span>
         </button>
-
-        <div class="mt-12 opacity-50 flex justify-center gap-6 items-center flex-wrap text-white">
-            <span class="text-sm">وسائل الدفع:</span>
-            <div class="flex gap-4 items-center">
-                <i class="fab fa-cc-visa text-2xl"></i>
-                <i class="fab fa-cc-paypal text-2xl"></i>
-                <span class="font-bold border px-2 py-1 rounded text-[10px]">BENEFIT</span>
-            </div>
-        </div>
     </div>
 </section>
 
-<section id="packagesPage">
-    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto border-b border-white/5">
-        <div class="text-2xl font-bold">Boneless <span class="highlight">Hosts</span></div>
-        <div class="flex gap-4 items-center">
-            <div id="statusBadge" class="hidden text-xs font-bold px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
-                <i class="fas fa-clock"></i> بانتظار التفعيل
+<section id="packagesPage" class="min-h-screen pb-20 hidden">
+    <nav class="bg-black/60 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-black">Boneless <span class="highlight">Hosts</span></div>
+            <div class="flex gap-4 items-center">
+                <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10"></div>
+                <button id="logoutBtn" class="text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors" title="تسجيل خروج">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
-            <div id="userInfo" class="text-sm text-gray-300 bg-white/5 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2"></div>
-            <button id="logoutBtn" class="text-red-500 hover:text-red-400 text-sm font-bold"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
-    <div class="text-center py-10 px-4">
-        <h2 class="text-4xl font-bold mb-2">اختر خطتك</h2>
-        <p class="text-gray-400">جميع السيرفرات تعمل بمعالجات Ryzen/EPYC عالية الأداء</p>
-    </div>
-
-    <div class="text-center mb-8 bg-[#111] p-4 rounded-2xl border border-white/5 inline-block mx-auto flex justify-center w-fit mx-auto">
-        <div class="text-right">
-            <label class="text-gray-400 text-sm block mb-2 font-bold">📍 اختر موقع السيرفر (Location):</label>
-            <div class="relative inline-flex w-full md:w-auto">
-                <select id="locationSelector" onchange="window.renderPlans()" class="w-full appearance-none bg-black border border-gray-600 text-white py-2 pl-4 pr-10 rounded-lg outline-none font-bold cursor-pointer hover:border-blue-500 focus:border-blue-500 transition-colors" dir="ltr">
-                    <option value="us">🇺🇸 USA</option>
-                    <option value="de">🇩🇪 Deutschland</option>
-                    <option value="sg">🇸🇬 Singapore</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
-                    <i class="fas fa-chevron-down text-xs"></i>
+    <div class="container mx-auto px-6 py-10">
+        
+        <div id="myOrdersSection" class="mb-12 hidden">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-list-ul text-blue-500"></i> طلباتي وسيرفراتي</h3>
+            <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 </div>
+        </div>
+
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-bold mb-3">اختر مواصفات سيرفرك</h2>
+            <p class="text-gray-400">يمكنك طلب أكثر من سيرفر في نفس الوقت</p>
+        </div>
+
+        <div class="flex justify-center mb-10">
+            <div class="bg-[#151515] p-2 rounded-xl border border-white/10 flex items-center gap-3 shadow-lg">
+                <span class="text-gray-400 text-sm font-bold px-2">📍 الموقع:</span>
+                <select id="locationSelector" onchange="window.renderPlans()" class="bg-black text-white py-2 px-4 rounded-lg border border-gray-700 outline-none focus:border-blue-500 font-bold cursor-pointer">
+                    <option value="us">🇺🇸 أمريكا (USA)</option>
+                    <option value="de">🇩🇪 ألمانيا (Germany)</option>
+                    <option value="sg">🇸🇬 سنغافورة (Singapore)</option>
+                </select>
             </div>
         </div>
+
+        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            </div>
     </div>
+</section>
 
-    <div class="container mx-auto px-6 pb-12">
-        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-    </div>
-
-    <section class="max-w-5xl mx-auto px-6 py-16">
-        <h3 class="text-2xl font-bold text-center mb-10"><span class="highlight text-blue-400">خطوات الاستلام</span></h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="step-card">
-                <div class="text-3xl mb-4 text-blue-500 font-bold">01</div>
-                <h4 class="font-bold mb-2">اطلب الباقة</h4>
-                <p class="text-sm text-gray-500">اختر المواصفات والدولة المناسبة.</p>
-            </div>
-            <div class="step-card">
-                <div class="text-3xl mb-4 text-green-500 font-bold">02</div>
-                <h4 class="font-bold mb-2">الدفع والتواصل</h4>
-                <p class="text-sm text-gray-500">ادفع عبر Benefit/PayPal وارسل الإيصال بالواتساب.</p>
-            </div>
-            <div class="step-card">
-                <div class="text-3xl mb-4 text-yellow-500 font-bold">03</div>
-                <h4 class="font-bold mb-2">استلام السيرفر</h4>
-                <p class="text-sm text-gray-500">سيتم تفعيل السيرفر وإرسال البيانات لك فوراً.</p>
-            </div>
-        </div>
-    </section>
-
-    <div id="confirmModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
-      <div class="bg-[#111] border border-white/10 p-8 rounded-3xl w-full max-w-md text-right shadow-2xl relative">
-        <button onclick="window.closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
-        
-        <h2 class="text-2xl font-bold mb-2 text-center text-white">تأكيد الحجز</h2>
-        <p class="text-gray-500 text-center text-sm mb-6">مراجعة تفاصيل الطلب قبل الإرسال</p>
-        
-        <div id="planDetails" class="mb-6 space-y-3 py-4 border-y border-white/5 text-gray-300"></div>
-        
-        <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20 text-white">
-            تأكيد وإرسال الطلب
+<div id="confirmModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[200] p-4 backdrop-blur-md overflow-y-auto">
+    <div class="bg-[#151515] border border-white/10 p-6 md:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl my-auto">
+        <button onclick="window.closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-white transition-colors">
+            <i class="fas fa-times text-xl"></i>
         </button>
-      </div>
+        
+        <h2 class="text-2xl font-bold mb-6 text-center text-white">تأكيد تفاصيل الطلب 🛠️</h2>
+        
+        <div id="planDetails" class="bg-black/40 p-5 rounded-xl border border-white/5 mb-6 space-y-3">
+            </div>
+
+        <div class="mb-6">
+            <label class="block text-sm text-gray-400 mb-2 font-bold">عدد السيرفرات المطلوبة:</label>
+            <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-2">
+                <button onclick="window.changeQty(-1)" class="quantity-btn bg-white/10 hover:bg-white/20 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">-</button>
+                <span id="qtyDisplay" class="text-xl font-bold">1</span>
+                <button onclick="window.changeQty(1)" class="quantity-btn bg-blue-600 hover:bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">+</button>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <label class="block text-sm text-gray-400 mb-3 font-bold">كيف تفضل أن نتواصل معك؟</label>
+            <div class="grid grid-cols-2 gap-4">
+                <label class="cursor-pointer">
+                    <input type="radio" name="contactMethod" value="whatsapp" checked class="peer hidden" onchange="window.updateBtnText()">
+                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-green-500 peer-checked:bg-green-500/10 transition-all text-center">
+                        <i class="fab fa-whatsapp text-2xl mb-1 text-green-500"></i>
+                        <div class="text-xs font-bold">واتساب</div>
+                    </div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="contactMethod" value="email" class="peer hidden" onchange="window.updateBtnText()">
+                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-blue-500 peer-checked:bg-blue-500/10 transition-all text-center">
+                        <i class="fas fa-envelope text-2xl mb-1 text-blue-500"></i>
+                        <div class="text-xs font-bold">الإيميل</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="border-t border-white/10 pt-4 flex flex-col gap-2">
+            <div class="flex justify-between items-center text-lg font-bold mb-4">
+                <span class="text-gray-400">الإجمالي النهائي:</span>
+                <span id="totalPriceDisplay" class="text-blue-400 text-2xl">$0.00</span>
+            </div>
+            
+            <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all text-white flex justify-center items-center gap-2 text-lg">
+                </button>
+        </div>
     </div>
-            </section>
-            <script type="module">
+</div>
+
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -167,245 +200,209 @@
 
     let currentUser = null;
     let selectedPlanData = null;
-    let currentOrder = null;
-    
-    // رقم الواتساب الخاص بك
-    const MY_PHONE = "97336464439"; 
+    let currentQty = 1;
+    const MY_PHONE = "97336464439";
 
-    // الباقات (بناءً على صور OVH ومواصفاتها الحقيقية)
     const plans = [
-        { 
-            id: 'p1', 
-            name: "Starter", 
-            ram: "8GB",          // VPS-1
-            cpu: "4 vCores",     
-            disk: "75GB NVMe",   
-            basePrice: 7.99,     
-            featured: false 
-        },
-        { 
-            id: 'p2', 
-            name: "Basic", 
-            ram: "12GB",         // VPS-2
-            cpu: "6 vCores",     
-            disk: "100GB NVMe",  
-            basePrice: 12.99,    
-            featured: true 
-        },
-        { 
-            id: 'p3', 
-            name: "Pro",         
-            ram: "24GB",         // VPS-3
-            cpu: "8 vCores",     
-            disk: "200GB NVMe",  
-            basePrice: 22.99,    
-            featured: false 
-        },
-        { 
-            id: 'p4', 
-            name: "Elite",       
-            ram: "96GB",         // VPS-6
-            cpu: "24 vCores",    
-            disk: "400GB NVMe",  
-            basePrice: 69.99,    
-            featured: false 
-        }
+        { id: 'p1', name: "Starter", ram: "8GB", cpu: "4 vCores", disk: "75GB NVMe", basePrice: 7.99, featured: false },
+        { id: 'p2', name: "Basic", ram: "12GB", cpu: "6 vCores", disk: "100GB NVMe", basePrice: 12.99, featured: true },
+        { id: 'p3', name: "Pro", ram: "24GB", cpu: "8 vCores", disk: "200GB NVMe", basePrice: 22.99, featured: false },
+        { id: 'p4', name: "Elite", ram: "96GB", cpu: "24 vCores", disk: "400GB NVMe", basePrice: 69.99, featured: false }
     ];
 
-    // رسوم الموقع حسب الدولة (تغطية الفروقات)
-    const locationFees = {
-        'us': 0,     // أمريكا: السعر الأساسي
-        'de': 6.00,  // ألمانيا: زيادة 6 دولار (فرق السعر + العملة)
-        'sg': 3.00   // سنغافورة: زيادة 3 دولار
-    };
+    const locationFees = { 'us': 0, 'de': 6.00, 'sg': 3.00 };
+    const locationNames = { 'us': '🇺🇸 USA', 'de': '🇩🇪 Germany', 'sg': '🇸🇬 Singapore' };
 
-    // أسماء الدول للعرض
-    const locationNames = {
-        'us': '🇺🇸 USA',
-        'de': '🇩🇪 Deutschland',
-        'sg': '🇸🇬 Singapore'
-    };
-
-    // حماية النصوص من الثغرات
-    function escapeHtml(text) {
-        if (!text) return "";
-        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
-    // عرض الباقات وتحديث الأسعار
+    // رسم الباقات
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
         const selector = document.getElementById('locationSelector');
-        const selectedLocCode = selector.value;
-        const extraFee = locationFees[selectedLocCode];
-        const locNameDisplay = locationNames[selectedLocCode];
+        const locCode = selector.value;
+        const extraFee = locationFees[locCode];
 
         grid.innerHTML = plans.map(p => {
             const finalPrice = (p.basePrice + extraFee).toFixed(2);
             
-            const isPending = currentOrder && currentOrder.status === 'pending';
-            const isActive = currentOrder && currentOrder.status === 'active';
-            
-            let btnText = "اطلب الآن";
-            let btnClass = "bg-white text-black hover:bg-[#00ff64]";
-            let isDisabled = false;
-
-            if (isActive) {
-                btnText = "لديك سيرفر مفعل";
-                btnClass = "bg-green-500/20 text-green-500 border border-green-500/50 cursor-default";
-                isDisabled = true;
-            } else if (isPending) {
-                if (currentOrder.plan === p.name) {
-                    btnText = "⏳ قيد المراجعة...";
-                    btnClass = "bg-yellow-600 text-white cursor-default";
-                    isDisabled = true;
-                }
-            }
-
             return `
-            <div class="plan-card p-8 ${p.featured ? 'featured' : ''} ${isPending && currentOrder.plan === p.name ? 'active-plan' : ''}">
-                ${p.featured ? '<span class="absolute top-4 left-4 bg-blue-500 text-[10px] px-3 py-1 rounded-full font-bold">الأكثر طلباً</span>' : ''}
-                <h3 class="text-2xl font-bold mb-1">${p.name}</h3>
+            <div class="plan-card p-6 flex flex-col relative overflow-hidden ${p.featured ? 'border-blue-500/50' : ''}">
+                ${p.featured ? '<div class="absolute top-0 right-0 bg-blue-600 text-xs px-3 py-1 rounded-bl-lg font-bold shadow-lg">الأكثر طلباً</div>' : ''}
                 
-                <div class="flex items-end gap-1 mb-6">
-                    <span class="text-3xl font-black">$${finalPrice}</span>
-                    <span class="text-sm text-gray-500 mb-1">/شهر</span>
+                <h3 class="text-2xl font-bold mb-2">${p.name}</h3>
+                <div class="flex items-baseline gap-1 mb-6">
+                    <span class="text-4xl font-black text-blue-400">$${finalPrice}</span>
+                    <span class="text-sm text-gray-500">/شهر</span>
                 </div>
-                
-                ${extraFee > 0 ? `<div class="text-[10px] text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded mb-4 w-fit mx-auto md:mx-0">
-                    <i class="fas fa-info-circle"></i> يشمل رسوم المنطقة ($${extraFee}+)
-                </div>` : ''}
-                
-                <ul class="space-y-4 mb-8 text-sm text-gray-400">
-                    <li><i class="fas fa-microchip ml-2 text-blue-500"></i> المعالج: <span class="text-white">${p.cpu}</span></li>
-                    <li><i class="fas fa-memory ml-2 text-blue-500"></i> الرامات: <span class="text-white">${p.ram}</span></li>
-                    <li><i class="fas fa-hdd ml-2 text-blue-500"></i> التخزين: <span class="text-white">${p.disk}</span></li>
-                    <li><i class="fas fa-tachometer-alt ml-2 text-blue-500"></i> ترافيك: غير محدود</li>
+
+                <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-300">
+                    <li class="flex items-center gap-2"><i class="fas fa-microchip text-blue-500 w-5"></i> ${p.cpu}</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-memory text-blue-500 w-5"></i> ${p.ram} RAM</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-hdd text-blue-500 w-5"></i> ${p.disk}</li>
                 </ul>
 
-                <button 
-                    onclick="window.initOrder('${p.id}', '${locNameDisplay}', ${finalPrice})"
-                    ${isDisabled ? 'disabled' : ''}
-                    class="w-full py-3 rounded-xl font-bold transition-all ${btnClass}"
-                >
-                    ${btnText}
+                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" 
+                    class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-blue-500 hover:text-white transition-all shadow-lg">
+                    اطلب الآن
                 </button>
             </div>
-        `}).join('');
+            `;
+        }).join('');
     };
 
-    // فتح نافذة التأكيد
-    window.initOrder = (planId, locName, price) => {
-        if (!currentUser) return alert("الرجاء تسجيل الدخول أولاً");
+    // تحضير الطلب وفتح النافذة
+    window.initOrder = (planId, locCode, unitPrice) => {
+        if (!currentUser) return alert("يرجى تسجيل الدخول أولاً");
         
+        currentQty = 1; // تصفير الكمية
         selectedPlanData = plans.find(p => p.id === planId);
-        selectedPlanData.finalPrice = price;
-        selectedPlanData.locName = locName;
+        selectedPlanData.unitPrice = unitPrice;
+        selectedPlanData.locName = locationNames[locCode];
 
+        document.getElementById('qtyDisplay').innerText = currentQty;
+        
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between border-b border-white/10 pb-2 mb-2">
-                <span>الباقة المختارة:</span>
-                <div class="text-left">
-                    <span class="font-bold text-white block">${selectedPlanData.name}</span>
-                    <span class="text-xs text-gray-400">${locName}</span>
-                </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-400">نوع السيرفر:</span>
+                <span class="font-bold text-white text-lg">${selectedPlanData.name}</span>
             </div>
-            
-            <div class="space-y-1 text-sm text-gray-400 mb-4 bg-white/5 p-3 rounded-lg">
-                <div class="flex justify-between"><span>RAM:</span> <span class="text-white">${selectedPlanData.ram}</span></div>
-                <div class="flex justify-between"><span>CPU:</span> <span class="text-white">${selectedPlanData.cpu}</span></div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-400">موقع الاستضافة:</span>
+                <span class="font-bold text-white">${selectedPlanData.locName}</span>
             </div>
-
-            <div class="flex justify-between font-bold text-blue-400 text-lg border-t border-white/10 pt-2">
-                <span>المبلغ المطلوب:</span><span>$${price}</span>
-            </div>
-            
-            <div class="mt-4 text-xs text-gray-500 text-center">
-                سيتم إرسال تفاصيل السيرفر إلى: <br> <span class="text-white font-bold">${escapeHtml(currentUser.email)}</span>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-400">سعر الوحدة:</span>
+                <span class="font-bold text-gray-300">$${unitPrice}</span>
             </div>
         `;
+        
+        window.updateTotal();
+        window.updateBtnText();
         document.getElementById('confirmModal').style.display = 'flex';
     };
 
     window.closeModal = () => document.getElementById('confirmModal').style.display = 'none';
 
-    // إرسال الطلب وحفظه
+    // تغيير الكمية
+    window.changeQty = (amount) => {
+        if (currentQty + amount < 1) return;
+        currentQty += amount;
+        document.getElementById('qtyDisplay').innerText = currentQty;
+        window.updateTotal();
+    };
+
+    // حساب المجموع
+    window.updateTotal = () => {
+        const total = (selectedPlanData.unitPrice * currentQty).toFixed(2);
+        document.getElementById('totalPriceDisplay').innerText = `$${total}`;
+    };
+
+    // تحديث نص الزر حسب طريقة التواصل
+    window.updateBtnText = () => {
+        const method = document.querySelector('input[name="contactMethod"]:checked').value;
+        const btn = document.getElementById('confirmBtn');
+        if (method === 'whatsapp') {
+            btn.innerHTML = '<span>إرسال عبر واتساب</span> <i class="fab fa-whatsapp"></i>';
+            btn.className = "w-full bg-[#25d366] py-4 rounded-xl font-bold hover:bg-[#128c7e] transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-green-500/20";
+        } else {
+            btn.innerHTML = '<span>إرسال الطلب</span> <i class="fas fa-paper-plane"></i>';
+            btn.className = "w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-blue-500/20";
+        }
+    };
+
+    // تنفيذ الطلب
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
         btn.disabled = true;
-        btn.innerHTML = '<div class="loader"></div> جاري الحجز...';
+
+        const method = document.querySelector('input[name="contactMethod"]:checked').value;
+        const totalPrice = (selectedPlanData.unitPrice * currentQty).toFixed(2);
 
         try {
-            // حفظ الطلب في Firestore
-            await setDoc(doc(db, "orders", currentUser.uid), {
+            // إضافة الطلب لقاعدة البيانات (مجموعة orders)
+            await addDoc(collection(db, "orders"), {
                 uid: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName,
                 plan: selectedPlanData.name,
                 location: selectedPlanData.locName,
-                price: selectedPlanData.finalPrice,
+                price: parseFloat(totalPrice),
+                quantity: currentQty,
+                contactMethod: method,
                 status: "pending",
-                requestedAt: serverTimestamp()
+                timestamp: serverTimestamp()
             });
 
-            // فتح الواتساب
-            const msgBody = 
-                `مرحباً Boneless Hosts 👋\n` +
-                `أرغب في شراء سيرفر جديد:\n\n` +
-                `📦 الباقة: *${selectedPlanData.name}*\n` +
-                `📍 الموقع: *${selectedPlanData.locName}*\n` +
-                `💰 السعر: *$${selectedPlanData.finalPrice}*\n` +
-                `📧 إيميلي: ${currentUser.email}\n\n` +
-                `مرفق صورة التحويل لإتمام التفعيل 📎`;
-
-            const url = `https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msgBody)}`;
-            window.open(url, '_blank');
+            if (method === 'whatsapp') {
+                const msg = `السلام عليكم Boneless Hosts 👋\n\n` +
+                            `طلبت سيرفر جديد:\n` +
+                            `📦 الباقة: *${selectedPlanData.name}*\n` +
+                            `🔢 العدد: *${currentQty}*\n` +
+                            `📍 الموقع: *${selectedPlanData.locName}*\n` +
+                            `💰 الإجمالي: *$${totalPrice}*\n` +
+                            `📧 إيميلي: ${currentUser.email}\n\n` +
+                            `كيف طريقة الدفع؟`;
+                
+                window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                alert("✅ تم استلام طلبك بنجاح!\nسنتواصل معك عبر الإيميل قريباً لإكمال إجراءات الدفع والتفعيل.");
+            }
+            
             window.closeModal();
-
-        } catch (e) {
-            console.error(e);
-            alert("❌ حدث خطأ. تأكد من اتصال الإنترنت.");
+            
+        } catch (error) {
+            console.error(error);
+            alert("حدث خطأ أثناء الاتصال، يرجى المحاولة مرة أخرى.");
         } finally {
+            btn.innerHTML = originalContent;
             btn.disabled = false;
-            btn.innerText = "تأكيد وإرسال الطلب";
         }
     };
 
-    // تسجيل الدخول والخروج والمراقبة
-    document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
-    document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
+    // Auth & Realtime Orders
+    document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider);
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    onAuthStateChanged(auth, (u) => {
-        if (u) {
-            currentUser = u;
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerHTML = `
-                <img src="${u.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
-                <span class="max-w-[100px] truncate">${escapeHtml(u.displayName)}</span>
+                <img src="${user.photoURL}" class="w-8 h-8 rounded-full border border-white/20">
+                <span class="text-sm font-bold hidden md:block">${user.displayName}</span>
             `;
 
-            onSnapshot(doc(db, "orders", u.uid), (docSnap) => {
-                if (docSnap.exists()) {
-                    currentOrder = docSnap.data();
-                    const badge = document.getElementById('statusBadge');
-                    
-                    if (currentOrder.status === 'active') {
-                        badge.classList.remove('hidden', 'text-yellow-500', 'bg-yellow-500/10');
-                        badge.classList.add('text-green-500', 'bg-green-500/10');
-                        badge.innerHTML = '<i class="fas fa-check-circle"></i> السيرفر نشط';
-
-                        if (!localStorage.getItem(`notified_${u.uid}`)) {
-                            alert("🎉 مبروك! تم تفعيل سيرفرك.");
-                            localStorage.setItem(`notified_${u.uid}`, 'true');
-                        }
-                    } else {
-                        badge.classList.remove('hidden');
-                        badge.innerHTML = '<i class="fas fa-clock"></i> بانتظار التفعيل';
-                    }
+            // جلب طلبات المستخدم السابقة
+            const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const ordersList = document.getElementById('ordersList');
+                const myOrdersSection = document.getElementById('myOrdersSection');
+                
+                if (snapshot.empty) {
+                    myOrdersSection.classList.add('hidden');
+                } else {
+                    myOrdersSection.classList.remove('hidden');
+                    ordersList.innerHTML = snapshot.docs.map(doc => {
+                        const data = doc.data();
+                        const statusColor = data.status === 'active' ? 'text-green-500 border-green-500/30 bg-green-500/10' : 'text-yellow-500 border-yellow-500/30 bg-yellow-500/10';
+                        const statusText = data.status === 'active' ? '✅ نشط' : '⏳ قيد المراجعة';
+                        
+                        return `
+                            <div class="bg-[#111] p-4 rounded-xl border border-white/5 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-white">${data.plan} <span class="text-xs text-gray-500">x${data.quantity || 1}</span></div>
+                                    <div class="text-xs text-gray-400">${data.location}</div>
+                                </div>
+                                <div class="text-xs px-3 py-1 rounded-full border ${statusColor} font-bold">
+                                    ${statusText}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
                 }
-                window.renderPlans();
             });
+            
             window.renderPlans();
         } else {
             currentUser = null;
@@ -414,5 +411,6 @@
         }
     });
 </script>
+
 </body>
 </html>
