@@ -17,7 +17,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         
-        /* الخلفية */
         .bg-fixed-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
             background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
@@ -30,7 +29,6 @@
 
         .highlight { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
         
-        /* كرت الباقة */
         .plan-card { 
             background: rgba(20, 20, 20, 0.6); 
             border: 1px solid rgba(255,255,255,0.08); 
@@ -44,11 +42,10 @@
             box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2);
         }
 
-        /* كرت الطلب داخل القائمة */
         .order-history-card {
             background: #1a1a1a;
             border: 1px solid #333;
-            border-right: 4px solid #3b82f6; /* شريط ملون جانبي */
+            border-right: 4px solid #3b82f6;
             transition: 0.2s;
         }
         .order-history-card:hover { background: #222; }
@@ -67,7 +64,6 @@
         .quantity-btn { cursor: pointer; user-select: none; transition: 0.2s; }
         .quantity-btn:active { transform: scale(0.9); }
         
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
@@ -136,14 +132,12 @@
             </div>
         </div>
 
-        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            </div>
+        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
     </div>
 </section>
 
 <div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-sm">
     <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[80vh] flex flex-col relative shadow-2xl">
-        
         <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#151515] rounded-t-3xl">
             <h2 class="text-2xl font-bold text-white flex items-center gap-2">
                 <i class="fas fa-history text-blue-500"></i> سجل طلباتك
@@ -235,7 +229,7 @@
     let currentUser = null;
     let selectedPlanData = null;
     let currentQty = 1;
-    let myOrdersSnapshot = []; // لتخزين الطلبات
+    let myOrdersSnapshot = [];
     const MY_PHONE = "97336464439";
 
     const plans = [
@@ -251,7 +245,7 @@
     // --- Modal Logic ---
     window.openOrdersModal = () => {
         document.getElementById('ordersModal').style.display = 'flex';
-        renderOrdersList(); // تحديث القائمة عند الفتح
+        renderOrdersList();
     };
     window.closeOrdersModal = () => document.getElementById('ordersModal').style.display = 'none';
 
@@ -283,7 +277,9 @@
                 ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-clock' }
                 : { text: 'نشط ويعمل', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-check-circle' };
             
-            const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
+            // استخدام requestedAt إذا وجد، وإلا استخدام timestamp
+            const timeObj = data.requestedAt || data.timestamp;
+            const date = timeObj ? new Date(timeObj.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
             const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope"></i>' : '<i class="fab fa-whatsapp"></i>';
 
             return `
@@ -323,7 +319,7 @@
         }).join('');
     }
 
-    // --- Main Logic (Similar to before) ---
+    // --- Main Logic ---
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
         const selector = document.getElementById('locationSelector');
@@ -397,17 +393,24 @@
             btn.className = "w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-blue-500/20";
         }
     };
-    
+
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         const originalContent = btn.innerHTML;
         btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
         btn.disabled = true;
+
         const method = document.querySelector('input[name="contactMethod"]:checked').value;
         const totalPrice = (selectedPlanData.unitPrice * currentQty).toFixed(2);
+
         try {
             await addDoc(collection(db, "orders"), {
+                // بيانات الحماية
                 uid: currentUser.uid,
+                requestedAt: serverTimestamp(),
+                timestamp: serverTimestamp(), // للعميل
+
+                // التفاصيل
                 email: currentUser.email,
                 name: currentUser.displayName,
                 plan: selectedPlanData.name,
@@ -415,9 +418,9 @@
                 price: parseFloat(totalPrice),
                 quantity: currentQty,
                 contactMethod: method,
-                status: "pending",
-                timestamp: serverTimestamp()
+                status: "pending"
             });
+
             if (method === 'whatsapp') {
                 const msg = `السلام عليكم Boneless Hosts 👋\nطلبت سيرفر جديد:\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice}*\n📧 إيميلي: ${currentUser.email}\nكيف طريقة الدفع؟`;
                 window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -425,9 +428,14 @@
                 alert("✅ تم استلام طلبك بنجاح!\nسنتواصل معك عبر الإيميل قريباً.");
             }
             window.closeModal();
+            
         } catch (error) {
             console.error(error);
-            alert("حدث خطأ أثناء الاتصال.");
+            if (error.code === 'permission-denied') {
+                alert("خطأ: ليس لديك صلاحية لإتمام الطلب. حاول تسجيل الدخول مرة أخرى.");
+            } else {
+                alert("حدث خطأ أثناء الاتصال.");
+            }
         } finally {
             btn.innerHTML = originalContent;
             btn.disabled = false;
@@ -447,7 +455,7 @@
                 <img src="${user.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
                 <span class="max-w-[100px] truncate">${user.displayName}</span>`;
             
-            // Listen for orders
+            // الاستماع للطلبات
             const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
                 myOrdersSnapshot = snapshot.docs;
@@ -459,7 +467,14 @@
                     badge.classList.add('hidden');
                 }
                 renderOrdersList();
+            }, (error) => {
+                console.error("Firestore Error:", error);
+                if (error.code === 'failed-precondition') {
+                    console.log("⚠️ ملاحظة هامة: يجب إنشاء Index في الفايربيس لكي تعمل قائمة الطلبات.");
+                    console.log("انسخ الرابط الموجود في رسالة الخطأ في الكونسول وافتحه لإنشاء الـ Index تلقائياً.");
+                }
             });
+            
             window.renderPlans();
         } else {
             currentUser = null;
