@@ -45,10 +45,13 @@
         .order-history-card {
             background: #1a1a1a;
             border: 1px solid #333;
-            border-right: 4px solid #3b82f6;
             transition: 0.2s;
         }
         .order-history-card:hover { background: #222; }
+        
+        /* ألوان الحالات */
+        .card-active { border-right: 4px solid #22c55e; } /* أخضر للنشط */
+        .card-pending { border-right: 4px solid #eab308; } /* أصفر للانتظار */
 
         .whatsapp-float {
             position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
@@ -137,17 +140,17 @@
 </section>
 
 <div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-sm">
-    <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[80vh] flex flex-col relative shadow-2xl">
+    <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[85vh] flex flex-col relative shadow-2xl">
         <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#151515] rounded-t-3xl">
             <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                <i class="fas fa-history text-blue-500"></i> سجل طلباتك
+                <i class="fas fa-history text-blue-500"></i> طلباتي
             </h2>
             <button onclick="window.closeOrdersModal()" class="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-all">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
-        <div id="ordersListContent" class="flex-1 overflow-y-auto p-6 space-y-4">
+        <div id="ordersListContent" class="flex-1 overflow-y-auto p-6">
             <div class="text-center py-20 text-gray-500">
                 <i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i>
                 <p>جاري تحميل الطلبات...</p>
@@ -253,7 +256,7 @@
         navigator.clipboard.writeText(id).then(() => alert("تم نسخ رقم الطلب: " + id));
     };
 
-    // --- Rendering Orders ---
+    // --- Rendering Orders (The Update You Wanted) ---
     function renderOrdersList() {
         const container = document.getElementById('ordersListContent');
         
@@ -268,22 +271,26 @@
             return;
         }
 
-        container.innerHTML = myOrdersSnapshot.map(doc => {
+        // 1. فرز الطلبات (نشطة vs قيد الانتظار)
+        const activeOrders = myOrdersSnapshot.filter(doc => doc.data().status === 'active');
+        const pendingOrders = myOrdersSnapshot.filter(doc => doc.data().status !== 'active');
+
+        // 2. دالة لرسم البطاقة
+        const createCard = (doc) => {
             const data = doc.data();
             const id = doc.id;
             const isPending = data.status !== 'active';
             
             const statusConfig = isPending 
-                ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-clock' }
-                : { text: 'نشط ويعمل', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-check-circle' };
+                ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-clock', cardClass: 'card-pending' }
+                : { text: 'نشط ويعمل', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-check-circle', cardClass: 'card-active' };
             
-            // استخدام requestedAt إذا وجد، وإلا استخدام timestamp
             const timeObj = data.requestedAt || data.timestamp;
             const date = timeObj ? new Date(timeObj.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
             const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope"></i>' : '<i class="fab fa-whatsapp"></i>';
 
             return `
-            <div class="order-history-card p-5 rounded-2xl relative mb-4">
+            <div class="order-history-card p-5 rounded-2xl relative mb-4 ${statusConfig.cardClass}">
                 <div class="flex justify-between items-start mb-3">
                     <div class="flex items-center gap-3">
                         <span class="bg-blue-600 text-white font-bold px-3 py-1 rounded-lg text-sm">${data.plan}</span>
@@ -316,7 +323,34 @@
                 </div>
             </div>
             `;
-        }).join('');
+        };
+
+        // 3. بناء الـ HTML المقسم
+        let html = '';
+
+        if (activeOrders.length > 0) {
+            html += `
+                <div class="mb-6">
+                    <h3 class="text-green-500 font-bold mb-3 flex items-center gap-2">
+                        <i class="fas fa-server"></i> سيرفراتك النشطة (${activeOrders.length})
+                    </h3>
+                    ${activeOrders.map(createCard).join('')}
+                </div>
+            `;
+        }
+
+        if (pendingOrders.length > 0) {
+            html += `
+                <div class="mb-6">
+                    <h3 class="text-yellow-500 font-bold mb-3 flex items-center gap-2">
+                        <i class="fas fa-hourglass-half"></i> طلبات قيد المراجعة (${pendingOrders.length})
+                    </h3>
+                    ${pendingOrders.map(createCard).join('')}
+                </div>
+            `;
+        }
+
+        container.innerHTML = html;
     }
 
     // --- Main Logic ---
@@ -405,12 +439,10 @@
 
         try {
             await addDoc(collection(db, "orders"), {
-                // بيانات الحماية
                 uid: currentUser.uid,
                 requestedAt: serverTimestamp(),
                 timestamp: serverTimestamp(), // للعميل
 
-                // التفاصيل
                 email: currentUser.email,
                 name: currentUser.displayName,
                 plan: selectedPlanData.name,
@@ -456,7 +488,12 @@
                 <span class="max-w-[100px] truncate">${user.displayName}</span>`;
             
             // الاستماع للطلبات
-            const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("timestamp", "desc"));
+            const q = query(
+                collection(db, "orders"), 
+                where("uid", "==", user.uid), 
+                orderBy("requestedAt", "desc")
+            );
+
             onSnapshot(q, (snapshot) => {
                 myOrdersSnapshot = snapshot.docs;
                 const badge = document.getElementById('ordersBadge');
@@ -470,8 +507,7 @@
             }, (error) => {
                 console.error("Firestore Error:", error);
                 if (error.code === 'failed-precondition') {
-                    console.log("⚠️ ملاحظة هامة: يجب إنشاء Index في الفايربيس لكي تعمل قائمة الطلبات.");
-                    console.log("انسخ الرابط الموجود في رسالة الخطأ في الكونسول وافتحه لإنشاء الـ Index تلقائياً.");
+                    console.log("⚠️ يجب إنشاء Index في الفايربيس.");
                 }
             });
             
