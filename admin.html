@@ -7,58 +7,87 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; }
-        .order-card { background: #111; border: 1px solid #222; border-radius: 15px; transition: 0.3s; }
-        .order-card:hover { border-color: #00d4ff; }
-        /* تحسينات لأزرار التفاعل */
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background: #050505; color: white; }
+        
+        /* تصميم البطاقات */
+        .order-card { 
+            background: #111; 
+            border: 1px solid #222; 
+            border-radius: 16px; 
+            transition: 0.3s; 
+            position: relative;
+            overflow: hidden;
+        }
+        .order-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        
+        /* حالة التفعيل */
+        .order-card.active { border-color: rgba(34, 197, 94, 0.3); background: rgba(20, 83, 45, 0.1); }
+        
+        /* شريط التمرير */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
-<body class="p-6">
+<body class="p-4 md:p-8 min-h-screen">
 
-    <div class="max-w-6xl mx-auto">
-        <header class="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
-            <div>
-                <h1 class="text-3xl font-bold italic">BONELESS <span class="text-blue-500">ADMIN</span></h1>
-                <p class="text-gray-500 text-sm">إدارة طلبات سيرفرات VPS-6 (محمية)</p>
+    <div class="max-w-7xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-white/10 pb-6 gap-4">
+            <div class="text-center md:text-right">
+                <h1 class="text-3xl font-black italic tracking-wide">BONELESS <span class="text-blue-500">ADMIN</span></h1>
+                <p class="text-gray-500 text-xs mt-1">نظام إدارة الطلبات المركزية v2.0</p>
             </div>
-            <div id="adminInfo" class="text-sm bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full border border-blue-500/20">
-                جاري التحقق...
+            
+            <div class="flex items-center gap-4">
+                <div id="adminInfo" class="text-sm bg-white/5 text-gray-300 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    جاري التحقق...
+                </div>
+                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-full text-sm font-bold transition-all">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
             </div>
         </header>
 
-        <div id="stats" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="order-card p-6 text-center">
-                <span class="text-gray-500 block mb-2">طلبات بانتظار الدفع</span>
+        <div class="flex flex-col md:flex-row gap-6 mb-8">
+            <div class="bg-[#111] p-6 rounded-2xl border border-white/10 flex-1 flex items-center justify-between">
+                <div>
+                    <span class="text-gray-500 text-sm block mb-1">طلبات جديدة</span>
+                    <span class="text-xs text-gray-600">بانتظار التحقق والدفع</span>
+                </div>
                 <span id="pendingCount" class="text-4xl font-black text-yellow-500">0</span>
+            </div>
+
+            <div class="flex-[2] relative">
+                <input type="text" id="searchInput" placeholder="بحث باسم العميل، الإيميل، أو رقم الطلب..." 
+                    class="w-full h-full bg-[#111] border border-white/10 rounded-2xl px-12 py-4 outline-none focus:border-blue-500 transition-colors text-white placeholder-gray-600">
+                <i class="fas fa-search absolute top-1/2 right-5 transform -translate-y-1/2 text-gray-500"></i>
             </div>
         </div>
 
-        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-            <i class="fas fa-list text-blue-500"></i> قائمة الطلبات الحالية
-        </h2>
-
-        <div id="authError" class="hidden text-center text-red-500 py-10 bg-red-900/10 rounded-xl border border-red-500/20">
+        <div id="authError" class="hidden text-center text-red-400 py-8 bg-red-900/10 rounded-2xl border border-red-500/20 mb-6">
             <i class="fas fa-lock text-3xl mb-2"></i>
             <p>فشل التحميل: ليس لديك صلاحية الوصول لقاعدة البيانات.</p>
         </div>
 
-        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
+        <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <div id="noOrders" class="hidden text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
-            <i class="fas fa-inbox text-5xl text-gray-700 mb-4"></i>
-            <p class="text-gray-500">لا توجد طلبات جديدة حالياً</p>
+        <div id="noOrders" class="hidden text-center py-24 bg-white/5 rounded-3xl border border-dashed border-white/10">
+            <div class="bg-white/5 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-inbox text-4xl text-gray-600"></i>
+            </div>
+            <p class="text-gray-400 font-bold text-lg">لا توجد طلبات للعرض</p>
+            <p class="text-gray-600 text-sm">أنت جاهز تماماً!</p>
         </div>
     </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDEwXwXNHz57g4vrZ_1sUJ_NF8UXL1A5G8",
         authDomain: "boneless-hosts-req.firebaseapp.com",
@@ -72,129 +101,186 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // هذا المتغير للواجهة فقط، الحماية الحقيقية في Firestore Rules
+    // ضع إيميلك هنا ليتم التحقق منه ظاهرياً
     const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
+    let allOrdersData = []; // لتخزين البيانات من أجل البحث
 
-    // دالة لتنظيف النصوص لمنع ثغرات XSS
     function escapeHtml(text) {
         if (!text) return "";
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
+
+    // نسخ النصوص للحافظة
+    window.copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("تم النسخ: " + text);
+        });
+    };
+
+    // تسجيل الخروج
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        signOut(auth).then(() => window.location.reload());
+    });
+
+    // البحث
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allOrdersData.filter(o => 
+            o.name.toLowerCase().includes(term) || 
+            o.email.toLowerCase().includes(term) || 
+            o.id.toLowerCase().includes(term)
+        );
+        renderOrders(filtered);
+    });
 
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
             document.body.innerHTML = `
-            <div class="h-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
-                <i class="fas fa-user-shield text-6xl text-red-600"></i>
-                <h1 class="text-2xl font-bold text-red-500">وصول مرفوض</h1>
-                <p class="text-gray-400 text-center">يجب تسجيل الدخول بحساب الأدمن.</p>
-                <a href="index.html" class="bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-gray-200 transition">العودة</a>
+            <div class="h-screen flex items-center justify-center flex-col gap-6 bg-[#050505] text-white p-4 text-center">
+                <div class="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/20">
+                    <i class="fas fa-shield-alt text-5xl text-red-600"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">منطقة محظورة</h1>
+                    <p class="text-gray-500">يجب تسجيل الدخول بحساب المسؤول للوصول لهذه الصفحة.</p>
+                </div>
+                <a href="index.html" class="bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition shadow-lg">العودة للرئيسية</a>
             </div>`;
         } else {
-            document.getElementById('adminInfo').innerText = `أهلاً بك، ${escapeHtml(user.displayName)}`;
+            document.getElementById('adminInfo').innerHTML = `
+                <i class="fas fa-user-shield text-blue-400"></i>
+                ${escapeHtml(user.displayName || user.email)}
+            `;
             loadOrders();
         }
     });
 
     function loadOrders() {
-        const ordersList = document.getElementById('ordersList');
-        const pendingCount = document.getElementById('pendingCount');
-        const authError = document.getElementById('authError');
-
-        // ترتيب الطلبات حسب التاريخ (الأحدث أولاً)
         const q = query(collection(db, "orders"), orderBy("requestedAt", "desc"));
 
         onSnapshot(q, (snapshot) => {
-            const orders = [];
+            allOrdersData = [];
             let pendingCounter = 0;
 
             snapshot.forEach(doc => {
                 const data = doc.data();
                 if (data.status !== 'active') pendingCounter++;
-                orders.push({ id: doc.id, ...data });
+                allOrdersData.push({ id: doc.id, ...data });
             });
 
-            pendingCount.innerText = pendingCounter;
-            authError.classList.add('hidden'); // إخفاء رسالة الخطأ إذا نجح الاتصال
-
-            if (orders.length === 0) {
-                ordersList.innerHTML = "";
-                document.getElementById('noOrders').classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('noOrders').classList.add('hidden');
-            
-            ordersList.innerHTML = orders.map(order => {
-                const isActivated = order.status === 'active';
-                const date = order.requestedAt ? new Date(order.requestedAt.seconds * 1000).toLocaleString('ar-BH') : 'غير محدد';
-                
-                return `
-                <div class="order-card p-6 flex flex-col justify-between ${isActivated ? 'border-green-500/30 bg-green-900/10' : ''}">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-1 rounded font-bold">${escapeHtml(order.plan)}</span>
-                            <span class="text-[10px] text-gray-600" dir="ltr">${date}</span>
-                        </div>
-                        <h3 class="font-bold text-lg mb-1">${escapeHtml(order.name)}</h3>
-                        <p class="text-sm text-gray-500 mb-4 select-all">${escapeHtml(order.email)}</p>
-                        ${isActivated ? '<span class="text-xs text-green-500 font-bold mb-2 block"><i class="fas fa-check-circle"></i> تم التفعيل</span>' : ''}
-                    </div>
-                    
-                    <div class="flex gap-2 mt-2">
-                        ${!isActivated ? `
-                        <button onclick="window.activateOrder('${order.id}')" class="flex-1 bg-green-600 hover:bg-green-500 py-2 rounded-lg text-xs font-bold transition-all text-white shadow-lg shadow-green-900/20">
-                            تأكيد واستلام المبلغ
-                        </button>
-                        ` : `
-                        <button disabled class="flex-1 bg-gray-700 py-2 rounded-lg text-xs font-bold text-gray-400 cursor-not-allowed">
-                            مفعل
-                        </button>
-                        `}
-                        
-                        <button onclick="window.cancelOrder('${order.id}')" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-2 rounded-lg transition-all w-10 h-10 flex items-center justify-center">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `}).join('');
+            document.getElementById('pendingCount').innerText = pendingCounter;
+            document.getElementById('authError').classList.add('hidden');
+            renderOrders(allOrdersData);
 
         }, (error) => {
-            console.error("Error getting documents: ", error);
+            console.error("Error:", error);
             if(error.code === 'permission-denied') {
-                ordersList.innerHTML = "";
-                authError.classList.remove('hidden');
+                document.getElementById('ordersList').innerHTML = "";
+                document.getElementById('authError').classList.remove('hidden');
             }
         });
     }
 
-    // ربط الدوال بالنافذة (Window) لتعمل مع onclick
+    function renderOrders(orders) {
+        const list = document.getElementById('ordersList');
+        
+        if (orders.length === 0) {
+            list.innerHTML = "";
+            document.getElementById('noOrders').classList.remove('hidden');
+            return;
+        }
+
+        document.getElementById('noOrders').classList.add('hidden');
+        
+        list.innerHTML = orders.map(order => {
+            const isActivated = order.status === 'active';
+            const date = order.requestedAt ? new Date(order.requestedAt.seconds * 1000).toLocaleDateString('ar-BH') : 'غير محدد';
+            const contactIcon = order.contactMethod === 'email' ? '<i class="fas fa-envelope text-blue-400"></i>' : '<i class="fab fa-whatsapp text-green-400"></i>';
+            const locationDisplay = order.location || 'غير محدد';
+
+            return `
+            <div class="order-card p-5 flex flex-col justify-between ${isActivated ? 'active' : ''}">
+                
+                <div class="flex justify-between items-start mb-4 border-b border-white/5 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider">${escapeHtml(order.plan)}</span>
+                        ${isActivated 
+                            ? '<span class="bg-green-500/20 text-green-400 text-[10px] px-2 py-1 rounded font-bold">نشط</span>' 
+                            : '<span class="bg-yellow-500/20 text-yellow-500 text-[10px] px-2 py-1 rounded font-bold animate-pulse">جديد</span>'}
+                    </div>
+                    <button onclick="window.copyToClipboard('${order.id}')" class="text-gray-600 hover:text-white text-xs" title="نسخ ID">
+                        <i class="fas fa-hashtag"></i>
+                    </button>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="font-bold text-lg text-white mb-1 flex items-center gap-2">
+                        ${escapeHtml(order.name)}
+                        <span class="text-xs bg-white/5 p-1 rounded border border-white/10" title="طريقة التواصل">${contactIcon}</span>
+                    </h3>
+                    <div class="flex items-center gap-2 text-sm text-gray-400 mb-2 group cursor-pointer" onclick="window.copyToClipboard('${order.email}')">
+                        <span class="truncate max-w-[200px]">${escapeHtml(order.email)}</span>
+                        <i class="fas fa-copy text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-6 bg-black/30 p-3 rounded-xl border border-white/5 text-xs">
+                    <div class="text-gray-400">الموقع:</div>
+                    <div class="text-right font-bold text-white flex justify-end gap-1 items-center">
+                        <i class="fas fa-map-marker-alt text-red-500"></i> ${escapeHtml(locationDisplay)}
+                    </div>
+                    
+                    <div class="text-gray-400">الكمية:</div>
+                    <div class="text-right font-bold text-white">${order.quantity || 1} سيرفر</div>
+                    
+                    <div class="text-gray-400">الإجمالي:</div>
+                    <div class="text-right font-bold text-blue-400 text-sm">$${order.price}</div>
+                    
+                    <div class="text-gray-400">التاريخ:</div>
+                    <div class="text-right text-gray-500 font-mono">${date}</div>
+                </div>
+
+                <div class="mt-auto pt-2 flex gap-3">
+                    ${!isActivated ? `
+                    <button onclick="window.activateOrder('${order.id}')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-xl text-xs font-bold transition-all text-white shadow-lg shadow-green-900/20 flex items-center justify-center gap-2 group">
+                        <i class="fas fa-check-circle text-sm group-hover:scale-110 transition-transform"></i> تأكيد وتفعيل
+                    </button>
+                    ` : `
+                    <div class="flex-1 bg-green-500/5 border border-green-500/20 text-green-500 py-2 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2">
+                        <i class="fas fa-check"></i> تم التفعيل
+                    </div>
+                    `}
+                    
+                    <button onclick="window.cancelOrder('${order.id}')" class="bg-red-500/10 hover:bg-red-500 border border-red-500/20 text-red-500 hover:text-white px-4 rounded-xl transition-all flex items-center justify-center" title="حذف الطلب">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    // دوال التحكم
     window.activateOrder = async (id) => {
-        if(confirm("هل تأكدت من استلام المبلغ وتريد تفعيل السيرفر؟")) {
+        if(confirm("هل تم استلام المبلغ؟ سيتم تحويل حالة الطلب إلى (نشط).")) {
             try {
-                // نحدث حالة الطلب في قاعدة البيانات بدلاً من LocalStorage
                 await updateDoc(doc(db, "orders", id), { 
                     status: "active",
                     activatedAt: new Date()
                 });
-                alert("تم تحديث حالة الطلب ✅");
             } catch (error) {
-                alert("حدث خطأ: " + error.message);
+                alert("خطأ: " + error.message);
             }
         }
     };
 
     window.cancelOrder = async (id) => {
-        if(confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟")) {
+        const reason = prompt("هل أنت متأكد من الحذف؟ اكتب 'حذف' للتأكيد:");
+        if(reason === "حذف") {
             try {
                 await deleteDoc(doc(db, "orders", id));
             } catch (error) {
-                alert("حدث خطأ في الحذف: " + error.message);
+                alert("خطأ: " + error.message);
             }
         }
     };
