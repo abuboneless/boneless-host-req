@@ -7,7 +7,7 @@
     <title>Boneless Hosts | استضافة سيرفرات ماين كرافت</title>
     <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة.">
     <link rel="icon" href="./logo.png">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#050505">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -17,41 +17,70 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         
+        /* الخلفية الأساسية */
         .bg-fixed-image {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3;
             background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
         }
         .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            /* تغميق الخلفية قليلاً لتبريز اللوجو الفضي */
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(8px);
         }
 
-        /* تعديل الإضاءة لتكون فضية/بيضاء لتناسب اللوجو */
-        .highlight { color: #e4e4e7; text-shadow: 0 0 20px rgba(228, 228, 231, 0.5); }
+        /* شبكة ماين كرافت المتحركة */
+        .animated-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            animation: moveGrid 20s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* حركة طفو اللوجو 3D */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+
+        /* إضاءة اللوجو النابضة */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        .pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
         
+        /* تدرج الألوان المعدني للنصوص */
+        .text-metallic {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 50%, #52525b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .plan-card { 
-            background: rgba(20, 20, 20, 0.6); 
-            border: 1px solid rgba(255,255,255,0.08); 
+            background: rgba(15, 15, 15, 0.7); 
+            border: 1px solid rgba(255,255,255,0.05); 
             border-radius: 20px; 
-            transition: all 0.3s ease; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            backdrop-filter: blur(10px);
         }
         .plan-card:hover { 
-            /* تعديل تأثير الهوفر ليكون معدني/رمادي */
             border-color: #a1a1aa; 
-            transform: translateY(-5px); 
-            background: rgba(30, 30, 30, 0.9);
-            box-shadow: 0 10px 40px -10px rgba(161, 161, 170, 0.2);
+            transform: translateY(-10px) scale(1.02); 
+            background: rgba(25, 25, 25, 0.9);
+            box-shadow: 0 15px 35px -5px rgba(161, 161, 170, 0.3);
         }
 
-        .order-history-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            transition: 0.2s;
-        }
-        .order-history-card:hover { background: #222; }
-        
+        .order-history-card { background: #111; border: 1px solid #222; transition: 0.2s; }
+        .order-history-card:hover { background: #1a1a1a; border-color: #333; }
         .card-active { border-right: 4px solid #22c55e; } 
         .card-pending { border-right: 4px solid #eab308; } 
 
@@ -59,84 +88,86 @@
             position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
             border-radius: 50px; width: 60px; height: 60px; 
             display: flex; align-items: center; justify-content: center; font-size: 30px; 
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); z-index: 100; transition: 0.3s;
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4); z-index: 100; transition: 0.3s;
         }
-        .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); background-color: #128c7e; }
 
-        /* تعديل لون اللودينج */
-        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #a1a1aa; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; }
+        .loader { border: 2px solid #333; border-top: 2px solid #a1a1aa; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .quantity-btn { cursor: pointer; user-select: none; transition: 0.2s; }
-        .quantity-btn:active { transform: scale(0.9); }
-        
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #666; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
     </style>
 </head>
 <body>
 
 <div class="bg-fixed-image"></div>
 <div class="bg-overlay"></div>
+<div class="animated-grid"></div>
 
 <a href="https://wa.me/97336464439" target="_blank" class="whatsapp-float">
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<section id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-    <div class="max-w-3xl animate-fade-in-up">
-        <img src="./logo.png" alt="Boneless Hosts Logo" class="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)] object-contain transition-transform hover:scale-105 duration-300">
+<section id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 text-center relative z-10">
+    <div class="max-w-3xl">
+        <div class="relative w-48 h-48 mx-auto mb-10 animate-float">
+            <div class="absolute inset-0 bg-zinc-500 blur-[50px] rounded-full pulse-glow z-0"></div>
+            <img src="./logo.png" alt="Boneless Hosts Logo" class="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)]">
+        </div>
         
-        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">
-            Boneless <span class="highlight">Hosts</span>
+        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight text-metallic drop-shadow-2xl">
+            Boneless Hosts
         </h1>
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 font-light leading-relaxed">
-            استضافة سيرفرات ماين كرافت <span class="text-zinc-300 font-bold">احترافية</span>.<br>
-            أداء عالي، حماية شاملة، ودعم فني مستمر.
+        <p class="text-xl md:text-2xl text-zinc-400 mb-10 font-light leading-relaxed">
+            استضافة سيرفرات ماين كرافت <span class="text-zinc-200 font-bold">بأداء خارق</span>.<br>
+            حماية كاملة، بنية تحتية قوية، جاهزة للعب فوراً.
         </p>
-        <button id="googleSignIn" class="group bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-zinc-300 transition-all shadow-xl hover:shadow-white/20 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
-            <i class="fab fa-google text-xl transition-colors"></i>
+        <button id="googleSignIn" class="group bg-zinc-100 text-black px-8 py-4 rounded-xl font-bold text-lg hover:bg-zinc-300 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
+            <i class="fab fa-google text-xl text-zinc-800"></i>
             <span>تسجيل الدخول للبدء</span>
         </button>
     </div>
 </section>
 
-<section id="packagesPage" class="min-h-screen pb-20 hidden">
-    <nav class="bg-black/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+<section id="packagesPage" class="min-h-screen pb-20 hidden relative z-10">
+    <nav class="bg-black/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             
-            <div class="flex items-center gap-3">
-                <img src="./logo.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow-md">
-                <div class="text-2xl font-black text-gray-100">Boneless <span class="highlight">Hosts</span></div>
+            <div class="flex items-center gap-4 group cursor-pointer">
+                <div class="relative w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-zinc-800 to-black border border-zinc-700/50 shadow-[0_0_15px_rgba(161,161,170,0.1)] group-hover:shadow-[0_0_25px_rgba(161,161,170,0.4)] transition-all duration-300 transform group-hover:-rotate-6 group-hover:scale-110">
+                    <img src="./logo.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow-lg">
+                </div>
+                <div class="text-3xl font-black text-metallic tracking-wide">Boneless</div>
             </div>
             
             <div class="flex flex-wrap justify-center gap-4 items-center">
-                <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10 text-sm"></div>
+                <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5 text-sm font-bold text-zinc-300"></div>
                 
-                <button onclick="window.openOrdersModal()" class="bg-zinc-700/30 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-500/50 px-5 py-2 rounded-full font-bold transition-all flex items-center gap-2">
+                <button onclick="window.openOrdersModal()" class="bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-600/50 px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 hover:shadow-[0_0_15px_rgba(161,161,170,0.3)]">
                     <i class="fas fa-box-open"></i> طلباتي
-                    <span id="ordersBadge" class="bg-red-500 text-white text-[10px] px-1.5 rounded-full hidden">0</span>
+                    <span id="ordersBadge" class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full hidden">0</span>
                 </button>
 
-                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-full transition-all text-sm font-bold">
-                    <i class="fas fa-sign-out-alt"></i> خروج
+                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2.5 rounded-xl transition-all text-sm font-bold">
+                    <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto px-6 py-10">
-        <div class="text-center mb-10 pt-5">
-            <h2 class="text-4xl font-bold mb-3">سيرفر جديد؟</h2>
-            <p class="text-gray-400">اختر المواصفات التي تناسبك وابدأ اللعب فوراً</p>
+    <div class="container mx-auto px-6 py-12">
+        <div class="text-center mb-14 pt-5">
+            <h2 class="text-4xl md:text-5xl font-black mb-4 text-metallic">جاهز تبدأ سيرفرك؟</h2>
+            <p class="text-zinc-400 text-lg">اختر المواصفات، حدد الموقع، وابدأ رحلتك فوراً</p>
         </div>
 
-        <div class="flex justify-center mb-10">
-            <div class="bg-[#151515] p-2 rounded-xl border border-white/10 flex items-center gap-3 shadow-lg">
-                <span class="text-gray-400 text-sm font-bold px-2">📍 الموقع:</span>
-                <select id="locationSelector" onchange="window.renderPlans()" class="bg-black text-white py-2 px-4 rounded-lg border border-gray-700 outline-none focus:border-zinc-500 font-bold cursor-pointer">
+        <div class="flex justify-center mb-12">
+            <div class="bg-black/50 p-2 rounded-2xl border border-zinc-800 flex items-center gap-3 shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                <span class="text-zinc-400 text-sm font-bold px-3"><i class="fas fa-globe-americas mr-1"></i> الموقع:</span>
+                <select id="locationSelector" onchange="window.renderPlans()" class="bg-zinc-900 text-white py-2.5 px-5 rounded-xl border border-zinc-700 outline-none focus:border-zinc-400 font-bold cursor-pointer transition-colors">
                     <option value="us">🇺🇸 أمريكا (USA)</option>
                     <option value="de">🇩🇪 ألمانيا (Germany)</option>
                     <option value="sg">🇸🇬 سنغافورة (Singapore)</option>
@@ -144,76 +175,76 @@
             </div>
         </div>
 
-        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </div>
 </section>
 
-<div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-sm">
-    <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[85vh] flex flex-col relative shadow-2xl">
-        <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#151515] rounded-t-3xl">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                <i class="fas fa-history text-zinc-400"></i> طلباتي
+<div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-md">
+    <div class="bg-[#0a0a0a] border border-zinc-800 rounded-3xl w-full max-w-2xl h-[85vh] flex flex-col relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+        <div class="p-6 border-b border-zinc-800 flex justify-between items-center bg-[#111] rounded-t-3xl">
+            <h2 class="text-2xl font-black text-metallic flex items-center gap-3">
+                <i class="fas fa-history text-zinc-500"></i> سجل الطلبات
             </h2>
-            <button onclick="window.closeOrdersModal()" class="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-all">
+            <button onclick="window.closeOrdersModal()" class="text-zinc-500 hover:text-white bg-zinc-900 hover:bg-zinc-800 w-10 h-10 rounded-full flex items-center justify-center transition-all">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
-        <div id="ordersListContent" class="flex-1 overflow-y-auto p-6">
-            <div class="text-center py-20 text-gray-500">
-                <i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i>
-                <p>جاري تحميل الطلبات...</p>
-            </div>
-        </div>
+        <div id="ordersListContent" class="flex-1 overflow-y-auto p-6 scroll-smooth"></div>
     </div>
 </div>
 
-<div id="confirmModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[200] p-4 backdrop-blur-md overflow-y-auto">
-    <div class="bg-[#151515] border border-white/10 p-6 md:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl my-auto">
-        <button onclick="window.closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-white transition-colors">
-            <i class="fas fa-times text-xl"></i>
+<div id="confirmModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[200] p-4 backdrop-blur-lg overflow-y-auto">
+    <div class="bg-[#0a0a0a] border border-zinc-800 p-6 md:p-8 rounded-3xl w-full max-w-lg relative shadow-[0_0_40px_rgba(161,161,170,0.1)] my-auto">
+        <button onclick="window.closeModal()" class="absolute top-5 left-5 text-zinc-600 hover:text-white transition-colors bg-zinc-900 w-8 h-8 rounded-full flex items-center justify-center">
+            <i class="fas fa-times"></i>
         </button>
         
-        <h2 class="text-2xl font-bold mb-6 text-center text-white">تأكيد تفاصيل الطلب 🛠️</h2>
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-zinc-900 border border-zinc-700 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-inner">
+                <i class="fas fa-server text-2xl text-zinc-300"></i>
+            </div>
+            <h2 class="text-2xl font-black text-metallic">تأكيد إعدادات السيرفر</h2>
+        </div>
         
-        <div id="planDetails" class="bg-black/40 p-5 rounded-xl border border-white/5 mb-6 space-y-3"></div>
+        <div id="planDetails" class="bg-[#111] p-5 rounded-2xl border border-zinc-800 mb-6 space-y-4"></div>
 
-        <div class="mb-6">
-            <label class="block text-sm text-gray-400 mb-2 font-bold">عدد السيرفرات المطلوبة:</label>
-            <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-2">
-                <button onclick="window.changeQty(-1)" class="quantity-btn bg-white/10 hover:bg-white/20 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">-</button>
-                <span id="qtyDisplay" class="text-xl font-bold">1</span>
-                <button onclick="window.changeQty(1)" class="quantity-btn bg-zinc-600 hover:bg-zinc-500 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">+</button>
+        <div class="mb-6 bg-[#111] p-5 rounded-2xl border border-zinc-800">
+            <label class="block text-sm text-zinc-400 mb-3 font-bold">الكمية المطلوبة:</label>
+            <div class="flex items-center justify-between bg-black border border-zinc-800 rounded-xl p-2">
+                <button onclick="window.changeQty(-1)" class="w-12 h-12 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xl font-bold transition-colors">-</button>
+                <span id="qtyDisplay" class="text-2xl font-black text-white">1</span>
+                <button onclick="window.changeQty(1)" class="w-12 h-12 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white text-xl font-bold transition-colors">+</button>
             </div>
         </div>
 
         <div class="mb-8">
-            <label class="block text-sm text-gray-400 mb-3 font-bold">طريقة التواصل:</label>
+            <label class="block text-sm text-zinc-400 mb-3 font-bold">طريقة استلام الطلب:</label>
             <div class="grid grid-cols-2 gap-4">
                 <label class="cursor-pointer">
                     <input type="radio" name="contactMethod" value="whatsapp" checked class="peer hidden" onchange="window.updateBtnText()">
-                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-green-500 peer-checked:bg-green-500/10 transition-all text-center">
-                        <i class="fab fa-whatsapp text-2xl mb-1 text-green-500"></i>
-                        <div class="text-xs font-bold">واتساب</div>
+                    <div class="p-4 rounded-2xl border border-zinc-800 bg-[#111] peer-checked:border-green-500 peer-checked:bg-green-500/10 transition-all text-center">
+                        <i class="fab fa-whatsapp text-3xl mb-2 text-green-500"></i>
+                        <div class="text-sm font-bold">واتساب</div>
                     </div>
                 </label>
                 <label class="cursor-pointer">
                     <input type="radio" name="contactMethod" value="email" class="peer hidden" onchange="window.updateBtnText()">
-                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-zinc-400 peer-checked:bg-zinc-500/10 transition-all text-center">
-                        <i class="fas fa-envelope text-2xl mb-1 text-zinc-400"></i>
-                        <div class="text-xs font-bold">الإيميل</div>
+                    <div class="p-4 rounded-2xl border border-zinc-800 bg-[#111] peer-checked:border-zinc-400 peer-checked:bg-zinc-500/20 transition-all text-center">
+                        <i class="fas fa-envelope text-3xl mb-2 text-zinc-400"></i>
+                        <div class="text-sm font-bold">الإيميل</div>
                     </div>
                 </label>
             </div>
         </div>
 
-        <div class="border-t border-white/10 pt-4 flex flex-col gap-2">
-            <div class="flex justify-between items-center text-lg font-bold mb-4">
-                <span class="text-gray-400">الإجمالي النهائي:</span>
-                <span id="totalPriceDisplay" class="text-zinc-200 text-2xl">$0.00</span>
+        <div class="border-t border-zinc-800 pt-6 flex flex-col gap-4">
+            <div class="flex justify-between items-end mb-2">
+                <span class="text-zinc-400 font-bold">الإجمالي:</span>
+                <span id="totalPriceDisplay" class="text-white text-4xl font-black drop-shadow-md">$0.00</span>
             </div>
             
-            <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-zinc-700 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-zinc-500/20 hover:bg-zinc-600 transition-all text-white flex justify-center items-center gap-2 text-lg">
+            <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-zinc-200 text-black py-4 rounded-xl font-black hover:bg-white transition-all flex justify-center items-center gap-2 text-lg shadow-[0_5px_20px_rgba(255,255,255,0.1)]">
             </button>
         </div>
     </div>
@@ -269,10 +300,10 @@
         
         if (myOrdersSnapshot.length === 0) {
             container.innerHTML = `
-                <div class="text-center py-20 opacity-50">
-                    <i class="fas fa-ghost text-6xl mb-4 text-gray-600"></i>
-                    <p class="text-xl font-bold">لا توجد طلبات سابقة</p>
-                    <p class="text-sm">اطلب سيرفرك الأول الآن!</p>
+                <div class="flex flex-col items-center justify-center h-full opacity-40">
+                    <i class="fas fa-box-open text-7xl mb-6 text-zinc-600"></i>
+                    <p class="text-2xl font-black text-metallic">لا توجد طلبات سابقة</p>
+                    <p class="text-zinc-400 mt-2">عالمك الخاص في ماين كرافت بانتظارك!</p>
                 </div>
             `;
             return;
@@ -287,43 +318,43 @@
             const isPending = data.status !== 'active';
             
             const statusConfig = isPending 
-                ? { text: 'قيد المراجعة', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-clock', cardClass: 'card-pending' }
-                : { text: 'نشط ويعمل', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-check-circle', cardClass: 'card-active' };
+                ? { text: 'قيد التجهيز', color: 'text-yellow-500', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', icon: 'fa-cog fa-spin', cardClass: 'card-pending' }
+                : { text: 'نشط (Online)', color: 'text-green-500', bg: 'bg-green-500/10', border: 'border-green-500/30', icon: 'fa-signal', cardClass: 'card-active' };
             
             const timeObj = data.requestedAt || data.timestamp;
             const date = timeObj ? new Date(timeObj.seconds * 1000).toLocaleDateString('ar-BH') : 'الآن';
-            const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope"></i>' : '<i class="fab fa-whatsapp"></i>';
+            const methodIcon = data.contactMethod === 'email' ? '<i class="fas fa-envelope text-zinc-400"></i>' : '<i class="fab fa-whatsapp text-green-500"></i>';
 
             return `
-            <div class="order-history-card p-5 rounded-2xl relative mb-4 ${statusConfig.cardClass}">
-                <div class="flex justify-between items-start mb-3">
-                    <div class="flex items-center gap-3">
-                        <span class="bg-zinc-700 text-white font-bold px-3 py-1 rounded-lg text-sm">${data.plan}</span>
-                        <div class="text-xs text-gray-400 bg-black/30 px-2 py-1 rounded cursor-pointer hover:text-white transition" onclick="window.copyOrderId('${id}')" title="نسخ الرقم">
-                            #${id.slice(0, 6)}... <i class="fas fa-copy ml-1"></i>
+            <div class="order-history-card p-6 rounded-2xl relative mb-4 ${statusConfig.cardClass}">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex flex-col gap-2">
+                        <span class="bg-zinc-800 text-white font-black px-4 py-1.5 rounded-xl text-sm w-fit border border-zinc-700 shadow-inner">${data.plan}</span>
+                        <div class="text-xs text-zinc-500 bg-black/50 px-3 py-1.5 rounded-lg cursor-pointer hover:text-white transition w-fit border border-zinc-800" onclick="window.copyOrderId('${id}')" title="انسخ الـ ID">
+                            #${id.slice(0, 8)} <i class="fas fa-copy ml-1"></i>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full border ${statusConfig.color} ${statusConfig.bg} ${statusConfig.border}">
+                    <div class="flex items-center gap-2 text-sm font-bold px-4 py-1.5 rounded-full border ${statusConfig.color} ${statusConfig.bg} ${statusConfig.border}">
                         <i class="fas ${statusConfig.icon}"></i> ${statusConfig.text}
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 text-sm mt-4 border-t border-white/5 pt-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mt-5 bg-black/30 p-4 rounded-xl border border-zinc-800/50">
                     <div>
-                        <span class="text-gray-500 text-xs block">الموقع والكمية</span>
-                        <div class="font-bold text-white">${data.location} <span class="text-gray-500">x${data.quantity || 1}</span></div>
+                        <span class="text-zinc-500 text-xs block mb-1">الموقع</span>
+                        <div class="font-bold text-zinc-200">${data.location}</div>
                     </div>
                     <div>
-                        <span class="text-gray-500 text-xs block">السعر الإجمالي</span>
-                        <div class="font-bold text-zinc-300">$${data.price}</div>
+                        <span class="text-zinc-500 text-xs block mb-1">الكمية والتكلفة</span>
+                        <div class="font-bold text-white"><span class="text-zinc-500 text-xs mr-1">x${data.quantity || 1}</span> $${data.price}</div>
                     </div>
                     <div>
-                        <span class="text-gray-500 text-xs block">تاريخ الطلب</span>
-                        <div class="font-bold text-white">${date}</div>
+                        <span class="text-zinc-500 text-xs block mb-1">التاريخ</span>
+                        <div class="font-bold text-zinc-300">${date}</div>
                     </div>
                     <div>
-                        <span class="text-gray-500 text-xs block">طريقة التواصل</span>
-                        <div class="font-bold text-gray-300">${methodIcon}</div>
+                        <span class="text-zinc-500 text-xs block mb-1">التواصل</span>
+                        <div class="font-bold text-lg">${methodIcon}</div>
                     </div>
                 </div>
             </div>
@@ -331,29 +362,12 @@
         };
 
         let html = '';
-
         if (activeOrders.length > 0) {
-            html += `
-                <div class="mb-6">
-                    <h3 class="text-green-500 font-bold mb-3 flex items-center gap-2">
-                        <i class="fas fa-server"></i> سيرفراتك النشطة (${activeOrders.length})
-                    </h3>
-                    ${activeOrders.map(createCard).join('')}
-                </div>
-            `;
+            html += `<div class="mb-8"><h3 class="text-green-500 font-bold mb-4 flex items-center gap-2"><i class="fas fa-power-off"></i> سيرفراتك الشغالة</h3>${activeOrders.map(createCard).join('')}</div>`;
         }
-
         if (pendingOrders.length > 0) {
-            html += `
-                <div class="mb-6">
-                    <h3 class="text-yellow-500 font-bold mb-3 flex items-center gap-2">
-                        <i class="fas fa-hourglass-half"></i> طلبات قيد المراجعة (${pendingOrders.length})
-                    </h3>
-                    ${pendingOrders.map(createCard).join('')}
-                </div>
-            `;
+            html += `<div class="mb-6"><h3 class="text-yellow-500 font-bold mb-4 flex items-center gap-2"><i class="fas fa-truck-loading"></i> سيرفرات بنجهزها لك</h3>${pendingOrders.map(createCard).join('')}</div>`;
         }
-
         container.innerHTML = html;
     }
 
@@ -366,19 +380,26 @@
         grid.innerHTML = plans.map(p => {
             const finalPrice = (p.basePrice + extraFee).toFixed(2);
             return `
-            <div class="plan-card p-6 flex flex-col relative overflow-hidden ${p.featured ? 'border-zinc-500/50' : ''}">
-                ${p.featured ? '<div class="absolute top-0 right-0 bg-zinc-700 text-zinc-100 text-xs px-3 py-1 rounded-bl-lg font-bold shadow-lg">الأكثر طلباً</div>' : ''}
-                <h3 class="text-2xl font-bold mb-2">${p.name}</h3>
-                <div class="flex items-baseline gap-1 mb-6">
-                    <span class="text-4xl font-black text-zinc-200">$${finalPrice}</span>
-                    <span class="text-sm text-gray-500">/شهر</span>
+            <div class="plan-card p-8 flex flex-col relative overflow-hidden group ${p.featured ? 'border-zinc-400/50 shadow-[0_0_20px_rgba(255,255,255,0.05)]' : ''}">
+                ${p.featured ? '<div class="absolute top-4 right-[-30px] bg-zinc-200 text-black text-xs px-10 py-1 font-black shadow-lg transform rotate-45">الأكثر طلباً</div>' : ''}
+                
+                <h3 class="text-3xl font-black mb-1 text-white">${p.name}</h3>
+                <div class="w-12 h-1 bg-zinc-600 rounded-full mb-6 group-hover:bg-zinc-300 transition-colors"></div>
+                
+                <div class="flex items-baseline gap-1 mb-8">
+                    <span class="text-5xl font-black text-white drop-shadow-lg">$${finalPrice}</span>
+                    <span class="text-sm text-zinc-500 font-bold">/شهرياً</span>
                 </div>
-                <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-300">
-                    <li class="flex items-center gap-2"><i class="fas fa-microchip text-zinc-400 w-5"></i> ${p.cpu}</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-memory text-zinc-400 w-5"></i> ${p.ram} RAM</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-hdd text-zinc-400 w-5"></i> ${p.disk}</li>
+                
+                <ul class="space-y-4 mb-10 flex-1 text-sm text-zinc-300 font-semibold">
+                    <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center"><i class="fas fa-microchip text-zinc-400"></i></div> ${p.cpu}</li>
+                    <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center"><i class="fas fa-memory text-zinc-400"></i></div> ${p.ram} RAM</li>
+                    <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center"><i class="fas fa-hdd text-zinc-400"></i></div> ${p.disk}</li>
                 </ul>
-                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-zinc-300 hover:text-black transition-all shadow-lg">اطلب الآن</button>
+                
+                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" class="w-full py-4 rounded-xl font-black ${p.featured ? 'bg-zinc-100 text-black hover:bg-white' : 'bg-zinc-800 text-white hover:bg-zinc-700'} transition-all shadow-lg group-hover:scale-[1.02]">
+                    اختيار الباقة
+                </button>
             </div>`;
         }).join('');
     };
@@ -390,19 +411,21 @@
         selectedPlanData.unitPrice = unitPrice;
         selectedPlanData.locName = locationNames[locCode];
         document.getElementById('qtyDisplay').innerText = currentQty;
+        
         document.getElementById('planDetails').innerHTML = `
-            <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-400">نوع السيرفر:</span>
-                <span class="font-bold text-white text-lg">${selectedPlanData.name}</span>
+            <div class="flex justify-between items-center border-b border-zinc-800/50 pb-3">
+                <span class="text-zinc-400 font-bold"><i class="fas fa-cube mr-2"></i> الباقة:</span>
+                <span class="font-black text-white text-lg bg-zinc-800 px-3 py-1 rounded-lg">${selectedPlanData.name}</span>
             </div>
-            <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-400">الموقع:</span>
-                <span class="font-bold text-white">${selectedPlanData.locName}</span>
+            <div class="flex justify-between items-center border-b border-zinc-800/50 pb-3">
+                <span class="text-zinc-400 font-bold"><i class="fas fa-map-marker-alt mr-2"></i> الموقع:</span>
+                <span class="font-bold text-zinc-200">${selectedPlanData.locName}</span>
             </div>
-            <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-400">سعر الوحدة:</span>
-                <span class="font-bold text-gray-300">$${unitPrice}</span>
+            <div class="flex justify-between items-center">
+                <span class="text-zinc-400 font-bold"><i class="fas fa-tag mr-2"></i> سعر السيرفر الواحد:</span>
+                <span class="font-black text-white">$${unitPrice}</span>
             </div>`;
+            
         window.updateTotal();
         window.updateBtnText();
         document.getElementById('confirmModal').style.display = 'flex';
@@ -419,22 +442,21 @@
         const total = (selectedPlanData.unitPrice * currentQty).toFixed(2);
         document.getElementById('totalPriceDisplay').innerText = `$${total}`;
     };
+    
     window.updateBtnText = () => {
         const method = document.querySelector('input[name="contactMethod"]:checked').value;
         const btn = document.getElementById('confirmBtn');
         if (method === 'whatsapp') {
-            btn.innerHTML = '<span>إرسال عبر واتساب</span> <i class="fab fa-whatsapp"></i>';
-            btn.className = "w-full bg-[#25d366] py-4 rounded-xl font-bold hover:bg-[#128c7e] transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-green-500/20";
+            btn.innerHTML = '<span>إرسال الطلب واتساب</span> <i class="fab fa-whatsapp text-xl text-green-600"></i>';
         } else {
-            btn.innerHTML = '<span>إرسال الطلب</span> <i class="fas fa-paper-plane"></i>';
-            btn.className = "w-full bg-zinc-700 py-4 rounded-xl font-bold hover:bg-zinc-600 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-zinc-500/20";
+            btn.innerHTML = '<span>تأكيد الطلب (إيميل)</span> <i class="fas fa-paper-plane text-xl text-zinc-600"></i>';
         }
     };
 
     window.confirmOrder = async () => {
         const btn = document.getElementById('confirmBtn');
         const originalContent = btn.innerHTML;
-        btn.innerHTML = '<div class="loader"></div> جاري المعالجة...';
+        btn.innerHTML = '<div class="loader mr-2"></div> جاري التجهيز...';
         btn.disabled = true;
 
         const method = document.querySelector('input[name="contactMethod"]:checked').value;
@@ -445,7 +467,6 @@
                 uid: currentUser.uid,
                 requestedAt: serverTimestamp(),
                 timestamp: serverTimestamp(),
-
                 email: currentUser.email,
                 name: currentUser.displayName,
                 plan: selectedPlanData.name,
@@ -457,20 +478,16 @@
             });
 
             if (method === 'whatsapp') {
-                const msg = `السلام عليكم Boneless Hosts 👋\nطلبت سيرفر جديد:\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice}*\n📧 إيميلي: ${currentUser.email}\nكيف طريقة الدفع؟`;
+                const msg = `🔥 أهلاً Boneless Hosts\nعايز أطلب سيرفر جديد بالمواصفات دي:\n\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الحساب: *$${totalPrice}*\n📧 إيميلي المربوط: ${currentUser.email}\n\nجاهز للدفع، إيه الخطوة الجاية؟`;
                 window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
             } else {
-                alert("✅ تم استلام طلبك بنجاح!\nسنتواصل معك عبر الإيميل قريباً.");
+                alert("✅ طلبك وصلنا بنجاح!\nهنتواصل معاك على الإيميل في أسرع وقت.");
             }
             window.closeModal();
             
         } catch (error) {
             console.error(error);
-            if (error.code === 'permission-denied') {
-                alert("خطأ: ليس لديك صلاحية لإتمام الطلب. حاول تسجيل الدخول مرة أخرى.");
-            } else {
-                alert("حدث خطأ أثناء الاتصال.");
-            }
+            alert("حدث خطأ، تأكد من اتصالك بالإنترنت وجرب تاني.");
         } finally {
             btn.innerHTML = originalContent;
             btn.disabled = false;
@@ -486,8 +503,8 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('packagesPage').style.display = 'block';
             document.getElementById('userInfo').innerHTML = `
-                <img src="${user.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
-                <span class="max-w-[100px] truncate">${user.displayName}</span>`;
+                <img src="${user.photoURL}" class="w-7 h-7 rounded-lg border border-zinc-600">
+                <span class="max-w-[120px] truncate">${user.displayName}</span>`;
             
             const q = query(
                 collection(db, "orders"), 
@@ -505,13 +522,7 @@
                     badge.classList.add('hidden');
                 }
                 renderOrdersList();
-            }, (error) => {
-                console.error("Firestore Error:", error);
-                if (error.code === 'failed-precondition') {
-                    console.log("⚠️ يجب إنشاء Index في الفايربيس.");
-                }
             });
-            
             window.renderPlans();
         } else {
             currentUser = null;
