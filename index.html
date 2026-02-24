@@ -6,7 +6,7 @@
 
     <title>Boneless Hosts | استضافة سيرفرات ماين كرافت</title>
     <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة.">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3062/3062634.png">
+    <link rel="icon" href="./logo.png">
     <meta name="theme-color" content="#000000">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,11 +23,13 @@
         }
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: rgba(0, 0, 0, 0.85);
+            /* تغميق الخلفية قليلاً لتبريز اللوجو الفضي */
+            background: rgba(0, 0, 0, 0.88);
             backdrop-filter: blur(5px);
         }
 
-        .highlight { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        /* تعديل الإضاءة لتكون فضية/بيضاء لتناسب اللوجو */
+        .highlight { color: #e4e4e7; text-shadow: 0 0 20px rgba(228, 228, 231, 0.5); }
         
         .plan-card { 
             background: rgba(20, 20, 20, 0.6); 
@@ -36,10 +38,11 @@
             transition: all 0.3s ease; 
         }
         .plan-card:hover { 
-            border-color: #3b82f6; 
+            /* تعديل تأثير الهوفر ليكون معدني/رمادي */
+            border-color: #a1a1aa; 
             transform: translateY(-5px); 
             background: rgba(30, 30, 30, 0.9);
-            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 40px -10px rgba(161, 161, 170, 0.2);
         }
 
         .order-history-card {
@@ -49,9 +52,8 @@
         }
         .order-history-card:hover { background: #222; }
         
-        /* ألوان الحالات */
-        .card-active { border-right: 4px solid #22c55e; } /* أخضر للنشط */
-        .card-pending { border-right: 4px solid #eab308; } /* أصفر للانتظار */
+        .card-active { border-right: 4px solid #22c55e; } 
+        .card-pending { border-right: 4px solid #eab308; } 
 
         .whatsapp-float {
             position: fixed; bottom: 30px; left: 30px; background-color: #25d366; color: #FFF;
@@ -61,7 +63,8 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
 
-        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; }
+        /* تعديل لون اللودينج */
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #a1a1aa; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .quantity-btn { cursor: pointer; user-select: none; transition: 0.2s; }
@@ -69,8 +72,8 @@
         
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #666; }
     </style>
 </head>
 <body>
@@ -84,15 +87,17 @@
 
 <section id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 text-center">
     <div class="max-w-3xl animate-fade-in-up">
+        <img src="./logo.png" alt="Boneless Hosts Logo" class="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)] object-contain transition-transform hover:scale-105 duration-300">
+        
         <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">
             Boneless <span class="highlight">Hosts</span>
         </h1>
         <p class="text-xl md:text-2xl text-gray-300 mb-8 font-light leading-relaxed">
-            استضافة سيرفرات ماين كرافت <span class="text-blue-400 font-bold">احترافية</span>.<br>
+            استضافة سيرفرات ماين كرافت <span class="text-zinc-300 font-bold">احترافية</span>.<br>
             أداء عالي، حماية شاملة، ودعم فني مستمر.
         </p>
-        <button id="googleSignIn" class="group bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-600 hover:text-white transition-all shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
-            <i class="fab fa-google text-xl group-hover:text-white transition-colors"></i>
+        <button id="googleSignIn" class="group bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-zinc-300 transition-all shadow-xl hover:shadow-white/20 flex items-center justify-center gap-3 mx-auto w-full md:w-auto">
+            <i class="fab fa-google text-xl transition-colors"></i>
             <span>تسجيل الدخول للبدء</span>
         </button>
     </div>
@@ -101,12 +106,16 @@
 <section id="packagesPage" class="min-h-screen pb-20 hidden">
     <nav class="bg-black/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-2xl font-black">Boneless <span class="highlight">Hosts</span></div>
+            
+            <div class="flex items-center gap-3">
+                <img src="./logo.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow-md">
+                <div class="text-2xl font-black text-gray-100">Boneless <span class="highlight">Hosts</span></div>
+            </div>
             
             <div class="flex flex-wrap justify-center gap-4 items-center">
                 <div id="userInfo" class="hidden md:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10 text-sm"></div>
                 
-                <button onclick="window.openOrdersModal()" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-600/50 px-5 py-2 rounded-full font-bold transition-all flex items-center gap-2">
+                <button onclick="window.openOrdersModal()" class="bg-zinc-700/30 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-500/50 px-5 py-2 rounded-full font-bold transition-all flex items-center gap-2">
                     <i class="fas fa-box-open"></i> طلباتي
                     <span id="ordersBadge" class="bg-red-500 text-white text-[10px] px-1.5 rounded-full hidden">0</span>
                 </button>
@@ -127,7 +136,7 @@
         <div class="flex justify-center mb-10">
             <div class="bg-[#151515] p-2 rounded-xl border border-white/10 flex items-center gap-3 shadow-lg">
                 <span class="text-gray-400 text-sm font-bold px-2">📍 الموقع:</span>
-                <select id="locationSelector" onchange="window.renderPlans()" class="bg-black text-white py-2 px-4 rounded-lg border border-gray-700 outline-none focus:border-blue-500 font-bold cursor-pointer">
+                <select id="locationSelector" onchange="window.renderPlans()" class="bg-black text-white py-2 px-4 rounded-lg border border-gray-700 outline-none focus:border-zinc-500 font-bold cursor-pointer">
                     <option value="us">🇺🇸 أمريكا (USA)</option>
                     <option value="de">🇩🇪 ألمانيا (Germany)</option>
                     <option value="sg">🇸🇬 سنغافورة (Singapore)</option>
@@ -143,7 +152,7 @@
     <div class="bg-[#111] border border-white/10 rounded-3xl w-full max-w-2xl h-[85vh] flex flex-col relative shadow-2xl">
         <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#151515] rounded-t-3xl">
             <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                <i class="fas fa-history text-blue-500"></i> طلباتي
+                <i class="fas fa-history text-zinc-400"></i> طلباتي
             </h2>
             <button onclick="window.closeOrdersModal()" class="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-all">
                 <i class="fas fa-times"></i>
@@ -174,7 +183,7 @@
             <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-2">
                 <button onclick="window.changeQty(-1)" class="quantity-btn bg-white/10 hover:bg-white/20 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">-</button>
                 <span id="qtyDisplay" class="text-xl font-bold">1</span>
-                <button onclick="window.changeQty(1)" class="quantity-btn bg-blue-600 hover:bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">+</button>
+                <button onclick="window.changeQty(1)" class="quantity-btn bg-zinc-600 hover:bg-zinc-500 w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold">+</button>
             </div>
         </div>
 
@@ -190,8 +199,8 @@
                 </label>
                 <label class="cursor-pointer">
                     <input type="radio" name="contactMethod" value="email" class="peer hidden" onchange="window.updateBtnText()">
-                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-blue-500 peer-checked:bg-blue-500/10 transition-all text-center">
-                        <i class="fas fa-envelope text-2xl mb-1 text-blue-500"></i>
+                    <div class="p-3 rounded-xl border border-white/10 bg-white/5 peer-checked:border-zinc-400 peer-checked:bg-zinc-500/10 transition-all text-center">
+                        <i class="fas fa-envelope text-2xl mb-1 text-zinc-400"></i>
                         <div class="text-xs font-bold">الإيميل</div>
                     </div>
                 </label>
@@ -201,10 +210,10 @@
         <div class="border-t border-white/10 pt-4 flex flex-col gap-2">
             <div class="flex justify-between items-center text-lg font-bold mb-4">
                 <span class="text-gray-400">الإجمالي النهائي:</span>
-                <span id="totalPriceDisplay" class="text-blue-400 text-2xl">$0.00</span>
+                <span id="totalPriceDisplay" class="text-zinc-200 text-2xl">$0.00</span>
             </div>
             
-            <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all text-white flex justify-center items-center gap-2 text-lg">
+            <button onclick="window.confirmOrder()" id="confirmBtn" class="w-full bg-zinc-700 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-zinc-500/20 hover:bg-zinc-600 transition-all text-white flex justify-center items-center gap-2 text-lg">
             </button>
         </div>
     </div>
@@ -245,7 +254,6 @@
     const locationFees = { 'us': 0, 'de': 6.00, 'sg': 3.00 };
     const locationNames = { 'us': '🇺🇸 USA', 'de': '🇩🇪 Germany', 'sg': '🇸🇬 Singapore' };
 
-    // --- Modal Logic ---
     window.openOrdersModal = () => {
         document.getElementById('ordersModal').style.display = 'flex';
         renderOrdersList();
@@ -256,7 +264,6 @@
         navigator.clipboard.writeText(id).then(() => alert("تم نسخ رقم الطلب: " + id));
     };
 
-    // --- Rendering Orders (The Update You Wanted) ---
     function renderOrdersList() {
         const container = document.getElementById('ordersListContent');
         
@@ -271,11 +278,9 @@
             return;
         }
 
-        // 1. فرز الطلبات (نشطة vs قيد الانتظار)
         const activeOrders = myOrdersSnapshot.filter(doc => doc.data().status === 'active');
         const pendingOrders = myOrdersSnapshot.filter(doc => doc.data().status !== 'active');
 
-        // 2. دالة لرسم البطاقة
         const createCard = (doc) => {
             const data = doc.data();
             const id = doc.id;
@@ -293,7 +298,7 @@
             <div class="order-history-card p-5 rounded-2xl relative mb-4 ${statusConfig.cardClass}">
                 <div class="flex justify-between items-start mb-3">
                     <div class="flex items-center gap-3">
-                        <span class="bg-blue-600 text-white font-bold px-3 py-1 rounded-lg text-sm">${data.plan}</span>
+                        <span class="bg-zinc-700 text-white font-bold px-3 py-1 rounded-lg text-sm">${data.plan}</span>
                         <div class="text-xs text-gray-400 bg-black/30 px-2 py-1 rounded cursor-pointer hover:text-white transition" onclick="window.copyOrderId('${id}')" title="نسخ الرقم">
                             #${id.slice(0, 6)}... <i class="fas fa-copy ml-1"></i>
                         </div>
@@ -310,7 +315,7 @@
                     </div>
                     <div>
                         <span class="text-gray-500 text-xs block">السعر الإجمالي</span>
-                        <div class="font-bold text-blue-400">$${data.price}</div>
+                        <div class="font-bold text-zinc-300">$${data.price}</div>
                     </div>
                     <div>
                         <span class="text-gray-500 text-xs block">تاريخ الطلب</span>
@@ -325,7 +330,6 @@
             `;
         };
 
-        // 3. بناء الـ HTML المقسم
         let html = '';
 
         if (activeOrders.length > 0) {
@@ -353,7 +357,6 @@
         container.innerHTML = html;
     }
 
-    // --- Main Logic ---
     window.renderPlans = () => {
         const grid = document.getElementById('plansGrid');
         const selector = document.getElementById('locationSelector');
@@ -363,19 +366,19 @@
         grid.innerHTML = plans.map(p => {
             const finalPrice = (p.basePrice + extraFee).toFixed(2);
             return `
-            <div class="plan-card p-6 flex flex-col relative overflow-hidden ${p.featured ? 'border-blue-500/50' : ''}">
-                ${p.featured ? '<div class="absolute top-0 right-0 bg-blue-600 text-xs px-3 py-1 rounded-bl-lg font-bold shadow-lg">الأكثر طلباً</div>' : ''}
+            <div class="plan-card p-6 flex flex-col relative overflow-hidden ${p.featured ? 'border-zinc-500/50' : ''}">
+                ${p.featured ? '<div class="absolute top-0 right-0 bg-zinc-700 text-zinc-100 text-xs px-3 py-1 rounded-bl-lg font-bold shadow-lg">الأكثر طلباً</div>' : ''}
                 <h3 class="text-2xl font-bold mb-2">${p.name}</h3>
                 <div class="flex items-baseline gap-1 mb-6">
-                    <span class="text-4xl font-black text-blue-400">$${finalPrice}</span>
+                    <span class="text-4xl font-black text-zinc-200">$${finalPrice}</span>
                     <span class="text-sm text-gray-500">/شهر</span>
                 </div>
                 <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-300">
-                    <li class="flex items-center gap-2"><i class="fas fa-microchip text-blue-500 w-5"></i> ${p.cpu}</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-memory text-blue-500 w-5"></i> ${p.ram} RAM</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-hdd text-blue-500 w-5"></i> ${p.disk}</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-microchip text-zinc-400 w-5"></i> ${p.cpu}</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-memory text-zinc-400 w-5"></i> ${p.ram} RAM</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-hdd text-zinc-400 w-5"></i> ${p.disk}</li>
                 </ul>
-                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-blue-500 hover:text-white transition-all shadow-lg">اطلب الآن</button>
+                <button onclick="window.initOrder('${p.id}', '${locCode}', ${finalPrice})" class="w-full py-3 rounded-lg font-bold bg-white text-black hover:bg-zinc-300 hover:text-black transition-all shadow-lg">اطلب الآن</button>
             </div>`;
         }).join('');
     };
@@ -424,7 +427,7 @@
             btn.className = "w-full bg-[#25d366] py-4 rounded-xl font-bold hover:bg-[#128c7e] transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-green-500/20";
         } else {
             btn.innerHTML = '<span>إرسال الطلب</span> <i class="fas fa-paper-plane"></i>';
-            btn.className = "w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-blue-500/20";
+            btn.className = "w-full bg-zinc-700 py-4 rounded-xl font-bold hover:bg-zinc-600 transition-all text-white flex justify-center items-center gap-2 text-lg shadow-lg shadow-zinc-500/20";
         }
     };
 
@@ -441,7 +444,7 @@
             await addDoc(collection(db, "orders"), {
                 uid: currentUser.uid,
                 requestedAt: serverTimestamp(),
-                timestamp: serverTimestamp(), // للعميل
+                timestamp: serverTimestamp(),
 
                 email: currentUser.email,
                 name: currentUser.displayName,
@@ -474,7 +477,6 @@
         }
     };
 
-    // Firebase Auth & Listener
     document.getElementById('googleSignIn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
@@ -487,7 +489,6 @@
                 <img src="${user.photoURL}" class="w-6 h-6 rounded-full border border-white/20">
                 <span class="max-w-[100px] truncate">${user.displayName}</span>`;
             
-            // الاستماع للطلبات
             const q = query(
                 collection(db, "orders"), 
                 where("uid", "==", user.uid), 
