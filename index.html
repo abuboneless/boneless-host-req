@@ -48,7 +48,7 @@
         @keyframes floatUp { 0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate3d(0, -120vh, 100px) rotate(360deg); opacity: 0; } }
 
         .glitch-hover:hover { animation: skew-x-shake 0.2s infinite; position: relative; }
-        .glitch-hover:hover::before, .glitch-hover:hover::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8; }
+        .glitch-hover:hover::before, .glitch-hover:hover::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8; pointer-events: none; }
         .glitch-hover:hover::before { left: 3px; text-shadow: -2px 0 #a1a1aa; animation: glitch-anim 0.3s infinite linear alternate-reverse; clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); }
         .glitch-hover:hover::after { left: -3px; text-shadow: -2px 0 #3f3f46; animation: glitch-anim 0.4s infinite linear alternate-reverse; clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); }
         @keyframes skew-x-shake { 0%, 20%, 100% { transform: skewX(0deg); } 5%, 15% { transform: skewX(5deg); } 10% { transform: skewX(-5deg); } }
@@ -484,14 +484,14 @@
     let myOrdersSnapshot = [];
     const MY_PHONE = "97336464439";
 
+    // ✅ تم دمج الأسعار الديناميكية الجديدة هنا وتأكيد 94GB لباقة Elite
     const plans = [
-        { id: 'p1', name: "Starter", ram: "6GB", cpu: "4 vCores", disk: "75GB NVMe", basePrice: 7.99, featured: false },
-        { id: 'p2', name: "Basic", ram: "10GB", cpu: "6 vCores", disk: "100GB NVMe", basePrice: 12.99, featured: true },
-        { id: 'p3', name: "Pro", ram: "22GB", cpu: "8 vCores", disk: "200GB NVMe", basePrice: 22.99, featured: false },
-        { id: 'p4', name: "Elite", ram: "94GB", cpu: "24 vCores", disk: "400GB NVMe", basePrice: 69.99, featured: false }
+        { id: 'p1', name: "Starter", ram: "8GB", cpu: "4 vCores", disk: "75GB SSD", prices: { us: 7.99, de: 10.99, sg: 9.99 }, featured: false },
+        { id: 'p2', name: "Basic", ram: "12GB", cpu: "6 vCores", disk: "100GB NVMe", prices: { us: 12.99, de: 15.99, sg: 13.99 }, featured: true },
+        { id: 'p3', name: "Pro", ram: "24GB", cpu: "8 vCores", disk: "200GB NVMe", prices: { us: 22.99, de: 29.99, sg: 25.99 }, featured: false },
+        { id: 'p4', name: "Elite", ram: "94GB", cpu: "24 vCores", disk: "400GB NVMe", prices: { us: 69.99, de: 99.99, sg: 84.99 }, featured: false }
     ];
 
-    const locationFees = { 'us': 0, 'de': 6.00, 'sg': 3.00 };
     const locationNamesAr = { 'us': '🇺🇸 الولايات المتحدة', 'de': '🇩🇪 ألمانيا', 'sg': '🇸🇬 سنغافورة' };
     const locationNamesEn = { 'us': '🇺🇸 United States', 'de': '🇩🇪 Germany', 'sg': '🇸🇬 Singapore' };
 
@@ -548,14 +548,14 @@
         const grid = document.getElementById('plansGrid');
         const selector = document.getElementById('locationSelector');
         const locCode = selector.value;
-        const extraFee = locationFees[locCode];
 
         const txtMonth = currentLang === 'ar' ? '/شهرياً' : '/mo';
         const txtOrder = currentLang === 'ar' ? 'حجز الخادم' : 'Rent Server';
         const txtFeatured = currentLang === 'ar' ? 'الأكثر طلباً 🔥' : 'Most Popular 🔥';
 
         grid.innerHTML = plans.map((p, index) => {
-            const finalPrice = (p.basePrice + extraFee).toFixed(2);
+            // ✅ تم ربط السعر بشكل ديناميكي هنا ليعتمد على موقع السيرفر
+            const finalPrice = p.prices[locCode].toFixed(2);
             const delayClass = `delay-${(index + 1) * 100}`; 
             
             return `
