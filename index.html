@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>Boneless Hosts | استضافة سيرفرات ماين كرافت</title>
-    <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة.">
+    <title>Boneless Hosts | Minecraft Server Hosting</title>
+    <meta name="description" content="استضافة سيرفرات ماين كرافت فائقة القوة. | Ultimate Minecraft Server Hosting.">
     <link rel="icon" href="./logo.png">
     <meta name="theme-color" content="#050505">
 
@@ -127,6 +127,14 @@
         
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #52525b; border-radius: 4px; }
+
+        /* توجيه زر اللغة في صفحة البداية ليكون متناسق مع الاتجاه */
+        html[dir="ltr"] .login-lang-btn { right: 1.5rem; }
+        html[dir="rtl"] .login-lang-btn { left: 1.5rem; }
+        @media (min-width: 768px) {
+            html[dir="ltr"] .login-lang-btn { right: 2.5rem; }
+            html[dir="rtl"] .login-lang-btn { left: 2.5rem; }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -137,6 +145,12 @@
 <div class="floating-cubes-container" id="cubesContainer"></div>
 
 <section id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 text-center relative z-10 w-full">
+    
+    <button onclick="window.toggleLanguage()" class="login-lang-btn absolute top-6 md:top-10 bg-white/5 hover:bg-white/10 text-white border border-white/10 w-12 h-12 rounded-xl font-bold transition-transform hover:scale-105 flex items-center justify-center shadow-lg backdrop-blur-md z-50">
+        <span class="lang-ar text-sm">EN</span>
+        <span class="lang-en text-sm">AR</span>
+    </button>
+
     <div class="max-w-3xl w-full">
         <div class="relative w-36 h-36 md:w-56 md:h-56 mx-auto mb-8 md:mb-10 animate-float-extreme reveal-3d">
             <div class="absolute inset-0 bg-zinc-400 blur-[40px] md:blur-[60px] rounded-full opacity-30 animate-pulse z-0 transform translate3d(0,0,0)"></div>
@@ -218,9 +232,9 @@
                     <span class="lang-ar">الموقع:</span><span class="lang-en">Location:</span>
                 </span>
                 <select id="locationSelector" onchange="window.renderPlans()" class="bg-zinc-800 text-white py-2 px-2 md:py-3 md:px-6 rounded-lg md:rounded-xl border border-zinc-600 outline-none focus:border-white font-bold md:font-black text-sm md:text-lg cursor-pointer hover:bg-zinc-700 w-full flex-1 transition-colors">
-                    <option value="us" data-ar="🇺🇸 الولايات المتحدة" data-en="🇺🇸 United States">🇺🇸 الولايات المتحدة</option>
-                    <option value="de" data-ar="🇩🇪 ألمانيا" data-en="🇩🇪 Germany">🇩🇪 ألمانيا</option>
-                    <option value="sg" data-ar="🇸🇬 سنغافورة" data-en="🇸🇬 Singapore">🇸🇬 سنغافورة</option>
+                    <option value="us" data-ar="🇺🇸 الولايات المتحدة" data-en="🇺🇸 United States">🇺🇸 United States</option>
+                    <option value="de" data-ar="🇩🇪 ألمانيا" data-en="🇩🇪 Germany">🇩🇪 Germany</option>
+                    <option value="sg" data-ar="🇸🇬 سنغافورة" data-en="🇸🇬 Singapore">🇸🇬 Singapore</option>
                 </select>
             </div>
         </div>
@@ -391,14 +405,14 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    let currentLang = 'ar';
+    // تم تغيير اللغة الافتراضية هنا لتكون الإنجليزية
+    let currentLang = 'en';
 
     window.toggleLanguage = () => {
         currentLang = currentLang === 'ar' ? 'en' : 'ar';
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
         
-        // تحديث القوائم المنسدلة بناءً على اللغة
         const locSelect = document.getElementById('locationSelector');
         Array.from(locSelect.options).forEach(opt => {
             opt.text = currentLang === 'ar' ? opt.getAttribute('data-ar') : opt.getAttribute('data-en');
