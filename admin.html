@@ -3,83 +3,146 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Boneless Admin - لوحة التحكم</title>
+    <title>Boneless Command Center</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3062/3062634.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; background: #050505; color: white; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap');
         
-        /* تصميم البطاقات */
+        body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
+        
+        /* --- خلفية مركز القيادة --- */
+        .admin-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: radial-gradient(circle at top, #111827 0%, #000000 100%);
+        }
+        .grid-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            animation: panGrid 30s linear infinite; pointer-events: none;
+        }
+        @keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+
+        /* --- تصميم البطاقات الزجاجية --- */
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.7);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+        }
+
         .order-card { 
-            background: #111; 
-            border: 1px solid #222; 
-            border-radius: 16px; 
-            transition: 0.3s; 
-            position: relative;
+            position: relative; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            opacity: 0; transform: translateY(30px); animation: fadeUp 0.6s forwards;
             overflow: hidden;
         }
-        .order-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        .order-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(59, 130, 246, 0.15);
+            z-index: 10;
+        }
         
-        /* حالة التفعيل */
-        .order-card.active { border-color: rgba(34, 197, 94, 0.3); background: rgba(20, 83, 45, 0.1); }
-        
+        /* حالة التفعيل (أخضر) وحالة الانتظار (أصفر) */
+        .order-card.pending { border-right: 4px solid #eab308; }
+        .order-card.active { border-right: 4px solid #22c55e; background: rgba(20, 30, 25, 0.8); }
+        .order-card.active:hover { border-color: rgba(34, 197, 94, 0.5); box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); }
+
+        /* لمعان BenefitPay متوافق 100% مع الموقع الأساسي */
+        .benefit-shine {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: benefitShine 2s infinite linear;
+            -webkit-background-clip: text;
+        }
+        @keyframes benefitShine { 0% { background-position: -100% 0; } 100% { background-position: 200% 0; } }
+
         /* شريط التمرير */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen">
+<body class="p-4 md:p-8 min-h-screen antialiased">
 
-    <div class="max-w-7xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-white/10 pb-6 gap-4">
-            <div class="text-center md:text-right">
-                <h1 class="text-3xl font-black italic tracking-wide">BONELESS <span class="text-blue-500">ADMIN</span></h1>
-                <p class="text-gray-500 text-xs mt-1">نظام إدارة الطلبات المركزية v2.0</p>
+    <div class="admin-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        
+        <header class="glass-panel p-6 flex flex-col md:flex-row justify-between items-center mb-8 gap-4 shadow-2xl">
+            <div class="flex items-center gap-4 text-center md:text-right">
+                <div class="w-14 h-14 bg-zinc-900 rounded-2xl flex items-center justify-center border border-zinc-700 shadow-inner">
+                    <i class="fas fa-satellite-dish text-3xl text-blue-500 animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black tracking-wide text-white">BONELESS <span class="text-blue-500">COMMAND</span></h1>
+                    <p class="text-zinc-400 text-sm font-bold mt-1">نظام الإدارة المركزي | V2.0</p>
+                </div>
             </div>
             
-            <div class="flex items-center gap-4">
-                <div id="adminInfo" class="text-sm bg-white/5 text-gray-300 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <div class="flex flex-wrap justify-center items-center gap-4">
+                <div id="adminInfo" class="text-sm bg-black/50 text-zinc-300 px-5 py-2.5 rounded-xl border border-zinc-700 flex items-center gap-3 font-bold shadow-inner">
+                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500 animate-pulse"></div>
                     جاري التحقق...
                 </div>
-                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-full text-sm font-bold transition-all">
-                    <i class="fas fa-sign-out-alt"></i> خروج
+                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 px-6 py-2.5 rounded-xl text-sm font-black transition-all shadow-lg">
+                    <i class="fas fa-sign-out-alt mr-2"></i> إغلاق النظام
                 </button>
             </div>
         </header>
 
-        <div class="flex flex-col md:flex-row gap-6 mb-8">
-            <div class="bg-[#111] p-6 rounded-2xl border border-white/10 flex-1 flex items-center justify-between">
+        <div class="flex flex-col lg:flex-row gap-6 mb-10">
+            
+            <div class="glass-panel p-6 flex-1 flex items-center justify-between group hover:border-yellow-500/50 transition-colors cursor-default">
                 <div>
-                    <span class="text-gray-500 text-sm block mb-1">طلبات جديدة</span>
-                    <span class="text-xs text-gray-600">بانتظار التحقق والدفع</span>
+                    <div class="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fas fa-hourglass-half text-xl text-yellow-500 group-hover:rotate-180 transition-transform duration-700"></i>
+                    </div>
+                    <span class="text-zinc-400 text-sm font-bold block mb-1">طلبات بانتظار التفعيل</span>
                 </div>
-                <span id="pendingCount" class="text-4xl font-black text-yellow-500">0</span>
+                <span id="pendingCount" class="text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(234,179,8,0.4)]">0</span>
             </div>
 
-            <div class="flex-[2] relative">
-                <input type="text" id="searchInput" placeholder="بحث باسم العميل، الإيميل، أو رقم الطلب..." 
-                    class="w-full h-full bg-[#111] border border-white/10 rounded-2xl px-12 py-4 outline-none focus:border-blue-500 transition-colors text-white placeholder-gray-600">
-                <i class="fas fa-search absolute top-1/2 right-5 transform -translate-y-1/2 text-gray-500"></i>
+            <div class="glass-panel p-6 flex-1 flex items-center justify-between group hover:border-green-500/50 transition-colors cursor-default">
+                <div>
+                    <div class="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fas fa-server text-xl text-green-500 group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="text-zinc-400 text-sm font-bold block mb-1">الخوادم النشطة حالياً</span>
+                </div>
+                <span id="activeCount" class="text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]">0</span>
+            </div>
+
+            <div class="flex-[2] relative flex items-center">
+                <input type="text" id="searchInput" placeholder="ابحث باسم العميل، البريد، أو رقم الـ ID..." 
+                    class="w-full h-full min-h-[80px] bg-black/60 border border-zinc-700 rounded-2xl px-14 py-4 outline-none focus:border-blue-500 focus:bg-black/80 transition-all text-white placeholder-zinc-500 font-bold text-lg shadow-inner">
+                <i class="fas fa-search absolute right-6 text-2xl text-zinc-500"></i>
             </div>
         </div>
 
-        <div id="authError" class="hidden text-center text-red-400 py-8 bg-red-900/10 rounded-2xl border border-red-500/20 mb-6">
-            <i class="fas fa-lock text-3xl mb-2"></i>
-            <p>فشل التحميل: ليس لديك صلاحية الوصول لقاعدة البيانات.</p>
+        <div id="authError" class="hidden text-center text-red-400 py-10 glass-panel border-red-500/30 mb-6">
+            <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <i class="fas fa-lock text-4xl text-red-500"></i>
+            </div>
+            <h2 class="text-2xl font-black mb-2 text-white">الوصول مرفوض</h2>
+            <p class="text-zinc-400">حسابك لا يملك صلاحيات الإدارة للوصول إلى قاعدة البيانات.</p>
         </div>
 
         <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <div id="noOrders" class="hidden text-center py-24 bg-white/5 rounded-3xl border border-dashed border-white/10">
-            <div class="bg-white/5 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-inbox text-4xl text-gray-600"></i>
+        <div id="noOrders" class="hidden text-center py-24 glass-panel border-dashed border-zinc-700 mt-6">
+            <div class="bg-zinc-800 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <i class="fas fa-check-double text-5xl text-zinc-500"></i>
             </div>
-            <p class="text-gray-400 font-bold text-lg">لا توجد طلبات للعرض</p>
-            <p class="text-gray-600 text-sm">أنت جاهز تماماً!</p>
+            <p class="text-white font-black text-2xl mb-2">لا توجد نتائج</p>
+            <p class="text-zinc-400 font-bold text-lg">لم يتم العثور على طلبات تطابق بحثك، أو الصندوق فارغ!</p>
         </div>
     </div>
 
@@ -101,34 +164,34 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ضع إيميلك هنا ليتم التحقق منه ظاهرياً
+    // ⚠️ ضع إيميلك الإداري هنا 
     const ADMIN_EMAIL = "yaunfang76@gmail.com"; 
-    let allOrdersData = []; // لتخزين البيانات من أجل البحث
+    let allOrdersData = [];
 
     function escapeHtml(text) {
         if (!text) return "";
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    // نسخ النصوص للحافظة
-    window.copyToClipboard = (text) => {
+    window.copyToClipboard = (text, type) => {
         navigator.clipboard.writeText(text).then(() => {
-            alert("تم النسخ: " + text);
+            alert(`✅ تم نسخ ${type} بنجاح:\n${text}`);
         });
     };
 
-    // تسجيل الخروج
     document.getElementById('logoutBtn').addEventListener('click', () => {
-        signOut(auth).then(() => window.location.reload());
+        if(confirm("هل أنت متأكد من تسجيل الخروج؟")) {
+            signOut(auth).then(() => window.location.href = "index.html");
+        }
     });
 
-    // البحث
-    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+    document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const filtered = allOrdersData.filter(o => 
-            o.name.toLowerCase().includes(term) || 
-            o.email.toLowerCase().includes(term) || 
-            o.id.toLowerCase().includes(term)
+            (o.name && o.name.toLowerCase().includes(term)) || 
+            (o.email && o.email.toLowerCase().includes(term)) || 
+            (o.id && o.id.toLowerCase().includes(term)) ||
+            (o.paymentMethod && o.paymentMethod.toLowerCase().includes(term))
         );
         renderOrders(filtered);
     });
@@ -136,19 +199,19 @@
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== ADMIN_EMAIL) {
             document.body.innerHTML = `
-            <div class="h-screen flex items-center justify-center flex-col gap-6 bg-[#050505] text-white p-4 text-center">
-                <div class="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/20">
-                    <i class="fas fa-shield-alt text-5xl text-red-600"></i>
+            <div class="h-screen flex items-center justify-center flex-col gap-6 bg-[#000] text-white p-4 text-center">
+                <div class="w-32 h-32 bg-red-900/20 rounded-3xl flex items-center justify-center border border-red-500/30 shadow-[0_0_50px_rgba(239,68,68,0.2)]">
+                    <i class="fas fa-shield-alt text-6xl text-red-500"></i>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-bold text-white mb-2">منطقة محظورة</h1>
-                    <p class="text-gray-500">يجب تسجيل الدخول بحساب المسؤول للوصول لهذه الصفحة.</p>
+                    <h1 class="text-4xl font-black text-white mb-4">منطقة محظورة</h1>
+                    <p class="text-zinc-400 text-lg">يجب تسجيل الدخول بحساب المسؤول المعتمد للوصول لهذه الصفحة.</p>
                 </div>
-                <a href="index.html" class="bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition shadow-lg">العودة للرئيسية</a>
+                <button onclick="window.location.reload()" class="bg-white text-black px-10 py-4 rounded-xl font-black text-lg hover:bg-zinc-300 transition-all shadow-[0_5px_20px_rgba(255,255,255,0.2)] hover:scale-105">تحديث الصفحة</button>
             </div>`;
         } else {
             document.getElementById('adminInfo').innerHTML = `
-                <i class="fas fa-user-shield text-blue-400"></i>
+                <div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
                 ${escapeHtml(user.displayName || user.email)}
             `;
             loadOrders();
@@ -161,16 +224,26 @@
         onSnapshot(q, (snapshot) => {
             allOrdersData = [];
             let pendingCounter = 0;
+            let activeCounter = 0;
 
             snapshot.forEach(doc => {
                 const data = doc.data();
                 if (data.status !== 'active') pendingCounter++;
+                else activeCounter++;
+                
                 allOrdersData.push({ id: doc.id, ...data });
             });
 
             document.getElementById('pendingCount').innerText = pendingCounter;
+            document.getElementById('activeCount').innerText = activeCounter;
             document.getElementById('authError').classList.add('hidden');
-            renderOrders(allOrdersData);
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if(searchTerm) {
+                document.getElementById('searchInput').dispatchEvent(new Event('input'));
+            } else {
+                renderOrders(allOrdersData);
+            }
 
         }, (error) => {
             console.error("Error:", error);
@@ -192,66 +265,88 @@
 
         document.getElementById('noOrders').classList.add('hidden');
         
-        list.innerHTML = orders.map(order => {
+        list.innerHTML = orders.map((order, index) => {
             const isActivated = order.status === 'active';
-            const date = order.requestedAt ? new Date(order.requestedAt.seconds * 1000).toLocaleDateString('ar-BH') : 'غير محدد';
-            const contactIcon = order.contactMethod === 'email' ? '<i class="fas fa-envelope text-blue-400"></i>' : '<i class="fab fa-whatsapp text-green-400"></i>';
-            const locationDisplay = order.location || 'غير محدد';
+            const date = order.requestedAt ? new Date(order.requestedAt.seconds * 1000).toLocaleString('ar-BH', { dateStyle: 'medium', timeStyle: 'short' }) : 'غير محدد';
+            
+            const contactIcon = order.contactMethod === 'email' 
+                ? '<i class="fas fa-envelope text-zinc-300"></i>' 
+                : '<i class="fab fa-whatsapp text-green-500 text-lg"></i>';
+            
+            let payBadge = '';
+            if (order.paymentMethod === 'benefitpay') {
+                payBadge = `<div class="bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-lg text-center">
+                                <span class="text-red-500 font-black italic tracking-tighter benefit-shine">BenefitPay</span>
+                            </div>`;
+            } else if (order.paymentMethod === 'iban') {
+                payBadge = `<div class="bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-lg text-center flex items-center justify-center gap-2">
+                                <i class="fas fa-university text-blue-400"></i> <span class="text-blue-400 font-bold text-xs">IBAN (تحويل دولي)</span>
+                            </div>`;
+            } else {
+                payBadge = `<div class="bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded-lg text-center text-zinc-400 text-xs font-bold">غير محدد</div>`;
+            }
+
+            const animDelay = `${index * 0.05}s`;
 
             return `
-            <div class="order-card p-5 flex flex-col justify-between ${isActivated ? 'active' : ''}">
+            <div class="glass-panel order-card p-6 flex flex-col justify-between ${isActivated ? 'active' : 'pending'}" style="animation-delay: ${animDelay}">
                 
-                <div class="flex justify-between items-start mb-4 border-b border-white/5 pb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider">${escapeHtml(order.plan)}</span>
-                        ${isActivated 
-                            ? '<span class="bg-green-500/20 text-green-400 text-[10px] px-2 py-1 rounded font-bold">نشط</span>' 
-                            : '<span class="bg-yellow-500/20 text-yellow-500 text-[10px] px-2 py-1 rounded font-bold animate-pulse">جديد</span>'}
+                <div class="flex justify-between items-start mb-5 border-b border-zinc-700/50 pb-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-white text-black text-xs px-3 py-1 rounded-md font-black shadow-lg uppercase tracking-wider">${escapeHtml(order.plan)}</span>
+                            ${isActivated 
+                                ? '<span class="bg-green-500/20 border border-green-500/30 text-green-400 text-[10px] px-2 py-1 rounded font-bold">نشط</span>' 
+                                : '<span class="bg-yellow-500/20 border border-yellow-500/30 text-yellow-500 text-[10px] px-2 py-1 rounded font-bold animate-pulse">بانتظار الدفع</span>'}
+                        </div>
+                        <div class="text-xs text-zinc-500 bg-black/50 px-2 py-1 rounded cursor-pointer hover:text-white transition w-fit border border-zinc-800" onclick="window.copyToClipboard('${order.id}', 'رقم الطلب (ID)')" title="نسخ ID">
+                            <i class="fas fa-hashtag text-[10px] mr-1"></i>${order.id.slice(0,8)}... <i class="fas fa-copy ml-1"></i>
+                        </div>
                     </div>
-                    <button onclick="window.copyToClipboard('${order.id}')" class="text-gray-600 hover:text-white text-xs" title="نسخ ID">
-                        <i class="fas fa-hashtag"></i>
-                    </button>
-                </div>
-
-                <div class="mb-4">
-                    <h3 class="font-bold text-lg text-white mb-1 flex items-center gap-2">
-                        ${escapeHtml(order.name)}
-                        <span class="text-xs bg-white/5 p-1 rounded border border-white/10" title="طريقة التواصل">${contactIcon}</span>
-                    </h3>
-                    <div class="flex items-center gap-2 text-sm text-gray-400 mb-2 group cursor-pointer" onclick="window.copyToClipboard('${order.email}')">
-                        <span class="truncate max-w-[200px]">${escapeHtml(order.email)}</span>
-                        <i class="fas fa-copy text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    <div class="bg-black/50 p-2 rounded-xl border border-zinc-800 shadow-inner" title="طريقة التواصل المختارة">
+                        ${contactIcon}
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2 mb-6 bg-black/30 p-3 rounded-xl border border-white/5 text-xs">
-                    <div class="text-gray-400">الموقع:</div>
-                    <div class="text-right font-bold text-white flex justify-end gap-1 items-center">
-                        <i class="fas fa-map-marker-alt text-red-500"></i> ${escapeHtml(locationDisplay)}
+                <div class="mb-5">
+                    <h3 class="font-black text-xl text-white mb-1 truncate" title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</h3>
+                    <div class="flex items-center gap-2 text-sm text-zinc-400 group cursor-pointer hover:text-blue-400 transition-colors w-fit" onclick="window.copyToClipboard('${order.email}', 'الإيميل')">
+                        <i class="fas fa-envelope text-xs"></i> <span class="truncate max-w-[220px]">${escapeHtml(order.email)}</span>
+                        <i class="fas fa-copy text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </div>
-                    
-                    <div class="text-gray-400">الكمية:</div>
-                    <div class="text-right font-bold text-white">${order.quantity || 1} سيرفر</div>
-                    
-                    <div class="text-gray-400">الإجمالي:</div>
-                    <div class="text-right font-bold text-blue-400 text-sm">$${order.price}</div>
-                    
-                    <div class="text-gray-400">التاريخ:</div>
-                    <div class="text-right text-gray-500 font-mono">${date}</div>
                 </div>
 
-                <div class="mt-auto pt-2 flex gap-3">
+                <div class="grid grid-cols-2 gap-3 mb-6 bg-black/40 p-4 rounded-2xl border border-zinc-800 shadow-inner">
+                    <div>
+                        <span class="text-zinc-500 text-[10px] font-bold block mb-1 uppercase tracking-wider">الموقع</span>
+                        <div class="font-black text-white text-sm"><i class="fas fa-globe-americas text-zinc-600 mr-1"></i> ${escapeHtml(order.location)}</div>
+                    </div>
+                    <div>
+                        <span class="text-zinc-500 text-[10px] font-bold block mb-1 uppercase tracking-wider">الكمية</span>
+                        <div class="font-black text-white text-sm"><i class="fas fa-server text-zinc-600 mr-1"></i> ${order.quantity || 1}</div>
+                    </div>
+                    <div class="col-span-2 border-t border-zinc-800/50 pt-2 mt-1">
+                        <span class="text-zinc-500 text-[10px] font-bold block mb-1 uppercase tracking-wider">طريقة الدفع</span>
+                        ${payBadge}
+                    </div>
+                    <div class="col-span-2 flex justify-between items-end mt-1">
+                        <span class="text-zinc-500 text-[10px] font-bold">${date}</span>
+                        <div class="font-black text-2xl text-white drop-shadow-md">$${order.price}</div>
+                    </div>
+                </div>
+
+                <div class="mt-auto flex gap-3">
                     ${!isActivated ? `
-                    <button onclick="window.activateOrder('${order.id}')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-xl text-xs font-bold transition-all text-white shadow-lg shadow-green-900/20 flex items-center justify-center gap-2 group">
-                        <i class="fas fa-check-circle text-sm group-hover:scale-110 transition-transform"></i> تأكيد وتفعيل
+                    <button onclick="window.activateOrder('${order.id}')" class="flex-[3] bg-white hover:bg-zinc-300 text-black py-3 rounded-xl text-sm font-black transition-transform hover:scale-105 flex items-center justify-center gap-2 shadow-[0_5px_15px_rgba(255,255,255,0.1)]">
+                        <i class="fas fa-power-off"></i> تفعيل السيرفر
                     </button>
                     ` : `
-                    <div class="flex-1 bg-green-500/5 border border-green-500/20 text-green-500 py-2 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2">
-                        <i class="fas fa-check"></i> تم التفعيل
+                    <div class="flex-[3] bg-green-500/10 border border-green-500/20 text-green-500 py-3 rounded-xl text-sm font-black text-center flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> مفعل ويعمل
                     </div>
                     `}
                     
-                    <button onclick="window.cancelOrder('${order.id}')" class="bg-red-500/10 hover:bg-red-500 border border-red-500/20 text-red-500 hover:text-white px-4 rounded-xl transition-all flex items-center justify-center" title="حذف الطلب">
+                    <button onclick="window.cancelOrder('${order.id}')" class="flex-1 bg-red-500/10 hover:bg-red-600 border border-red-500/20 text-red-500 hover:text-white rounded-xl transition-all flex items-center justify-center shadow-lg hover:shadow-red-500/20" title="حذف الطلب">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -260,28 +355,29 @@
         }).join('');
     }
 
-    // دوال التحكم
     window.activateOrder = async (id) => {
-        if(confirm("هل تم استلام المبلغ؟ سيتم تحويل حالة الطلب إلى (نشط).")) {
+        if(confirm("⚠️ تأكيد التفعيل:\nهل تأكدت من استلامك للمبلغ المالي بالكامل؟\n\nبمجرد التأكيد سيتحول الطلب إلى (نشط).")) {
             try {
                 await updateDoc(doc(db, "orders", id), { 
                     status: "active",
                     activatedAt: new Date()
                 });
             } catch (error) {
-                alert("خطأ: " + error.message);
+                alert("❌ فشل التحديث: " + error.message);
             }
         }
     };
 
     window.cancelOrder = async (id) => {
-        const reason = prompt("هل أنت متأكد من الحذف؟ اكتب 'حذف' للتأكيد:");
+        const reason = prompt("🗑️ حذف الطلب نهائياً:\nهل أنت متأكد؟ هذا الإجراء لا يمكن التراجع عنه.\n\nاكتب كلمة 'حذف' للتأكيد:");
         if(reason === "حذف") {
             try {
                 await deleteDoc(doc(db, "orders", id));
             } catch (error) {
-                alert("خطأ: " + error.message);
+                alert("❌ فشل الحذف: " + error.message);
             }
+        } else if (reason !== null) {
+            alert("إلغاء: الكلمة غير متطابقة.");
         }
     };
 </script>
