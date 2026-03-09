@@ -239,6 +239,14 @@
                     <span class="mt-1 tracking-wider text-sm md:text-base">hostsrequestsboneless@gmail.com</span>
                 </a>
             </div>
+            
+            <div class="mt-10 text-zinc-500 text-sm md:text-base">
+                <button onclick="window.openTermsModal()" class="hover:text-white transition-colors underline font-bold">
+                    <span class="lang-ar">شروط الخدمة وسياسة الخصوصية</span>
+                    <span class="lang-en">Terms of Service & Privacy Policy</span>
+                </button>
+            </div>
+
         </div>
     </div>
 </section>
@@ -407,7 +415,7 @@
                 <span class="text-zinc-400 font-bold text-lg">
                     <span class="lang-ar">التكلفة الإجمالية:</span><span class="lang-en">Total Cost:</span>
                 </span>
-                <div class="text-right" id="totalPriceContainer">
+                <div class="text-right md:text-left" id="totalPriceContainer">
                     <span id="totalPriceDisplay" class="text-white text-4xl md:text-5xl font-black drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] block">$0.00</span>
                     <span id="totalPriceBHD" class="text-zinc-400 font-bold text-sm md:text-lg mt-1 block">≈ 0.00 BHD</span>
                 </div>
@@ -423,7 +431,7 @@
     import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     let currentLang = 'en';
-    const BHD_RATE = 0.377; // تحويل السعر للدينار البحريني
+    const BHD_RATE = 0.377;
 
     window.toggleLanguage = () => {
         currentLang = currentLang === 'ar' ? 'en' : 'ar';
@@ -438,7 +446,7 @@
         window.renderPlans();
         if(document.getElementById('confirmModal').style.display === 'flex') {
             window.updateBtnText();
-            window.updateTotal(); // تحديث العملة في التوتال
+            window.updateTotal();
         }
         if(myOrdersSnapshot.length > 0 || document.getElementById('ordersModal').style.display === 'flex') renderOrdersList();
     };
@@ -491,7 +499,6 @@
     let myOrdersSnapshot = [];
     const MY_PHONE = "97336464439";
 
-    // الأسعار الديناميكية ومواصفات Elite 94GB
     const plans = [
         { id: 'p1', name: "Starter", ram: "8GB", cpu: "4 vCores", disk: "75GB SSD", prices: { us: 7.99, de: 10.99, sg: 9.99 }, featured: false },
         { id: 'p2', name: "Basic", ram: "12GB", cpu: "6 vCores", disk: "100GB NVMe", prices: { us: 12.99, de: 15.99, sg: 13.99 }, featured: true },
