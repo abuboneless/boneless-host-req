@@ -246,26 +246,6 @@
         .stagger-4 { animation-delay: 0.4s; }
         .stagger-5 { animation-delay: 0.5s; }
 
-        /* Hover Lift */
-        @keyframes hoverLift {
-            0% { 
-                transform: translate3d(0, 0, 0);
-            }
-            100% { 
-                transform: translate3d(0, -12px, 0);
-            }
-        }
-
-        /* 3D Flip */
-        @keyframes flip3d {
-            0% { 
-                transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
-            }
-            100% { 
-                transform: perspective(1000px) rotateY(360deg) rotateX(10deg);
-            }
-        }
-
         /* Legendary Glow Text */
         @keyframes legendaryGlow {
             0%, 100% { 
@@ -292,29 +272,6 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Slide In */
-        @keyframes slideInLeft {
-            from { 
-                opacity: 0; 
-                transform: translate3d(-100px, 0, 0); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translate3d(0, 0, 0); 
-            }
-        }
-
-        @keyframes slideInRight {
-            from { 
-                opacity: 0; 
-                transform: translate3d(100px, 0, 0); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translate3d(0, 0, 0); 
-            }
-        }
-
         /* Shimmer Wave */
         @keyframes shimmerWave {
             0% { 
@@ -323,12 +280,6 @@
             100% { 
                 background-position: 200% 0; 
             } 
-        }
-
-        /* Rotate */
-        @keyframes rotate360 {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         /* ===== LEGENDARY COMPONENTS ===== */
@@ -552,6 +503,22 @@
             }
         }
 
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: smoothFadeIn 0.8s ease;
+        }
+
         /* Accessibility */
         @media (prefers-reduced-motion: reduce) {
             * {
@@ -588,10 +555,23 @@
                 right: 20px;
                 left: 20px;
             }
+
+            .demo-badge {
+                top: 10px;
+                left: 10px;
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Demo Badge -->
+    <div class="demo-badge">
+        <i class="fas fa-flask mr-2"></i>
+        <span class="lang-ar">وضع تجريبي</span><span class="lang-en">Demo Mode</span>
+    </div>
+
     <!-- Background Layers -->
     <div class="bg-fixed-image"></div>
     <div class="bg-overlay"></div>
@@ -606,14 +586,14 @@
                 <div class="mb-6 inline-block animate-bounce" style="animation: bounceElastic 2s ease-in-out infinite;">
                     <img src="./logo.png" alt="Boneless Hosts Logo" class="w-40 h-40 rounded-3xl shadow-[0_0_60px_rgba(150,180,220,0.4)] glow-pulse" loading="lazy">
                 </div>
-                <h1 class="text-5xl md:text-6xl font-black metallic-text mb-3 legendary-glow glitch-hover" data-text="Boneless Hosts">Boneless Hosts</h1>
+                <h1 class="text-5xl md:text-6xl font-black metallic-text mb-3 legendary-glow" data-text="Boneless Hosts">Boneless Hosts</h1>
                 <p class="text-lg md:text-xl font-bold text-gray-300 smooth-fade-in stagger-1">
                     <span class="lang-ar">استضافة خوادم ماينكرافت الموثوقة</span>
                     <span class="lang-en">Reliable Minecraft Server Hosting</span>
                 </p>
             </div>
 
-            <button id="googleSignIn" class="legendary-btn w-full mb-8 smooth-fade-in stagger-2 ripple" aria-label="Sign in with Google">
+            <button id="demoLoginBtn" class="legendary-btn w-full mb-8 smooth-fade-in stagger-2 ripple" aria-label="Enter Demo">
                 <i class="fab fa-google text-2xl"></i>
                 <span class="lang-ar">تسجيل الدخول</span>
                 <span class="lang-en">Login</span>
@@ -625,8 +605,8 @@
             </div>
 
             <div class="text-gray-400 text-sm smooth-fade-in stagger-4">
-                <p class="lang-ar">تسجيل الدخول آمن وسريع عبر حسابك في جوجل</p>
-                <p class="lang-en">Safe and fast login via your Google account</p>
+                <p class="lang-ar">🎮 وضع تجريبي - اضغط تسجيل الدخول للدخول مباشرة</p>
+                <p class="lang-en">🎮 Demo Mode - Click Login to enter directly</p>
             </div>
         </div>
     </div>
@@ -651,7 +631,10 @@
                         <i class="fas fa-history text-lg md:text-xl"></i>
                         <span id="ordersBadge" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center animate-bounce">0</span>
                     </button>
-                    <div id="userInfo" class="hidden flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 px-4 py-2 rounded-xl"></div>
+                    <div id="userInfo" class="flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 px-4 py-2 rounded-xl">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center font-bold">D</div>
+                        <span class="max-w-[120px] truncate text-white text-sm">Demo User</span>
+                    </div>
                     <button id="logoutBtn" class="p-3 md:p-4 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white transition-all hover:scale-110 ripple" aria-label="Logout">
                         <i class="fas fa-sign-out-alt text-lg md:text-xl"></i>
                     </button>
@@ -834,32 +817,12 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            authDomain: "boneless-hosts.firebaseapp.com",
-            projectId: "boneless-hosts",
-            storageBucket: "boneless-hosts.appspot.com",
-            messagingSenderId: "XXXXXXXXXX",
-            appId: "1:XXXXXXXXXX:web:XXXXXXXXXXXXXXXX"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
+    <script>
         // Global Variables
-        let currentUser = null;
         let currentLang = localStorage.getItem('lang') || 'en';
         let currentQty = 1;
         let selectedPlanData = null;
-        let myOrdersSnapshot = [];
+        let demoOrders = [];
         const MAX_SERVERS = 10;
         const BHD_RATE = 0.377;
         const MY_PHONE = "+966XXXXXXXXX";
@@ -1024,25 +987,21 @@
             const bhdText = currentLang === 'ar' ? 'د.ب' : 'BHD';
 
             try {
-                await addDoc(collection(db, "orders"), {
-                    uid: currentUser.uid, 
-                    requestedAt: serverTimestamp(), 
-                    timestamp: serverTimestamp(),
-                    email: currentUser.email, 
-                    name: currentUser.displayName, 
+                // Add to demo orders
+                demoOrders.push({
                     plan: selectedPlanData.name,
-                    location: selectedPlanData.locName, 
-                    price: parseFloat(totalPrice), 
+                    location: selectedPlanData.locName,
+                    price: parseFloat(totalPrice),
                     quantity: currentQty,
-                    contactMethod: method, 
-                    paymentMethod: paymentMethod, 
+                    contactMethod: method,
+                    paymentMethod: paymentMethod,
                     status: "pending"
                 });
 
                 if (method === 'whatsapp') {
                     const msg = currentLang === 'ar' 
-                        ? `مرحباً Boneless Hosts،\nطلبي الجديد:\n\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 الدفع عبر: *${paymentString}*\n📧 إيميلي: ${currentUser.email}\n\nجاهز للدفع!`
-                        : `Hello Boneless Hosts,\nMy new order:\n\n📦 Plan: *${selectedPlanData.name}*\n🔢 Qty: *${currentQty}*\n📍 Location: *${selectedPlanData.locName}*\n💰 Total: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 Payment via: *${paymentString}*\n📧 Email: ${currentUser.email}\n\nReady to pay!`;
+                        ? `مرحباً Boneless Hosts،\nطلبي الجديد:\n\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 الدفع عبر: *${paymentString}*\n\nجاهز للدفع!`
+                        : `Hello Boneless Hosts,\nMy new order:\n\n📦 Plan: *${selectedPlanData.name}*\n🔢 Qty: *${currentQty}*\n📍 Location: *${selectedPlanData.locName}*\n💰 Total: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 Payment via: *${paymentString}*\n\nReady to pay!`;
                     window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
                 window.showToast(currentLang === 'ar' ? "تم استلام طلبك بنجاح! ✅" : "Order received successfully! ✅", 'success');
@@ -1073,27 +1032,24 @@
         // Render Orders List
         window.renderOrdersList = () => {
             const content = document.getElementById('ordersListContent');
-            if (myOrdersSnapshot.length === 0) {
+            if (demoOrders.length === 0) {
                 content.innerHTML = '<div class="text-center py-12"><p class="text-gray-400 text-lg"><span class="lang-ar">لا توجد طلبات حالياً</span><span class="lang-en">No orders yet</span></p></div>';
                 return;
             }
 
-            content.innerHTML = myOrdersSnapshot.map(doc => {
-                const data = doc.data();
-                return `
-                    <div class="legendary-card mb-4">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-white font-black text-lg">${data.plan}</h3>
-                            <span class="px-3 py-1 rounded-lg text-xs font-black ${data.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'}">${data.status}</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">${data.location}</p>
-                        <div class="flex justify-between items-center text-gray-300">
-                            <span>$${data.price.toFixed(2)} × ${data.quantity}</span>
-                            <span class="text-white font-bold text-lg">$${(data.price * data.quantity).toFixed(2)}</span>
-                        </div>
+            content.innerHTML = demoOrders.map((order, idx) => `
+                <div class="legendary-card mb-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-white font-black text-lg">${order.plan}</h3>
+                        <span class="px-3 py-1 rounded-lg text-xs font-black ${order.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'}">${order.status}</span>
                     </div>
-                `;
-            }).join('');
+                    <p class="text-gray-400 text-sm mb-3">${order.location}</p>
+                    <div class="flex justify-between items-center text-gray-300">
+                        <span>$${order.price.toFixed(2)} × ${order.quantity}</span>
+                        <span class="text-white font-bold text-lg">$${(order.price * order.quantity).toFixed(2)}</span>
+                    </div>
+                </div>
+            `).join('');
         };
 
         // Toast Notification
@@ -1160,49 +1116,29 @@
         generateParticles();
         generateCubes();
 
-        // Google Sign In
-        document.getElementById('googleSignIn').onclick = () => {
-            const btn = document.getElementById('googleSignIn');
-            btn.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span class="lang-ar">جاري التحميل...</span><span class="lang-en">Loading...</span>`;
-            signInWithPopup(auth, provider).catch(() => {
+        // Demo Login
+        document.getElementById('demoLoginBtn').onclick = () => {
+            const btn = document.getElementById('demoLoginBtn');
+            btn.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span class="lang-ar">جاري الدخول...</span><span class="lang-en">Entering...</span>`;
+            
+            setTimeout(() => {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('packagesPage').style.display = 'block';
+                window.renderPlans();
                 btn.innerHTML = `<i class="fab fa-google text-2xl"></i><span class="lang-ar">تسجيل الدخول</span><span class="lang-en">Login</span>`;
-            });
+            }, 800);
         };
         
         // Logout
-        document.getElementById('logoutBtn').onclick = () => signOut(auth);
+        document.getElementById('logoutBtn').onclick = () => {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('packagesPage').style.display = 'none';
+            demoOrders = [];
+        };
 
-        // Auth State Change
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('packagesPage').style.display = 'block';
-                document.getElementById('userInfo').innerHTML = `<img src="${user.photoURL}" class="w-8 h-8 rounded-lg border border-gray-400 hover:scale-110 transition-transform" alt="Profile" loading="lazy"><span class="max-w-[120px] truncate text-white text-sm" dir="ltr">${user.displayName}</span>`;
-                document.getElementById('userInfo').classList.remove('hidden');
-                
-                const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("requestedAt", "desc"));
-                onSnapshot(q, (snapshot) => {
-                    myOrdersSnapshot = snapshot.docs; 
-                    const badge = document.getElementById('ordersBadge');
-                    if(!snapshot.empty) { 
-                        badge.innerText = snapshot.size; 
-                        badge.classList.remove('hidden');
-                    } else { 
-                        badge.classList.add('hidden'); 
-                    }
-                    window.renderOrdersList();
-                }, (error) => {
-                    console.error("Firestore error:", error);
-                });
-                window.renderPlans();
-            } else {
-                currentUser = null; 
-                document.getElementById('loginPage').style.display = 'flex';
-                document.getElementById('packagesPage').style.display = 'none'; 
-                document.getElementById('userInfo').classList.add('hidden');
-            }
-        });
+        // Initialize
+        window.renderPlans();
     </script>
 </body>
 </html>
+تحسين التصميم دون تغييره بشكل كامل - Manus
