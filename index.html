@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO & Meta Tags -->
+    <title>Boneless Hosts - Premium Minecraft Server Hosting | Fast & Reliable</title>
+    <meta name="description" content="Boneless Hosts provides premium Minecraft server hosting with high performance, 99.9% uptime guarantee, and 24/7 support. Choose from multiple locations worldwide.">
+    <meta name="keywords" content="Minecraft server hosting, game server, hosting provider, Minecraft">
+    <meta name="author" content="Boneless Hosts">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Boneless Hosts - Premium Minecraft Server Hosting">
+    <meta property="og:description" content="Fast, reliable, and affordable Minecraft server hosting with 99.9% uptime.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="./logo.png">
+    
+    <!-- External Stylesheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3H5NxgL6REBA3019bgQFtPQR1FTL8vh8CsNDnQeSvec2ZLsusrRiBIXWVfJcMSE7nNLM+8+dMg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== LEGENDARY CSS RESET & BASE STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body, html { 
+            font-family: 'Cairo', sans-serif; 
+            background: #050505; 
+            color: white; 
+            overflow-x: hidden; 
+            width: 100%; 
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        /* Language-specific Display */
+        html[lang="ar"] .lang-en { display: none !important; }
+        html[lang="en"] .lang-ar { display: none !important; }
+
+        /* ===== LEGENDARY BACKGROUND EFFECTS ===== */
+        .bg-fixed-image {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -4;
+            background: linear-gradient(135deg, #0a0a0a 0%, #151520 25%, #0a0a0a 50%, #1a1a2e 75%, #0a0a0a 100%);
+            background-size: 400% 400%;
+            animation: legendaryBgShift 20s ease infinite; 
+            will-change: background-position; 
+            transform: translate3d(0,0,0);
+        }
+        
+        @keyframes legendaryBgShift { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+
+        .bg-overlay {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -3;
+            background: radial-gradient(circle at 50% 50%, rgba(100, 150, 200, 0.08) 0%, rgba(10, 10, 10, 0.98) 100%);
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px); 
+            transform: translate3d(0,0,0);
+        }
+
+        /* Scanlines Effect */
+        .scanlines {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1; 
+            pointer-events: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.08));
+            background-size: 100% 4px; 
+            opacity: 0.4; 
+            transform: translate3d(0,0,0);
+        }
+
+        /* Particle System */
+        .particles-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -2; 
+            overflow: hidden; 
+            pointer-events: none; 
+        }
+        
+        .particle {
+            position: absolute; 
+            background: radial-gradient(circle, rgba(200, 200, 220, 0.8) 0%, rgba(100, 150, 200, 0.3) 100%);
+            border-radius: 50%;
+            will-change: transform, opacity; 
+            box-shadow: 0 0 20px rgba(150, 180, 220, 0.5);
+        }
+        
+        @keyframes particleFloat {
+            0% { 
+                transform: translate3d(0, 0, 0) scale(1); 
+                opacity: 0; 
+            } 
+            10% { 
+                opacity: 1; 
+            } 
+            90% { 
+                opacity: 1; 
+            } 
+            100% { 
+                transform: translate3d(var(--tx), var(--ty), 0) scale(0.5); 
+                opacity: 0; 
+            } 
+        }
+        
+        .particle {
+            animation: particleFloat linear forwards;
+        }
+
+        /* Floating Cubes Animation */
+        .floating-cubes-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -2; 
+            overflow: hidden; 
+            pointer-events: none; 
+            perspective: 1200px; 
+        }
+        
+        .cube {
+            position: absolute; 
+            bottom: -100px;
+            background: linear-gradient(135deg, rgba(150, 180, 220, 0.1) 0%, rgba(100, 130, 180, 0.05) 100%);
+            border: 1px solid rgba(180, 200, 230, 0.15); 
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px); 
+            animation: cubeFloat infinite ease-in; 
+            border-radius: 8px;
+            will-change: transform, opacity; 
+            box-shadow: 
+                inset 0 0 20px rgba(200, 220, 255, 0.1),
+                0 0 30px rgba(150, 180, 220, 0.1);
+        }
+        
+        @keyframes cubeFloat { 
+            0% { 
+                transform: translate3d(0, 0, 0) rotate(0deg) rotateX(0deg) rotateY(0deg); 
+                opacity: 0; 
+            } 
+            10% { opacity: 0.8; } 
+            90% { opacity: 0.8; } 
+            100% { 
+                transform: translate3d(0, -150vh, 50px) rotate(720deg) rotateX(180deg) rotateY(180deg); 
+                opacity: 0; 
+            } 
+        }
+
+        /* ===== LEGENDARY ANIMATIONS ===== */
+        
+        /* Glow Pulse */
+        @keyframes glowPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(150, 180, 220, 0.3), inset 0 0 20px rgba(150, 180, 220, 0.1);
+            } 
+            50% { 
+                box-shadow: 0 0 40px rgba(150, 180, 220, 0.6), inset 0 0 40px rgba(150, 180, 220, 0.2);
+            } 
+        }
+        
+        .glow-pulse {
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        /* Metallic Shine */
+        @keyframes metallicShine {
+            0% { 
+                background-position: -1000px 0; 
+            } 
+            100% { 
+                background-position: 1000px 0; 
+            } 
+        }
+        
+        .metallic-shine {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            background-size: 1000px 100%;
+            animation: metallicShine 3s infinite;
+        }
+
+        /* Smooth Fade In */
+        @keyframes smoothFadeIn {
+            from { 
+                opacity: 0; 
+                transform: translate3d(0, 40px, 0) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translate3d(0, 0, 0) scale(1); 
+            }
+        }
+        
+        .smooth-fade-in {
+            animation: smoothFadeIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Stagger Animation */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+
+        /* Hover Lift */
+        @keyframes hoverLift {
+            0% { 
+                transform: translate3d(0, 0, 0);
+            }
+            100% { 
+                transform: translate3d(0, -12px, 0);
+            }
+        }
+
+        /* 3D Flip */
+        @keyframes flip3d {
+            0% { 
+                transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+            }
+            100% { 
+                transform: perspective(1000px) rotateY(360deg) rotateX(10deg);
+            }
+        }
+
+        /* Legendary Glow Text */
+        @keyframes legendaryGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px rgba(150, 180, 220, 0.5),
+                    0 0 20px rgba(100, 150, 200, 0.3),
+                    0 0 30px rgba(150, 180, 220, 0.2);
+            } 
+            50% { 
+                text-shadow: 
+                    0 0 20px rgba(150, 180, 220, 0.8),
+                    0 0 40px rgba(100, 150, 200, 0.6),
+                    0 0 60px rgba(150, 180, 220, 0.4);
+            } 
+        }
+        
+        .legendary-glow {
+            animation: legendaryGlow 2s ease-in-out infinite;
+        }
+
+        /* Bounce Elastic */
+        @keyframes bounceElastic {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Slide In */
+        @keyframes slideInLeft {
+            from { 
+                opacity: 0; 
+                transform: translate3d(-100px, 0, 0); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translate3d(0, 0, 0); 
+            }
+        }
+
+        @keyframes slideInRight {
+            from { 
+                opacity: 0; 
+                transform: translate3d(100px, 0, 0); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translate3d(0, 0, 0); 
+            }
+        }
+
+        /* Shimmer Wave */
+        @keyframes shimmerWave {
+            0% { 
+                background-position: -200% 0; 
+            } 
+            100% { 
+                background-position: 200% 0; 
+            } 
+        }
+
+        /* Rotate */
+        @keyframes rotate360 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== LEGENDARY COMPONENTS ===== */
+        
+        .legendary-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #c0c0c8 0%, #a0a0a8 50%, #808088 100%);
+            border: 2px solid rgba(200, 200, 220, 0.3);
+            color: #0a0a0a;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 10px 30px rgba(150, 180, 220, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            will-change: transform, box-shadow;
+        }
+
+        .legendary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .legendary-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(150, 180, 220, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border-color: rgba(200, 200, 220, 0.6);
+        }
+
+        .legendary-btn:hover::before {
+            left: 100%;
+        }
+
+        .legendary-btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* Legendary Card */
+        .legendary-card {
+            background: linear-gradient(145deg, rgba(50, 50, 70, 0.8) 0%, rgba(30, 30, 50, 0.9) 100%);
+            border: 1px solid rgba(150, 180, 220, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(200, 200, 220, 0.1);
+        }
+
+        .legendary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(150, 180, 220, 0.1) 0%, transparent 70%);
+            animation: cardGlow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        .legendary-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(150, 180, 220, 0.4);
+            box-shadow: 
+                0 30px 80px rgba(150, 180, 220, 0.2),
+                inset 0 1px 0 rgba(200, 200, 220, 0.2);
+        }
+
+        .legendary-card.featured {
+            border: 2px solid rgba(150, 180, 220, 0.4);
+            background: linear-gradient(145deg, rgba(60, 80, 120, 0.9) 0%, rgba(40, 50, 80, 0.95) 100%);
+        }
+
+        .legendary-card.featured::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(150, 180, 220, 0.1) 50%, transparent 100%);
+            animation: shimmerWave 3s infinite;
+            pointer-events: none;
+        }
+
+        /* Legendary Modal */
+        .legendary-modal {
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95) 0%, rgba(20, 20, 40, 0.98) 100%);
+            border: 1px solid rgba(150, 180, 220, 0.2);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 50px 150px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(200, 200, 220, 0.1);
+        }
+
+        /* Metallic Text */
+        .metallic-text {
+            background: linear-gradient(135deg, #e8e8f0 0%, #b0b0b8 50%, #707078 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(150, 180, 220, 0.2));
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { 
+            width: 8px; 
+        } 
+        
+        ::-webkit-scrollbar-track { 
+            background: rgba(30, 30, 50, 0.5); 
+        } 
+        
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #6a7a9a 0%, #4a5a7a 100%);
+            border-radius: 4px;
+            border: 2px solid rgba(30, 30, 50, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #8a9aba 0%, #6a7a9a 100%);
+        }
+
+        /* Focus Styles */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid rgba(150, 180, 220, 0.6);
+            outline-offset: 3px;
+        }
+
+        /* Loading State */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .ripple:active::after {
+            animation: rippleEffect 0.6s ease-out;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+
+        /* Toast Notification */
+        .legendary-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 9999;
+            animation: toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(150, 180, 220, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translate3d(100px, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .bg-fixed-image,
+            .bg-overlay,
+            .scanlines,
+            .floating-cubes-container,
+            .particles-container {
+                display: none;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .legendary-btn {
+                padding: 14px 24px;
+                font-size: 0.95rem;
+            }
+
+            .legendary-card {
+                padding: 24px;
+            }
+
+            .legendary-toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Layers -->
+    <div class="bg-fixed-image"></div>
+    <div class="bg-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="particles-container" id="particlesContainer"></div>
+    <div class="floating-cubes-container" id="floatingCubesContainer"></div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="w-full h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="text-center max-w-md w-full">
+            <div class="mb-12 smooth-fade-in">
+                <div class="mb-6 inline-block animate-bounce" style="animation: bounceElastic 2s ease-in-out infinite;">
+                    <img src="./logo.png" alt="Boneless Hosts Logo" class="w-40 h-40 rounded-3xl shadow-[0_0_60px_rgba(150,180,220,0.4)] glow-pulse" loading="lazy">
+                </div>
+                <h1 class="text-5xl md:text-6xl font-black metallic-text mb-3 legendary-glow glitch-hover" data-text="Boneless Hosts">Boneless Hosts</h1>
+                <p class="text-lg md:text-xl font-bold text-gray-300 smooth-fade-in stagger-1">
+                    <span class="lang-ar">استضافة خوادم ماينكرافت الموثوقة</span>
+                    <span class="lang-en">Reliable Minecraft Server Hosting</span>
+                </p>
+            </div>
+
+            <button id="googleSignIn" class="legendary-btn w-full mb-8 smooth-fade-in stagger-2 ripple" aria-label="Sign in with Google">
+                <i class="fab fa-google text-2xl"></i>
+                <span class="lang-ar">تسجيل الدخول</span>
+                <span class="lang-en">Login</span>
+            </button>
+
+            <div class="flex gap-3 mb-8 smooth-fade-in stagger-3">
+                <button onclick="changeLanguage('ar')" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold transition-all hover:scale-105 ripple" aria-label="Switch to Arabic">العربية</button>
+                <button onclick="changeLanguage('en')" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold transition-all hover:scale-105 ripple" aria-label="Switch to English">English</button>
+            </div>
+
+            <div class="text-gray-400 text-sm smooth-fade-in stagger-4">
+                <p class="lang-ar">تسجيل الدخول آمن وسريع عبر حسابك في جوجل</p>
+                <p class="lang-en">Safe and fast login via your Google account</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Packages Page -->
+    <div id="packagesPage" class="hidden w-full min-h-screen p-4 md:p-8 relative z-10">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto mb-16">
+            <div class="flex justify-between items-center mb-8 smooth-fade-in">
+                <div class="flex items-center gap-4">
+                    <img src="./logo.png" alt="Boneless Hosts Logo" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl shadow-[0_0_40px_rgba(150,180,220,0.3)] glow-pulse" loading="lazy">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-black metallic-text">Boneless Hosts</h1>
+                        <p class="text-gray-400 text-sm md:text-base font-bold">
+                            <span class="lang-ar">اختر الباقة المناسبة لك</span>
+                            <span class="lang-en">Choose Your Perfect Plan</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 md:gap-4">
+                    <button onclick="window.openOrdersModal()" class="relative p-3 md:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white transition-all hover:scale-110 ripple" aria-label="View orders">
+                        <i class="fas fa-history text-lg md:text-xl"></i>
+                        <span id="ordersBadge" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center animate-bounce">0</span>
+                    </button>
+                    <div id="userInfo" class="hidden flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 px-4 py-2 rounded-xl"></div>
+                    <button id="logoutBtn" class="p-3 md:p-4 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white transition-all hover:scale-110 ripple" aria-label="Logout">
+                        <i class="fas fa-sign-out-alt text-lg md:text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plans Grid -->
+        <div id="plansContainer" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-16">
+            <!-- Plans will be rendered here by JavaScript -->
+        </div>
+
+        <!-- Features Section -->
+        <div class="max-w-7xl mx-auto mt-20 pt-12 border-t border-gray-700/30">
+            <h2 class="text-4xl md:text-5xl font-black metallic-text text-center mb-12">
+                <span class="lang-ar">لماذا تختار Boneless Hosts؟</span>
+                <span class="lang-en">Why Choose Boneless Hosts?</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div class="legendary-card smooth-fade-in stagger-1">
+                    <div class="text-4xl mb-4 text-center">🛡️</div>
+                    <h3 class="text-white font-bold text-lg mb-2 text-center"><span class="lang-ar">الأمان</span><span class="lang-en">Security</span></h3>
+                    <p class="text-gray-400 text-sm text-center"><span class="lang-ar">أعلى معايير الحماية والأمان</span><span class="lang-en">Highest security standards</span></p>
+                </div>
+                <div class="legendary-card smooth-fade-in stagger-2">
+                    <div class="text-4xl mb-4 text-center">⚡</div>
+                    <h3 class="text-white font-bold text-lg mb-2 text-center"><span class="lang-ar">السرعة</span><span class="lang-en">Speed</span></h3>
+                    <p class="text-gray-400 text-sm text-center"><span class="lang-ar">أداء فائق وسرعة استثنائية</span><span class="lang-en">Exceptional performance</span></p>
+                </div>
+                <div class="legendary-card smooth-fade-in stagger-3">
+                    <div class="text-4xl mb-4 text-center">🎯</div>
+                    <h3 class="text-white font-bold text-lg mb-2 text-center"><span class="lang-ar">الموثوقية</span><span class="lang-en">Reliability</span></h3>
+                    <p class="text-gray-400 text-sm text-center"><span class="lang-ar">ضمان توفر 99.9%</span><span class="lang-en">99.9% uptime guarantee</span></p>
+                </div>
+                <div class="legendary-card smooth-fade-in stagger-4">
+                    <div class="text-4xl mb-4 text-center">🎧</div>
+                    <h3 class="text-white font-bold text-lg mb-2 text-center"><span class="lang-ar">الدعم</span><span class="lang-en">Support</span></h3>
+                    <p class="text-gray-400 text-sm text-center"><span class="lang-ar">دعم 24/7 متخصص</span><span class="lang-en">24/7 support team</span></p>
+                </div>
+                <div class="legendary-card smooth-fade-in stagger-5">
+                    <div class="text-4xl mb-4 text-center">🌍</div>
+                    <h3 class="text-white font-bold text-lg mb-2 text-center"><span class="lang-ar">العالمية</span><span class="lang-en">Global</span></h3>
+                    <p class="text-gray-400 text-sm text-center"><span class="lang-ar">خوادم في مواقع عالمية</span><span class="lang-en">Worldwide locations</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="max-w-7xl mx-auto mt-20 pt-12 text-center">
+            <h2 class="text-3xl md:text-4xl font-black metallic-text mb-8">
+                <span class="lang-ar">تواصل معنا</span>
+                <span class="lang-en">Get In Touch</span>
+            </h2>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <a href="https://wa.me/+966XXXXXXXXX" class="legendary-btn ripple" aria-label="Contact via WhatsApp">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    <span class="lang-ar">واتساب</span>
+                    <span class="lang-en">WhatsApp</span>
+                </a>
+                <a href="mailto:support@bonelesshosts.com" class="legendary-btn ripple" aria-label="Contact via Email">
+                    <i class="fas fa-envelope text-2xl"></i>
+                    <span class="lang-ar">البريد الإلكتروني</span>
+                    <span class="lang-en">Email</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[200] p-4 backdrop-blur-md overflow-y-auto transform translate3d(0,0,0)">
+        <div class="legendary-modal p-6 md:p-8 w-full max-w-lg relative my-auto">
+            <button onclick="window.closeModal()" class="absolute top-5 left-5 text-gray-400 hover:text-white transition-all hover:rotate-90 hover:scale-110 bg-gray-700 w-10 h-10 rounded-xl flex items-center justify-center z-10 ripple" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="text-center mb-6 mt-4 md:mt-0">
+                <div class="w-20 h-20 bg-gradient-to-r from-gray-600 to-gray-700 border-2 border-gray-500 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(150,180,220,0.2)]" style="animation: bounceElastic 1s ease-in-out infinite;">
+                    <i class="fas fa-rocket text-4xl text-white"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black metallic-text">
+                    <span class="lang-ar">إصدار الخادم</span><span class="lang-en">Deploy Server</span>
+                </h2>
+            </div>
+            
+            <div id="planDetails" class="bg-gradient-to-r from-gray-700/30 to-gray-800/30 p-6 rounded-2xl border border-gray-600/30 mb-6 space-y-3 shadow-inner"></div>
+
+            <div class="mb-6 bg-gradient-to-r from-gray-700/30 to-gray-800/30 p-5 rounded-2xl border border-gray-600/30">
+                <label class="block text-sm text-gray-300 mb-4 font-bold">
+                    <span class="lang-ar">عدد الخوادم المطلوبة:</span><span class="lang-en">Number of Servers:</span>
+                </label>
+                <div class="flex items-center justify-between bg-black/50 border border-gray-600/30 rounded-xl p-3">
+                    <button onclick="window.changeQty(-1)" class="w-12 h-12 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white text-2xl font-black transition-all hover:scale-110 active:scale-95 ripple">−</button>
+                    <div class="text-center">
+                        <span id="qtyDisplay" class="text-3xl md:text-4xl font-black metallic-text">1</span>
+                        <div class="text-xs text-gray-400 mt-1"><span class="lang-ar">الحد الأقصى: 10</span><span class="lang-en">Max: 10</span></div>
+                    </div>
+                    <button onclick="window.changeQty(1)" class="w-12 h-12 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white text-2xl font-black transition-all hover:scale-110 active:scale-95 ripple">+</button>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="mb-6">
+                <label class="block text-sm text-gray-300 mb-4 font-bold">
+                    <span class="lang-ar">طريقة الدفع:</span><span class="lang-en">Payment Method:</span>
+                </label>
+                <div class="grid grid-cols-3 gap-3">
+                    <label class="cursor-pointer h-full">
+                        <input type="radio" name="paymentMethod" value="benefitpay" checked class="peer hidden">
+                        <div class="p-4 rounded-2xl border-2 border-gray-600/30 bg-gray-700/20 peer-checked:border-red-500 peer-checked:bg-red-500/10 transition-all text-center flex flex-col items-center justify-center h-full group hover:border-gray-500">
+                            <span class="text-red-500 font-black text-lg italic">Benefit<span class="text-white">Pay</span></span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer h-full">
+                        <input type="radio" name="paymentMethod" value="paypal" class="peer hidden">
+                        <div class="p-4 rounded-2xl border-2 border-gray-600/30 bg-gray-700/20 peer-checked:border-blue-400 peer-checked:bg-blue-400/10 transition-all text-center flex flex-col items-center justify-center h-full group hover:border-gray-500">
+                            <i class="fab fa-paypal text-3xl mb-1 text-blue-400"></i>
+                            <div class="text-xs font-black text-gray-300">PayPal</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer h-full">
+                        <input type="radio" name="paymentMethod" value="iban" class="peer hidden">
+                        <div class="p-4 rounded-2xl border-2 border-gray-600/30 bg-gray-700/20 peer-checked:border-cyan-500 peer-checked:bg-cyan-500/10 transition-all text-center flex flex-col items-center justify-center h-full group hover:border-gray-500">
+                            <i class="fas fa-university text-3xl mb-1 text-gray-400 group-peer-checked:text-cyan-400"></i>
+                            <div class="text-xs font-black text-gray-300">IBAN</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm text-gray-300 mb-4 font-bold">
+                    <span class="lang-ar">طريقة استلام الكونسول:</span><span class="lang-en">Console Delivery:</span>
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="contactMethod" value="whatsapp" checked class="peer hidden" onchange="window.updateBtnText()">
+                        <div class="p-4 rounded-2xl border-2 border-gray-600/30 bg-gray-700/20 peer-checked:border-green-500 peer-checked:bg-green-500/10 transition-all text-center hover:border-gray-500 group">
+                            <i class="fab fa-whatsapp text-2xl mb-1 text-green-500"></i>
+                            <div class="text-xs font-black"><span class="lang-ar">واتساب</span><span class="lang-en">WhatsApp</span></div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="contactMethod" value="email" class="peer hidden" onchange="window.updateBtnText()">
+                        <div class="p-4 rounded-2xl border-2 border-gray-600/30 bg-gray-700/20 peer-checked:border-white peer-checked:bg-white/10 transition-all text-center hover:border-gray-500 group">
+                            <i class="fas fa-envelope text-2xl mb-1 text-white"></i>
+                            <div class="text-xs font-black"><span class="lang-ar">إيميل</span><span class="lang-en">Email</span></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-600/30 pt-6 flex flex-col gap-4">
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-gray-300 font-bold text-lg">
+                        <span class="lang-ar">الإجمالي:</span><span class="lang-en">Total:</span>
+                    </span>
+                    <div class="text-right md:text-left">
+                        <span id="totalPriceDisplay" class="text-white text-4xl md:text-5xl font-black metallic-text block">$0.00</span>
+                        <span id="totalPriceBHD" class="text-gray-400 font-bold text-sm md:text-lg mt-1 block">≈ 0.00 BHD</span>
+                    </div>
+                </div>
+                <button onclick="window.confirmOrder()" id="confirmBtn" class="legendary-btn w-full ripple" aria-label="Confirm order"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Modal -->
+    <div id="ordersModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[250] p-4 backdrop-blur-md transform translate3d(0,0,0)">
+        <div class="legendary-modal w-full max-w-2xl h-[85vh] flex flex-col relative">
+            <div class="p-6 border-b border-gray-600/30 flex justify-between items-center bg-gradient-to-r from-gray-700/30 to-gray-800/30 rounded-t-3xl">
+                <h2 class="text-3xl font-black metallic-text flex items-center gap-3">
+                    <i class="fas fa-history text-gray-300"></i> 
+                    <span class="lang-ar">غرفة التحكم</span><span class="lang-en">Control Room</span>
+                </h2>
+                <button onclick="window.closeOrdersModal()" class="text-gray-400 hover:text-white hover:bg-red-500 w-12 h-12 rounded-xl flex items-center justify-center transition-all hover:rotate-90 text-xl ripple" aria-label="Close orders modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="ordersListContent" class="flex-1 overflow-y-auto p-6 scroll-smooth"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            authDomain: "boneless-hosts.firebaseapp.com",
+            projectId: "boneless-hosts",
+            storageBucket: "boneless-hosts.appspot.com",
+            messagingSenderId: "XXXXXXXXXX",
+            appId: "1:XXXXXXXXXX:web:XXXXXXXXXXXXXXXX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Global Variables
+        let currentUser = null;
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let currentQty = 1;
+        let selectedPlanData = null;
+        let myOrdersSnapshot = [];
+        const MAX_SERVERS = 10;
+        const BHD_RATE = 0.377;
+        const MY_PHONE = "+966XXXXXXXXX";
+
+        // Initialize Language
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+        // Language Change Function
+        window.changeLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            window.renderPlans();
+            window.updateBtnText();
+        };
+
+        // Plans Data
+        const plans = [
+            {
+                name: currentLang === 'ar' ? 'ستارتر' : 'Starter',
+                locName: 'US - East',
+                unitPrice: 2.99,
+                specs: ['4 GB RAM', '50 Players', 'Unlimited Storage', '24/7 Support'],
+                featured: false
+            },
+            {
+                name: currentLang === 'ar' ? 'برو' : 'Pro',
+                locName: 'US - West',
+                unitPrice: 5.99,
+                specs: ['8 GB RAM', '100 Players', 'Unlimited Storage', '24/7 Support', 'Free Backups'],
+                featured: true
+            },
+            {
+                name: currentLang === 'ar' ? 'إنتربرايز' : 'Enterprise',
+                locName: 'EU - Central',
+                unitPrice: 9.99,
+                specs: ['16 GB RAM', '250 Players', 'Unlimited Storage', 'Priority Support', 'Free Backups', 'Custom Mods'],
+                featured: false
+            }
+        ];
+
+        // Render Plans
+        window.renderPlans = () => {
+            const container = document.getElementById('plansContainer');
+            container.innerHTML = plans.map((plan, idx) => `
+                <div class="legendary-card ${plan.featured ? 'featured' : ''} smooth-fade-in stagger-${idx + 1}" onclick="window.selectPlan(this, ${idx})">
+                    ${plan.featured ? '<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>' : ''}
+                    <div class="relative z-10">
+                        <h3 class="text-2xl md:text-3xl font-black metallic-text mb-2">${plan.name}</h3>
+                        <p class="text-gray-400 text-sm mb-6">${plan.locName}</p>
+                        <div class="mb-8">
+                            <span class="text-5xl md:text-6xl font-black metallic-text">$${plan.unitPrice.toFixed(2)}</span>
+                            <span class="text-gray-400 text-sm">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            ${plan.specs.map(spec => `<li class="flex items-center gap-2 text-gray-300"><i class="fas fa-check text-green-400"></i> ${spec}</li>`).join('')}
+                        </ul>
+                        <button class="legendary-btn w-full ripple">
+                            <span class="lang-ar">اختر هذه الباقة</span><span class="lang-en">Choose Plan</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // Select Plan
+        window.selectPlan = (element, idx) => {
+            selectedPlanData = plans[idx];
+            currentQty = 1;
+            window.showConfirmModal();
+        };
+
+        // Show Confirm Modal
+        window.showConfirmModal = () => {
+            const bhdValue = (selectedPlanData.unitPrice * BHD_RATE).toFixed(2);
+            const bhdText = currentLang === 'ar' ? 'د.ب' : 'BHD';
+            
+            document.getElementById('planDetails').innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-gray-300 font-bold"><span class="lang-ar">الباقة:</span><span class="lang-en">Plan:</span></span>
+                    <span class="text-white font-black text-lg">${selectedPlanData.name}</span>
+                </div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-gray-300 font-bold"><span class="lang-ar">الموقع:</span><span class="lang-en">Location:</span></span>
+                    <span class="text-white font-black">${selectedPlanData.locName}</span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <span class="text-gray-300 font-bold"><span class="lang-ar">السعر:</span><span class="lang-en">Price:</span></span>
+                    <div class="text-right">
+                        <span class="text-white font-black text-lg block">$${selectedPlanData.unitPrice.toFixed(2)}</span>
+                        <span class="text-xs text-gray-400 font-bold block mt-1">≈ ${bhdValue} ${bhdText}</span>
+                    </div>
+                </div>
+            `;
+            
+            window.updateTotal(); 
+            window.updateBtnText(); 
+            
+            const modal = document.getElementById('confirmModal');
+            modal.style.display = 'flex';
+        };
+
+        // Change Quantity
+        window.changeQty = (amount) => { 
+            const newQty = currentQty + amount;
+            
+            if (newQty < 1) {
+                window.showToast(currentLang === 'ar' ? "الحد الأدنى هو 1 خادم" : "Minimum is 1 server", 'error');
+                return;
+            }
+            if (newQty > MAX_SERVERS) {
+                window.showToast(currentLang === 'ar' ? `الحد الأقصى هو ${MAX_SERVERS} خوادم` : `Maximum is ${MAX_SERVERS} servers`, 'error');
+                return;
+            }
+            
+            currentQty = newQty; 
+            const display = document.getElementById('qtyDisplay');
+            display.innerText = currentQty;
+            display.style.animation = 'none';
+            setTimeout(() => {
+                display.style.animation = 'smoothFadeIn 0.3s ease';
+            }, 10);
+            window.updateTotal(); 
+        };
+        
+        // Update Total
+        window.updateTotal = () => { 
+            const total = (selectedPlanData.unitPrice * currentQty).toFixed(2); 
+            const totalBHD = (total * BHD_RATE).toFixed(2);
+            const bhdText = currentLang === 'ar' ? 'د.ب' : 'BHD';
+
+            const priceDisplay = document.getElementById('totalPriceDisplay');
+            const priceBHD = document.getElementById('totalPriceBHD');
+            
+            priceDisplay.innerText = `$${total}`; 
+            priceBHD.innerText = `≈ ${totalBHD} ${bhdText}`;
+        };
+        
+        // Update Button Text
+        window.updateBtnText = () => {
+            const method = document.querySelector('input[name="contactMethod"]:checked').value;
+            const btn = document.getElementById('confirmBtn');
+            if (method === 'whatsapp') btn.innerHTML = currentLang === 'ar' ? '<span>إرسال الطلب</span> <i class="fab fa-whatsapp text-2xl text-green-400"></i>' : '<span>Send Order</span> <i class="fab fa-whatsapp text-2xl text-green-400"></i>';
+            else btn.innerHTML = currentLang === 'ar' ? '<span>تأكيد الطلب</span> <i class="fas fa-paper-plane text-xl text-gray-300"></i>' : '<span>Confirm Order</span> <i class="fas fa-paper-plane text-xl text-gray-300"></i>';
+        };
+
+        // Confirm Order
+        window.confirmOrder = async () => {
+            const btn = document.getElementById('confirmBtn'); 
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = currentLang === 'ar' ? '<i class="fas fa-spinner animate-spin"></i> جاري المعالجة...' : '<i class="fas fa-spinner animate-spin"></i> Processing...';
+            btn.disabled = true;
+
+            const method = document.querySelector('input[name="contactMethod"]:checked').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const totalPrice = (selectedPlanData.unitPrice * currentQty).toFixed(2);
+            const totalBHD = (totalPrice * BHD_RATE).toFixed(2);
+            
+            let paymentString = paymentMethod === 'benefitpay' ? 'BenefitPay' : (paymentMethod === 'paypal' ? 'PayPal' : 'IBAN');
+            const bhdText = currentLang === 'ar' ? 'د.ب' : 'BHD';
+
+            try {
+                await addDoc(collection(db, "orders"), {
+                    uid: currentUser.uid, 
+                    requestedAt: serverTimestamp(), 
+                    timestamp: serverTimestamp(),
+                    email: currentUser.email, 
+                    name: currentUser.displayName, 
+                    plan: selectedPlanData.name,
+                    location: selectedPlanData.locName, 
+                    price: parseFloat(totalPrice), 
+                    quantity: currentQty,
+                    contactMethod: method, 
+                    paymentMethod: paymentMethod, 
+                    status: "pending"
+                });
+
+                if (method === 'whatsapp') {
+                    const msg = currentLang === 'ar' 
+                        ? `مرحباً Boneless Hosts،\nطلبي الجديد:\n\n📦 الباقة: *${selectedPlanData.name}*\n🔢 العدد: *${currentQty}*\n📍 الموقع: *${selectedPlanData.locName}*\n💰 الإجمالي: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 الدفع عبر: *${paymentString}*\n📧 إيميلي: ${currentUser.email}\n\nجاهز للدفع!`
+                        : `Hello Boneless Hosts,\nMy new order:\n\n📦 Plan: *${selectedPlanData.name}*\n🔢 Qty: *${currentQty}*\n📍 Location: *${selectedPlanData.locName}*\n💰 Total: *$${totalPrice} (≈ ${totalBHD} ${bhdText})*\n💳 Payment via: *${paymentString}*\n📧 Email: ${currentUser.email}\n\nReady to pay!`;
+                    window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+                }
+                window.showToast(currentLang === 'ar' ? "تم استلام طلبك بنجاح! ✅" : "Order received successfully! ✅", 'success');
+                window.closeModal();
+            } catch (error) {
+                console.error(error); 
+                window.showToast(currentLang === 'ar' ? "حدث خطأ، حاول مرة أخرى" : "An error occurred, please try again", 'error');
+            } finally {
+                btn.innerHTML = originalContent; 
+                btn.disabled = false;
+            }
+        };
+
+        // Modal Functions
+        window.closeModal = () => {
+            document.getElementById('confirmModal').style.display = 'none';
+        };
+
+        window.openOrdersModal = () => {
+            window.renderOrdersList();
+            document.getElementById('ordersModal').style.display = 'flex';
+        };
+
+        window.closeOrdersModal = () => {
+            document.getElementById('ordersModal').style.display = 'none';
+        };
+
+        // Render Orders List
+        window.renderOrdersList = () => {
+            const content = document.getElementById('ordersListContent');
+            if (myOrdersSnapshot.length === 0) {
+                content.innerHTML = '<div class="text-center py-12"><p class="text-gray-400 text-lg"><span class="lang-ar">لا توجد طلبات حالياً</span><span class="lang-en">No orders yet</span></p></div>';
+                return;
+            }
+
+            content.innerHTML = myOrdersSnapshot.map(doc => {
+                const data = doc.data();
+                return `
+                    <div class="legendary-card mb-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-white font-black text-lg">${data.plan}</h3>
+                            <span class="px-3 py-1 rounded-lg text-xs font-black ${data.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'}">${data.status}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">${data.location}</p>
+                        <div class="flex justify-between items-center text-gray-300">
+                            <span>$${data.price.toFixed(2)} × ${data.quantity}</span>
+                            <span class="text-white font-bold text-lg">$${(data.price * data.quantity).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // Toast Notification
+        window.showToast = (msg, type = 'info') => {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500/80' : type === 'error' ? 'bg-red-500/80' : 'bg-blue-500/80';
+            toast.className = `legendary-toast ${bgColor} text-white`;
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideIn 0.4s ease reverse';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        };
+
+        // Generate Particles
+        const generateParticles = () => {
+            const container = document.getElementById('particlesContainer');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
+                
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = left + '%';
+                particle.style.top = top + '%';
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = delay + 's';
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                
+                container.appendChild(particle);
+            }
+        };
+
+        // Generate Floating Cubes
+        const generateCubes = () => {
+            const container = document.getElementById('floatingCubesContainer');
+            for (let i = 0; i < 6; i++) {
+                const cube = document.createElement('div');
+                cube.className = 'cube';
+                const size = Math.random() * 80 + 40;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 12 + 12;
+                const delay = Math.random() * 5;
+                
+                cube.style.width = size + 'px';
+                cube.style.height = size + 'px';
+                cube.style.left = left + '%';
+                cube.style.animationDuration = duration + 's';
+                cube.style.animationDelay = delay + 's';
+                
+                container.appendChild(cube);
+            }
+        };
+
+        generateParticles();
+        generateCubes();
+
+        // Google Sign In
+        document.getElementById('googleSignIn').onclick = () => {
+            const btn = document.getElementById('googleSignIn');
+            btn.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span class="lang-ar">جاري التحميل...</span><span class="lang-en">Loading...</span>`;
+            signInWithPopup(auth, provider).catch(() => {
+                btn.innerHTML = `<i class="fab fa-google text-2xl"></i><span class="lang-ar">تسجيل الدخول</span><span class="lang-en">Login</span>`;
+            });
+        };
+        
+        // Logout
+        document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+        // Auth State Change
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('packagesPage').style.display = 'block';
+                document.getElementById('userInfo').innerHTML = `<img src="${user.photoURL}" class="w-8 h-8 rounded-lg border border-gray-400 hover:scale-110 transition-transform" alt="Profile" loading="lazy"><span class="max-w-[120px] truncate text-white text-sm" dir="ltr">${user.displayName}</span>`;
+                document.getElementById('userInfo').classList.remove('hidden');
+                
+                const q = query(collection(db, "orders"), where("uid", "==", user.uid), orderBy("requestedAt", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    myOrdersSnapshot = snapshot.docs; 
+                    const badge = document.getElementById('ordersBadge');
+                    if(!snapshot.empty) { 
+                        badge.innerText = snapshot.size; 
+                        badge.classList.remove('hidden');
+                    } else { 
+                        badge.classList.add('hidden'); 
+                    }
+                    window.renderOrdersList();
+                }, (error) => {
+                    console.error("Firestore error:", error);
+                });
+                window.renderPlans();
+            } else {
+                currentUser = null; 
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('packagesPage').style.display = 'none'; 
+                document.getElementById('userInfo').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
